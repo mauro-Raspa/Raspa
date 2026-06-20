@@ -909,26 +909,44 @@ DOCTYPE html>
         }
 
 
-		let stanza = getStanzaDaURL();
+		
+let stanza = getStanzaDaURL();
 
-		if(stanza){
-			alert("Sei entrato nella stanza: " + stanza);
-		}
+if(stanza){
+    alert("Sei entrato nella stanza: " + stanza);
+}
 
-		if(stanza){
+// ✅ AGGIUNGI QUESTO BLOCCO QUI (IMPORTANTISSIMO)
 
-			let lobbyRef = ref(db, "stanze/" + stanza + "/giocatori");
+let giocatoreId = Math.random().toString(36).substring(2,8);
 
-			onValue(lobbyRef, (snapshot) => {
+if(stanza){
 
-				let data = snapshot.val();
-				let lista = Object.values(data || {});
+  let playerRef = ref(db, "stanze/" + stanza + "/giocatori/" + giocatoreId);
 
-				alert("Giocatori nella stanza: " + lista.length);
+  set(playerRef, {
+    nome: "Player",
+    id: giocatoreId
+  });
 
-			});
+}
 
-		}
+// ✅ QUESTO LASCIALO (listener)
+
+if(stanza){
+
+  let lobbyRef = ref(db, "stanze/" + stanza + "/giocatori");
+
+  onValue(lobbyRef, (snapshot) => {
+
+    let data = snapshot.val();
+    let lista = Object.values(data || {});
+
+    alert("Giocatori nella stanza: " + lista.length);
+
+  });
+
+}
 
 
 
