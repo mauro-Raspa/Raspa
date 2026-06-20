@@ -227,17 +227,6 @@ DOCTYPE html>
 
 		
 
-const firebaseConfig = {
-  apiKey: "METTI QUI LA TUA API KEY",
-  authDomain: "METTI QUI authDomain",
-  databaseURL: "METTI QUI databaseURL",
-  projectId: "METTI QUI projectId"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-
         const semi=["♠","♥","♦","♣"];
         let valori=[];
 
@@ -924,44 +913,14 @@ function invitaAmici(){
         }
 
 
-		
 let stanza = getStanzaDaURL();
 
 if(stanza){
-    alert("Sei entrato nella stanza: " + stanza);
+    console.log("Stanza:", stanza);
 }
 
-// ✅ AGGIUNGI QUESTO BLOCCO QUI (IMPORTANTISSIMO)
+		
 
-let giocatoreId = Math.random().toString(36).substring(2,8);
-
-if(stanza){
-
-  let playerRef = ref(db, "stanze/" + stanza + "/giocatori/" + giocatoreId);
-
-  set(playerRef, {
-    nome: "Player",
-    id: giocatoreId
-  });
-
-}
-
-// ✅ QUESTO LASCIALO (listener)
-
-if(stanza){
-
-  let lobbyRef = ref(db, "stanze/" + stanza + "/giocatori");
-
-  onValue(lobbyRef, (snapshot) => {
-
-    let data = snapshot.val();
-    let lista = Object.values(data || {});
-
-    alert("Giocatori nella stanza: " + lista.length);
-
-  });
-
-}
 
 
 
