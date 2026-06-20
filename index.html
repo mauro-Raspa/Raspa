@@ -1,5 +1,6 @@
 
 
+
 DOCTYPE html>
 <html lang="it">
 <head>
@@ -912,6 +913,21 @@ DOCTYPE html>
 
 		if(stanza){
 			alert("Sei entrato nella stanza: " + stanza);
+		}
+
+		if(stanza){
+
+			let lobbyRef = ref(db, "stanze/" + stanza + "/giocatori");
+
+			onValue(lobbyRef, (snapshot) => {
+
+				let data = snapshot.val();
+				let lista = Object.values(data || {});
+
+				alert("Giocatori nella stanza: " + lista.length);
+
+			});
+
 		}
 
 
