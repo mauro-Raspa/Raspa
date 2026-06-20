@@ -682,18 +682,23 @@ const db = getDatabase(app);
         
 
 
+
 function invitaAmici(){
 
     let stanza = Math.random().toString(36).substring(2,8);
 
     let link = "https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
 
-    let testo = "https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
+    let testo = "🎮 Vuoi giocare con me a RASPA?\n👉 " + link;
 
-    // copia automatico negli appunti
-    navigator.clipboard.writeText(testo);
-
-    alert("Link copiato!\nIncollalo su WhatsApp:\n" + testo);
+    if(navigator.share){
+        navigator.share({
+            title: "RASPA",
+            text: testo
+        });
+    } else {
+        alert(testo);
+    }
 }
 
 
