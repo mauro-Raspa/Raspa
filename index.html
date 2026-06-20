@@ -1,6 +1,4 @@
 
-
-
 DOCTYPE html>
 <html lang="it">
 <head>
@@ -226,7 +224,22 @@ DOCTYPE html>
     </div>
 
 
-    <script>
+    <script type="module">
+
+		
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "METTI QUI LA TUA API KEY",
+  authDomain: "METTI QUI authDomain",
+  databaseURL: "METTI QUI databaseURL",
+  projectId: "METTI QUI projectId"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
 
         const semi=["♠","♥","♦","♣"];
         let valori=[];
@@ -955,3 +968,5 @@ if(stanza){
 </div>
 </body>
 </html>
+
+
