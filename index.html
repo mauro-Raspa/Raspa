@@ -226,8 +226,6 @@ DOCTYPE html>
     <script>
 
 		
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "METTI QUI LA TUA API KEY",
@@ -682,6 +680,7 @@ const db = getDatabase(app);
 
 
         
+
 function invitaAmici(){
 
     let stanza = Math.random().toString(36).substring(2,8);
@@ -690,7 +689,7 @@ function invitaAmici(){
 
     let testo = "Vuoi giocare con me a RASPA?\n" + link;
 
-    prompt("Copia questo link e invialo:", testo);
+    alert(testo);
 }
 
 
