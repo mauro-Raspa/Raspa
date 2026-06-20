@@ -1,0 +1,923 @@
+
+
+DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>RASPA 🃏</title>
+
+    <style>
+
+        <!--body { font-family: Arial; padding:20px; }-->
+        body {
+        font-family: Arial;
+        padding:20px;
+        text-align: center; /* ✅ aggiunto */
+        overflow-x: visible;
+       }
+
+        button { padding:10px; margin:5px; }
+        span { display:block; margin:3px; }
+        table { border-collapse: collapse; }
+        td, th { padding:6px 10px; text-align:center; }
+        .ok { color:green; font-weight:bold; }
+        .ko { color:red; }
+
+
+
+        #campoGioco{
+        position: relative;
+        width: 90vw;
+        height: 90vw;
+        max-width: 400px;
+        max-height: 400px;
+        margin: 0 auto;
+        margin-top: 80px;
+        }
+
+
+
+       #tavoloShape{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: green;
+        clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+       }
+
+       #tavolo{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+       }
+
+
+       #mano{
+        position: absolute;
+        bottom: -120px;   /* ✅ sotto il tavolo */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 5px;
+       }
+
+
+
+       #briscolaCentro {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 26px;
+        font-weight: bold;
+        background: #fff8dc;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.4);
+        z-index: 3;
+       }
+
+
+
+       #nomiGiocatori{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+       }
+
+       .nomeGiocatore{
+        position: absolute;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        background: white;
+        padding: 4px 8px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        white-space: nowrap;   /* ✅ BLOCCA il ritorno a capo */
+       }
+
+
+       #container{
+        max-width: 420px;
+        margin: auto;        /* ✅ centra tutto */
+        text-align: left;    /* ✅ testo leggibile */
+       }
+
+
+
+
+       #header{
+        display: flex;
+        justify-content: center;   /* ✅ li mette al centro */
+        align-items: center;
+        gap: 10px;                 /* ✅ spazio tra titolo e bottone */
+       }
+
+
+
+       #header h1{
+        margin: 0;
+       }
+
+
+
+
+    </style>
+
+</head>
+<body>
+
+
+<div id="header">
+    <h1>RASPA 🃏</h1>
+    <button onclick="avviaPartita()">Avvia Partita</button>
+    <button onclick="invitaAmici()">👥 Invita</button>
+</div>
+
+
+
+<!--<h1>RASPA 🃏</h1>-->
+<div id="container">
+
+    Mazzo:
+    <select id="mazzoTipo">
+        <option value="40">40 carte</option>
+        <option value="52">52 carte</option>
+    </select>
+
+    Giocatori:
+    <input type="number" id="numGiocatoriInput" value="3" min="3" style="width:60px;">
+
+
+    <div>
+        Difficoltà Bot:
+        <input type="number" id="livelloBot" value="5" min="1" max="10">
+    </div>
+
+
+    <!--<button onclick="avviaPartita()">Avvia Partita</button>-->
+
+    <h3>Mano: <span id="manoNum"></span></h3>
+    <h3>Carte per mano: <span id="carteNum"></span></h3>
+    <!--<h3>Briscola: <span id="briscola"></span></h3>-->
+    <!--<h3>Leader: <span id="leader"></span></h3>-->
+
+
+
+    <div style="display:flex; flex-direction:column; align-items:flex-start; gap:5px;">
+
+        <!-- ✅ riga con i due bottoni -->
+        <div style="display:flex; gap:10px;">
+            <button onclick="avviaPronostici()">Avvia Pronostici</button>
+            <button id="continuaBtn" onclick="continuaGioco()" style="display:none;">
+                ▶ Inizia Mano
+            </button>
+        </div>
+
+        <!-- ✅ input pronostico -->
+        <div style="display:flex; align-items:center; gap:10px;">
+            Pronostico:
+            <input id="pronostico" type="number" min="0" style="width:60px;">
+            <button id="btnPronostico" style="display:none;">Conferma</button>
+        </div>
+
+    </div>
+
+
+
+    <!--<h3>Pronostici:</h3>-->
+    <div id="pronostici"></div>
+
+    <!--<h3>La tua mano:</h3>-->
+    <!--<h3>Tavolo:</h3>-->
+
+
+    <div id="campoGioco">
+        <div id="tavoloShape"></div>
+        <div id="nomiGiocatori"></div>
+        <div id="tavolo"></div>
+        <!-- ✅ BRISCOLA AL CENTRO -->
+        <div id="briscolaCentro"></div>
+        <div id="mano"></div>
+
+
+    </div>
+
+
+
+
+    <!--<button id="continuaBtn" onclick="continuaGioco()" style="display:none;">
+    ➡️ Continua
+    </button>-->
+
+
+    <div style="margin-top:80px;">
+        <h3>Storico:</h3>
+        <table border="1" id="classificaTabella"></table>
+    </div>
+
+
+    <script>
+
+        const semi=["♠","♥","♦","♣"];
+        let valori=[];
+
+        let mazzo=[], mani=[];
+
+        let leader=0;
+        let leaderMano=0;
+
+        let numGiocatori=3;
+        let numeroMano=1, cartePerMano=1;
+        let totaleMani=0;
+
+        let briscola;
+
+        let tavolo=[];
+        let fasePronostico=true;
+        let indiceTurno=0;
+
+        let puntiGiocatori=[];
+        let preseGiocatori=[];
+        let pronostici=[];
+        let storicoMani=[];
+
+        let livelloBot = 5;
+
+        // ---------------------
+
+        function creaMazzo(){
+         let m=[];
+         semi.forEach(s=>valori.forEach(v=>m.push({s,v})));
+         return m.sort(()=>Math.random()-0.5);
+        }
+
+
+        function getStanzaDaURL(){
+         let params = new URLSearchParams(window.location.search);
+         return params.get("stanza");
+        }
+
+
+
+
+
+        function disegnaGiocatori(){
+
+        let container = document.getElementById("nomiGiocatori");
+        container.innerHTML = "";
+
+        for(let i = 0; i < numGiocatori; i++){
+
+        let angolo = (2 * Math.PI * i / numGiocatori) + Math.PI / 2;
+
+
+        let campo = document.getElementById("campoGioco");
+
+        let centroX = campo.offsetWidth / 2;
+        let centroY = campo.offsetHeight / 2;
+
+        // distanza dal centro (fuori dal tavolo)
+        let r = campo.offsetWidth / 2 + 10;
+
+        let x = centroX + r * Math.cos(angolo);
+        let y = centroY + r * Math.sin(angolo);
+
+
+
+
+        let div = document.createElement("div");
+        div.className = "nomeGiocatore";
+
+        if(i === leader){
+            div.style.background = "red";
+            div.style.color = "white";
+        }
+
+        div.innerHTML = `
+            ${(i === 0) ? "Tu" : "Bot " + i}
+            <div id="pron_g${i}" style="font-size:12px;"></div>
+         `;
+
+
+
+            div.style.left = x + "px";
+            div.style.top = y + "px";
+
+
+
+
+          container.appendChild(div);
+        }
+      }
+
+
+
+        function generaPoligono(lati){
+
+         let punti = [];
+
+         for(let i = 0; i < lati; i++){
+
+
+
+
+
+        let angolo = (2 * Math.PI * i / lati)
+                   - Math.PI/2
+                   + (Math.PI / lati)
+                   + Math.PI;
+
+
+
+          let x = 50 + 50 * Math.cos(angolo);
+          let y = 50 + 50 * Math.sin(angolo);
+
+          punti.push(x + "% " + y + "%");
+         }
+
+         return "polygon(" + punti.join(",") + ")";
+        }
+
+
+        function avviaPartita(){
+
+         numGiocatori=parseInt(document.getElementById("numGiocatoriInput").value)||3;
+         if (numGiocatori < 3) numGiocatori = 3;
+
+         livelloBot = parseInt(document.getElementById("livelloBot").value) || 5;
+
+         let tipo=document.getElementById("mazzoTipo").value;
+
+         if(tipo=="40"){
+          valori = ["2","3","4","5","6","7","J","Q","K","A"];
+         } else {
+          valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+         }
+
+         numeroMano=1;
+         cartePerMano=1;
+
+         puntiGiocatori=new Array(numGiocatori).fill(0);
+         storicoMani=[];
+
+         let maxCarte = valori.length * semi.length;
+         totaleMani = Math.floor((maxCarte - 1) / numGiocatori);
+
+         leaderMano = Math.floor(Math.random() * numGiocatori);
+         leader = leaderMano;
+
+         nuovaMano();
+        }
+
+        function nuovaMano(){
+
+         mazzo=creaMazzo();
+         mani=[];
+
+         if(numeroMano !== 1){
+          leaderMano = (leaderMano + 1) % numGiocatori;
+         }
+
+         leader = leaderMano;
+
+         for(let i=0;i<numGiocatori;i++){
+          mani.push(mazzo.splice(0,cartePerMano));
+         }
+
+         briscola=mazzo.shift();
+
+         preseGiocatori=new Array(numGiocatori).fill(0);
+         pronostici=[];
+         fasePronostico=true;
+         tavolo=[];
+
+         document.getElementById("manoNum").innerText =
+           numeroMano + " / " + totaleMani;
+
+         document.getElementById("carteNum").innerText=cartePerMano;
+         //document.getElementById("briscola").innerText=briscola.v+briscola.s;
+         let bc = document.getElementById("briscolaCentro");
+         bc.innerText = briscola.v + briscola.s;
+         bc.style.color = (briscola.s==="♥"||briscola.s==="♦") ? "red" : "black";
+
+         //document.getElementById("leader").innerText=(leader===0?"Tu":"Bot "+leader);
+
+         document.getElementById("pronostico").value="";
+         document.getElementById("pronostico").max = cartePerMano;
+
+         document.getElementById("pronostici").innerHTML="";
+         document.getElementById("tavolo").innerHTML="";
+         document.getElementById("continuaBtn").style.display="none";
+
+         mostraMano();
+
+
+        document.getElementById("tavoloShape").style.clipPath =
+          generaPoligono(numGiocatori);
+          disegnaGiocatori();
+
+        }
+
+        // ---------------------
+
+        function mostraMano(){
+
+         let d=document.getElementById("mano");
+         d.innerHTML="";
+
+         const ordineSemi=["♠","♥","♦","♣"];
+
+         let sorted = mani[0]
+          .map((c,i)=>({...c,index:i}))
+          .sort((a,b)=>{
+            let s=ordineSemi.indexOf(a.s)-ordineSemi.indexOf(b.s);
+            if(s!==0) return s;
+            return valori.indexOf(a.v)-valori.indexOf(b.v);
+          });
+
+         sorted.forEach(c=>{
+          let b=document.createElement("button");
+          b.innerText=c.v+c.s;
+          b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
+          b.onclick=()=>giocaUtente(c.index);
+          d.appendChild(b);
+         });
+        }
+
+        // ---------------------
+
+        function avviaPronostici(){
+
+         let ordine = [];
+         for(let i=0;i<numGiocatori;i++){
+          ordine.push((leader+i)%numGiocatori);
+         }
+
+         pronostici=new Array(numGiocatori);
+         document.getElementById("pronostici").innerHTML="";
+
+         let index=0;
+
+         function step(){
+
+          if(index >= ordine.length){
+            fasePronostico=false;
+
+            window.prossimaAzione = "iniziaMano";
+
+            document.getElementById("continuaBtn").innerText="▶ Inizia Mano";
+            document.getElementById("continuaBtn").style.display="block";
+            return;
+          }
+
+          let g = ordine[index];
+
+          // UTENTE
+          if(g === 0){
+
+            let btn = document.getElementById("btnPronostico");
+            btn.style.display = "inline-block";
+
+            btn.onclick = () => {
+              let mio = parseInt(document.getElementById("pronostico").value) || 0;
+              if (mio < 0) mio = 0;
+
+              pronostici[0]=mio;
+              document.getElementById("pron_g0").innerText = "🎯 " + mio;
+              btn.style.display = "none";
+
+              index++;
+              setTimeout(step,200);
+            };
+
+            return;
+          }
+
+          // BOT INTELLIGENTE
+          let manoBot = mani[g];
+
+          let stima = 0;
+
+          manoBot.forEach(c=>{
+
+            if(c.v === "A") stima += 0.9;
+            else if(c.v === "K") stima += 0.7;
+            else if(c.v === "Q") stima += 0.6;
+            else if(c.v === "J") stima += 0.5;
+
+            if(c.s === briscola.s){
+              stima += 0.8;
+            }
+
+          });
+
+          let errore = Math.random() * (11 - livelloBot);
+
+          let p = Math.round(stima - errore * 0.3);
+
+          if(p < 0) p = 0;
+          if(p > cartePerMano) p = cartePerMano;
+
+          // regola ultimo
+          if(index === ordine.length - 1){
+            let somma = pronostici.reduce((a,b)=>a+(b||0),0);
+            if(p + somma === cartePerMano){
+              p = (p > 0) ? p - 1 : 1;
+            }
+          }
+
+          pronostici[g]=p;
+
+          document.getElementById("pron_g"+g).innerText = "🎯 " + p;
+
+          index++;
+          setTimeout(step,200);
+         }
+
+         step();
+        }
+
+        // ---------------------
+
+
+        function giocaBot(){
+
+         let mano = mani[indiceTurno];
+         let seme = tavolo.length ? tavolo[0].c.s : null;
+
+         let possibili = seme ? mano.filter(c => c.s === seme) : mano;
+         if(possibili.length === 0) possibili = mano;
+
+         let rank = Object.fromEntries(valori.map((v,i)=>[v,i]));
+
+         let carta;
+
+         let preseFatte = preseGiocatori[indiceTurno];
+         let target = pronostici[indiceTurno];
+
+         // 🎯 BOT DEVE ANCORA FARE PRESE
+         if(preseFatte < target){
+
+           // logica "per vincere"
+           if(tavolo.length > 0){
+
+             let win = tavolo[0];
+
+             tavolo.forEach(x=>{
+               if(
+                 (x.c.s===briscola.s && win.c.s!==briscola.s) ||
+                 (x.c.s===win.c.s && rank[x.c.v]>rank[win.c.v])
+               ) win = x;
+             });
+
+             let vincenti = possibili.filter(c =>
+               (c.s===briscola.s && win.c.s!==briscola.s) ||
+               (c.s===win.c.s && rank[c.v]>rank[win.c.v])
+             );
+
+             if(vincenti.length > 0){
+               carta = vincenti.sort((a,b)=>rank[a.v]-rank[b.v])[0];
+             } else {
+               // non può vincere → gioca alto (più chance dopo)
+               carta = possibili.sort((a,b)=>rank[b.v]-rank[a.v])[0];
+             }
+
+           } else {
+             // apre: gioca medio-alto
+             let sorted = possibili.sort((a,b)=>rank[a.v]-rank[b.v]);
+             carta = sorted[Math.floor(sorted.length * 0.7)];
+           }
+
+         }
+
+         // 🎯 BOT DEVE EVITARE PRESE
+         else{
+
+           // gioca per perdere
+           let nonBriscole = possibili.filter(c => c.s !== briscola.s);
+
+           if(nonBriscole.length > 0){
+             carta = nonBriscole.sort((a,b)=>rank[a.v]-rank[b.v])[0];
+           } else {
+             // se ha solo briscole → la più bassa
+             carta = possibili.sort((a,b)=>rank[a.v]-rank[b.v])[0];
+           }
+         }
+
+         // 🎲 un pizzico di errore in base al livello
+         if(Math.random() > (livelloBot / 10)){
+           carta = possibili[Math.floor(Math.random()*possibili.length)];
+         }
+
+         let idx = mano.indexOf(carta);
+         carta = mano.splice(idx,1)[0];
+
+         tavolo.push({g:indiceTurno,c:carta});
+         mostraTavolo();
+
+         prossimoTurno();
+        }
+
+        // ---------------------
+
+        function giocaUtente(i){
+
+         if(fasePronostico || indiceTurno!==0) return;
+
+         let carta=mani[0][i];
+
+         if(tavolo.length>0){
+          let seme=tavolo[0].c.s;
+          let hai=mani[0].some(c=>c.s===seme);
+
+          if(hai && carta.s!==seme){
+           alert("Devi rispondere al seme: "+seme);
+           return;
+          }
+         }
+
+         carta=mani[0].splice(i,1)[0];
+
+         tavolo.push({g:0,c:carta});
+         mostraTavolo();
+
+         prossimoTurno();
+        }
+
+        function prossimoTurno(){
+
+         if(tavolo.length===numGiocatori){
+          setTimeout(finePresa,500);
+          return;
+         }
+
+         indiceTurno=(indiceTurno+1)%numGiocatori;
+
+         if(indiceTurno===0) return;
+
+         setTimeout(giocaBot,300);
+        }
+
+
+        function invitaAmici(){
+
+            let stanza = Math.random().toString(36).substring(2,8);
+
+            let link = window.location.href + "?stanza=" + stanza;
+
+            let testo = "🎮 Vuoi giocare con me a RASPA? 🃏\n👉 Clicca qui:\n" + link;
+
+            if(navigator.share){
+                navigator.share({
+                    title: "RASPA 🃏",
+                     text: testo
+                });
+            } else {
+                navigator.clipboard.writeText(testo);
+                alert("Invito copiato:\n" + testo);
+            }
+        }
+
+
+
+        function mostraTavolo(vincente = null){
+
+         let d = document.getElementById("tavolo");
+         d.innerHTML = "";
+
+         tavolo.forEach(x => {
+
+          let angolo = (2 * Math.PI * x.g / numGiocatori) + Math.PI/2;
+
+          let r = document.getElementById("campoGioco").offsetWidth * 0.08;
+
+          let xPos = 50 + r * Math.cos(angolo);
+          let yPos = 50 + r * Math.sin(angolo);
+
+          let div = document.createElement("div");
+
+          div.style.position = "absolute";
+          div.style.left = xPos + "%";
+          div.style.top = yPos + "%";
+          div.style.transform = "translate(-50%, -50%)";
+
+          div.style.fontSize = "20px";
+          div.style.fontWeight = "bold";
+
+          let col = (x.c.s==="♥"||x.c.s==="♦") ? "red" : "black";
+          div.style.color = col;
+
+          div.innerText = x.c.v + x.c.s;
+
+          // ⭐ evidenzia il vincitore
+          if(x.g === vincente){
+            div.style.background = "gold";
+            div.style.padding = "6px";
+            div.style.borderRadius = "8px";
+            div.style.boxShadow = "0 0 10px rgba(0,0,0,0.7)";
+          } else {
+            div.style.background = "white";
+            div.style.padding = "6px";
+            div.style.borderRadius = "8px";
+          }
+
+          d.appendChild(div);
+         });
+        }
+
+
+
+
+        function iniziaPresa(){
+         tavolo=[];
+         indiceTurno=leader;
+
+         if(indiceTurno!==0)
+          setTimeout(giocaBot,300);
+        }
+
+
+        function finePresa(){
+
+         let rank = Object.fromEntries(valori.map((v,i)=>[v,i]));
+         let win=tavolo[0];
+
+         tavolo.forEach(x=>{
+          if(
+           (x.c.s===briscola.s && win.c.s!==briscola.s) ||
+           (x.c.s===win.c.s && rank[x.c.v]>rank[win.c.v])
+          ) win=x;
+         });
+
+         leader=win.g;
+         disegnaGiocatori();
+         mostraTavolo(win.g);
+         preseGiocatori[leader]++;
+
+         //document.getElementById("leader").innerText=(leader===0?"Tu":"Bot "+leader);
+
+         if(mani[0].length===0){
+
+          for(let i=0;i<numGiocatori;i++){
+           let punti=(preseGiocatori[i]===pronostici[i])
+            ? 10+(preseGiocatori[i]*5)
+            : preseGiocatori[i];
+
+           puntiGiocatori[i]+=punti;
+          }
+
+          storicoMani.push({
+           prese:[...preseGiocatori],
+           pron:[...pronostici]
+          });
+
+          aggiornaClassifica();
+          window.prossimaAzione="nuovaMano";
+
+         } else {
+          window.prossimaAzione="presa";
+         }
+
+         document.getElementById("continuaBtn").innerText="➡️ Continua";
+         document.getElementById("continuaBtn").style.display="block";
+
+         mostraMano();
+        }
+
+        function continuaGioco(){
+
+         document.getElementById("continuaBtn").style.display="none";
+
+         if(window.prossimaAzione === "iniziaMano"){
+           iniziaPresa();
+           return;
+         }
+
+         if(window.prossimaAzione==="nuovaMano"){
+
+          let maxCarte = valori.length * semi.length;
+
+
+        if((cartePerMano+1)*numGiocatori > maxCarte){
+
+          let max = Math.max(...puntiGiocatori);
+          let vincitori = [];
+
+          for(let i=0;i<numGiocatori;i++){
+            if(puntiGiocatori[i] === max){
+              vincitori.push(i);
+            }
+          }
+
+          let testo = "";
+
+          if(vincitori.length === 1){
+            testo = (vincitori[0] === 0) ? "Hai vinto! 🎉" : "Vince Bot " + vincitori[0];
+          } else {
+            testo = "Pareggio tra: " +
+              vincitori.map(v => v===0 ? "Tu" : "Bot "+v).join(", ");
+          }
+
+          alert("Fine partita!\n" + testo);
+
+          return;
+        }
+
+
+          numeroMano++;
+          cartePerMano++;
+          nuovaMano();
+          return;
+         }
+
+         if(window.prossimaAzione==="presa"){
+           iniziaPresa();
+         }
+        }
+
+
+        function aggiornaClassifica(){
+
+         let t=document.getElementById("classificaTabella");
+
+         let html="<tr><th>Mano</th>";
+
+         for(let i=0;i<numGiocatori;i++){
+          html+="<th>"+(i===0?"Tu":"Bot "+i)+"</th>";
+         }
+
+         html+="</tr>";
+
+         storicoMani.forEach((m,i)=>{
+
+          html+="<tr><td>"+(i+1)+"</td>";
+
+          for(let g=0;g<numGiocatori;g++){
+           let ok=m.prese[g]===m.pron[g];
+
+           html+="<td class='"+(ok?"ok":"ko")+"'>"
+           + m.pron[g]+"/"+m.prese[g]
+           +"</td>";
+          }
+
+          html+="</tr>";
+         });
+
+         html+="<tr><td colspan='"+(numGiocatori+1)+"'>---</td></tr>";
+
+         // ✅ CALCOLO CLASSIFICA
+         let ranking = puntiGiocatori
+          .map((p,i)=>({giocatore:i,punti:p}))
+          .sort((a,b)=>b.punti - a.punti);
+
+         // assegna posizione (gestisce pari merito)
+         let posizioni = new Array(numGiocatori);
+         let posizioneCorrente = 1;
+
+         for(let i=0;i<ranking.length;i++){
+          if(i>0 && ranking[i].punti < ranking[i-1].punti){
+            posizioneCorrente = i+1;
+          }
+          posizioni[ranking[i].giocatore] = posizioneCorrente;
+         }
+
+         html+="<tr><td><b>TOT</b></td>";
+
+         for(let i=0;i<numGiocatori;i++){
+
+          let badge = "";
+          if(posizioni[i] === 1) badge = " 🥇";
+          else if(posizioni[i] === 2) badge = " 🥈";
+          else if(posizioni[i] === 3) badge = " 🥉";
+
+          html+="<td><b>"+puntiGiocatori[i]+badge+"</b></td>";
+         }
+
+         html+="</tr>";
+
+         t.innerHTML=html;
+        }
+
+
+		let stanza = getStanzaDaURL();
+
+		if(stanza){
+			alert("Sei entrato nella stanza: " + stanza);
+		}
+
+
+
+    </script>
+
+</div>
+</body>
+</html>
