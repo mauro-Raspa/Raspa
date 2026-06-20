@@ -1,4 +1,3 @@
-
 DOCTYPE html>
 <html lang="it">
 <head>
@@ -682,24 +681,18 @@ const db = getDatabase(app);
         }
 
 
-        function invitaAmici(){
+        
+function invitaAmici(){
 
-            let stanza = Math.random().toString(36).substring(2,8);
+    let stanza = Math.random().toString(36).substring(2,8);
 
-            let link = "https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
+    let link = "https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
 
-            let testo = "🎮 Vuoi giocare con me a RASPA? 🃏\n👉 Clicca qui:\n" + link;
+    let testo = "Vuoi giocare con me a RASPA?\n" + link;
 
-            if(navigator.share){
-                navigator.share({
-                    title: "RASPA 🃏",
-                     text: testo
-                });
-            } else {
-                navigator.clipboard.writeText(testo);
-                alert("Invito copiato:\n" + testo);
-            }
-        }
+    prompt("Copia questo link e invialo:", testo);
+}
+
 
 
 
@@ -968,5 +961,3 @@ if(stanza){
 </div>
 </body>
 </html>
-
-
