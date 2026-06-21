@@ -137,7 +137,7 @@ DOCTYPE html>
 <div id="header">
     <h1>RASPA 🃏</h1>
     <button onclick="avviaPartita()">Avvia Partita</button>
-    <button onclick="invitaAmici()">👥 Invita</button>
+    <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
 </div>
 
 
@@ -917,7 +917,7 @@ let stanza = getStanzaDaURL();
 
 if(stanza){
     console.log("Stanza:", stanza);
-	document.querySelector('button[onclick="invitaAmici()"]').style.display = "none";
+	document.getElementById("btnInvita").style.display = "none";
 }
 
 		
