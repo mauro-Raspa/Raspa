@@ -947,6 +947,8 @@ if(stanza){
     let id = "player_" + Math.random().toString(36).substring(2,8);
 
     db.ref("stanze/" + stanza + "/players/" + id).set(true);
+	alert("giocatore registrato ✅");
+	
 }
 
 		
