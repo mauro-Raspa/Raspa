@@ -222,8 +222,24 @@ DOCTYPE html>
         <table border="1" id="classificaTabella"></table>
     </div>
 
+https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js</script>
+https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
 
     <script>
+
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  databaseURL: "https://raspa-7ccec-default-rtdb.europa-west1.firebasedatabase.app",
+  projectId: "raspa-7ccec",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
 		
 
