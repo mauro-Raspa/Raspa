@@ -930,12 +930,20 @@ function invitaAmici(){
         }
 
 
+
 let stanza = getStanzaDaURL();
 let isHost = !stanza;
 
 if(stanza){
     console.log("Stanza:", stanza);
-	document.getElementById("btnInvita").style.display = "none";
+
+    // nascondi bottone invita
+    document.getElementById("btnInvita").style.display = "none";
+
+    // ✅ REGISTRA GIOCATORE SU FIREBASE
+    let id = "player_" + Math.random().toString(36).substring(2,8);
+
+    db.ref("stanze/" + stanza + "/players/" + id).set(true);
 }
 
 		
