@@ -146,18 +146,18 @@ DOCTYPE html>
 <div id="container">
 
     Mazzo:
-    <select id="mazzoTipo">
+    <select id="mazzoTipo" class="hostOnly">
         <option value="40">40 carte</option>
         <option value="52">52 carte</option>
     </select>
 
     Giocatori:
-    <input type="number" id="numGiocatoriInput" value="3" min="3" style="width:60px;">
+    <input type="number" id="numGiocatoriInput" class="hostOnly" value="3" min="3" style="width:60px;">
 
 
     <div>
         Difficoltà Bot:
-        <input type="number" id="livelloBot" value="5" min="1" max="10">
+        <input type="number" id="livelloBot" class="hostOnly" value="5" min="1" max="10">
     </div>
 
 
@@ -914,6 +914,7 @@ function invitaAmici(){
 
 
 let stanza = getStanzaDaURL();
+let isHost = !stanza;
 
 if(stanza){
     console.log("Stanza:", stanza);
