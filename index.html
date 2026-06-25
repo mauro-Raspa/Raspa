@@ -946,7 +946,7 @@ function invitaAmici(){
 
 
 let stanza = getStanzaDaURL();
-let isHost = (localStorage.getItem("hostStanza") === stanza);
+let isHost = (!stanza) || (localStorage.getItem("hostStanza") === stanza);
 
 // ✅ AGGIUNGI QUI
 if(!isHost){
