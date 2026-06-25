@@ -954,8 +954,14 @@ if(stanza){
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 
+let nome = prompt("Inserisci il tuo nome:");
+if(!nome) nome = "Giocatore";
+
 // lo registro
-playerRef.set(true);
+
+playerRef.set({
+    nome: nome
+});
 
 // 🔥 IMPORTANTISSIMO
 playerRef.onDisconnect().remove();
@@ -972,11 +978,12 @@ if(stanza){
     refPlayers.on("value", (snapshot) => {
 
         let data = snapshot.val() || {};
-        let count = Object.keys(data).length;
+        
+		let nomi = Object.values(data).map(p => p.nome);
 
-        // aggiorna UI
-        document.getElementById("playersBox").innerText =
-            "Giocatori connessi: " + count;
+		document.getElementById("playersBox").innerText =
+    		"Giocatori: " + nomi.join(" → ");
+
 
     });
 
