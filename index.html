@@ -108,11 +108,7 @@ DOCTYPE html>
         margin: auto;        /* ✅ centra tutto */
         text-align: left;    /* ✅ testo leggibile */
 		   
-<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    Giocatori connessi: 1
-</div>
-
-       }
+	   }
 
 
 
@@ -141,7 +137,7 @@ DOCTYPE html>
 
 <div id="header">
     <h1>RASPA 🃏</h1>
-    <button onclick="avviaPartita()">Avvia Partita</button>
+    <button id="btnStart" onclick="avviaPartita()">Avvia Partita</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
 </div>
 
@@ -149,6 +145,10 @@ DOCTYPE html>
 
 <!--<h1>RASPA 🃏</h1>-->
 <div id="container">
+	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
+    Giocatori connessi: 1
+	</div>
+
 
     Mazzo:
     <select id="mazzoTipo" class="hostOnly">
@@ -697,9 +697,13 @@ const db = firebase.database();
 
 
 
+
 function invitaAmici(){
 
     let stanza = Math.random().toString(36).substring(2,8);
+
+    // ✅ memorizza host
+    localStorage.setItem("hostStanza", stanza);
 
     let link = "https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
 
@@ -714,6 +718,7 @@ function invitaAmici(){
         alert(testo);
     }
 }
+
 
 
 
@@ -939,8 +944,15 @@ function invitaAmici(){
 
 
 
+
 let stanza = getStanzaDaURL();
-let isHost = !stanza;
+let isHost = (localStorage.getItem("hostStanza") === stanza);
+
+// ✅ AGGIUNGI QUI
+if(!isHost){
+    document.getElementById("btnStart").style.display = "none";
+}
+
 
 if(stanza){
     console.log("Stanza:", stanza);
