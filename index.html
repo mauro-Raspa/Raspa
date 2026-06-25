@@ -107,6 +107,11 @@ DOCTYPE html>
         max-width: 420px;
         margin: auto;        /* ✅ centra tutto */
         text-align: left;    /* ✅ testo leggibile */
+		   
+<div id="playersBox" style="margin:10px 0; font-weight:bold;">
+    Giocatori connessi: 1
+</div>
+
        }
 
 
@@ -946,9 +951,35 @@ if(stanza){
     // ✅ REGISTRA GIOCATORE SU FIREBASE
     let id = "player_" + Math.random().toString(36).substring(2,8);
 
-    db.ref("stanze/" + stanza + "/players/" + id).set(true);
-	alert("giocatore registrato ✅");
+    // riferimento al player
+let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
+
+// lo registro
+playerRef.set(true);
+
+// 🔥 IMPORTANTISSIMO
+playerRef.onDisconnect().remove();
+
+	// alert("giocatore registrato ✅");
 	
+}
+
+// ✅ CONTATORE GIOCATORI LIVE
+if(stanza){
+
+    const refPlayers = db.ref("stanze/" + stanza + "/players");
+
+    refPlayers.on("value", (snapshot) => {
+
+        let data = snapshot.val() || {};
+        let count = Object.keys(data).length;
+
+        // aggiorna UI
+        document.getElementById("playersBox").innerText =
+            "Giocatori connessi: " + count;
+
+    });
+
 }
 
 		
