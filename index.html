@@ -993,8 +993,11 @@ if(stanza){
         
 		let nomi = Object.values(data).map(p => p.nome);
 
+		
 		document.getElementById("playersBox").innerText =
-    		"Giocatori: " + nomi.join(" → ");
+        (isHost ? "👑 Host - " : "👤 Ospite - ") +
+        document.getElementById("playersBox").innerText;
+
 
 
     });
