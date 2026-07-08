@@ -329,9 +329,7 @@ const db = firebase.database();
 
         div.innerHTML = `
             ${(i === 0) ? "Tu" : "Bot " + i}
-            <div id="pron_g${i}" style="font-size:12px;">
-				${pronostici[i] !== undefined ? "🎯 " + pronostici[i] : ""}
-			</div>
+            <div id="pron_g${i}" style="font-size:12px;"></div>
          `;
 
 
@@ -792,6 +790,11 @@ function invitaAmici(){
 
          leader=win.g;
          disegnaGiocatori();
+		 for(let i=0;i<numGiocatori;i++){
+			if(pronostici[i] !== undefined){
+				document.getElementById("pron_g"+i).innerText = "🎯 " + pronostici[i];
+			}
+		 }
          mostraTavolo(win.g);
          preseGiocatori[leader]++;
 
