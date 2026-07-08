@@ -329,7 +329,7 @@ const db = firebase.database();
 
         div.innerHTML = `
             ${(i === 0) ? "Tu" : "Bot " + i}
-            <div id="pron_g${i}" style="font-size:12px;"></div>
+            <div id="score_g${i}" style="font-size:12px;"></div>
          `;
 
 
@@ -449,7 +449,8 @@ const db = firebase.database();
         document.getElementById("tavoloShape").style.clipPath =
           generaPoligono(numGiocatori);
           disegnaGiocatori();
-
+		  for(let i=0;i<numGiocatori;i++){
+			  document.getElementById("prese_g"+i).innerText = "🏆 0";
         }
 
         // ---------------------
@@ -517,7 +518,9 @@ const db = firebase.database();
               if (mio < 0) mio = 0;
 
               pronostici[0]=mio;
-              document.getElementById("pron_g0").innerText = "🎯 " + mio;
+              document.getElementById("score_g0").innerText =
+				"🎯 " + mio + " | 🏆 0";
+				
               btn.style.display = "none";
 
               index++;
@@ -562,8 +565,9 @@ const db = firebase.database();
 
           pronostici[g]=p;
 
-          document.getElementById("pron_g"+g).innerText = "🎯 " + p;
-
+          document.getElementById("score_g"+g).innerText =
+			"🎯 " + p + " | 🏆 0";
+			 
           index++;
           setTimeout(step,200);
          }
@@ -797,7 +801,17 @@ function invitaAmici(){
 		 }
          mostraTavolo(win.g);
          preseGiocatori[leader]++;
+			
+			for(let i=0;i<numGiocatori;i++){
+				if(pronostici[i] !== undefined){
+					document.getElementById("score_g"+i).innerText =
+						"🎯 " + pronostici[i];
+						"🏆 " + preseGiocatori[i];
+				}
+			}	
+					
 
+				
          //document.getElementById("leader").innerText=(leader===0?"Tu":"Bot "+leader);
 
          if(mani[0].length===0){
