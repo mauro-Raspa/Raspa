@@ -329,8 +329,8 @@ const db = firebase.database();
 
         div.innerHTML = `
             ${(i === 0) ? "Tu" : "Bot " + i}
-            <div id="pron_g${i}" style="font-size:12px;"></div>
-				${pronostici[i] !== undefined ? "P: " + pronostici[i] : ""}
+            <div id="pron_g${i}" style="font-size:12px;">
+				${pronostici[i] !== undefined ? "🎯 " + pronostici[i] : ""}
 			</div>
          `;
 
