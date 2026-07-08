@@ -449,7 +449,7 @@ const db = firebase.database();
         document.getElementById("tavoloShape").style.clipPath =
           generaPoligono(numGiocatori);
           disegnaGiocatori();
-		  
+		}  
 
         // ---------------------
 
@@ -798,8 +798,8 @@ function invitaAmici(){
 			for(let i=0;i<numGiocatori;i++){
 				if(pronostici[i] !== undefined){
 					document.getElementById("score_g"+i).innerText =
-						"🎯 " + pronostici[i];
-						"|🏆 " + preseGiocatori[i];
+						"🎯 " + pronostici[i]+
+						" |🏆 " + preseGiocatori[i];
 				}
 			}	
 					
