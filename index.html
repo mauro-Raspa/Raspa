@@ -57,7 +57,7 @@ DOCTYPE html>
 
        #mano{
         position: absolute;
-        bottom: -120px;   /* ✅ sotto il tavolo */
+        top: 105%;   /* ✅ sotto il tavolo */
         left: 50%;
         transform: translateX(-50%);
         display: grid;
@@ -226,7 +226,7 @@ DOCTYPE html>
     </button>-->
 
 
-    <div style="margin-top:80px;">
+    <div style="margin-top:200px;">
         <h3>Storico:</h3>
         <table border="1" id="classificaTabella"></table>
     </div>
@@ -256,7 +256,7 @@ const db = firebase.database();
 
 		
 
-        const semi=["♠","♥","♦","♣"];
+        const semi=["♠","♥","♣","♦"];
         let valori=[];
 
         let mazzo=[], mani=[];
