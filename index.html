@@ -60,11 +60,15 @@ DOCTYPE html>
         bottom: -120px;   /* ✅ sotto il tavolo */
         left: 50%;
         transform: translateX(-50%);
-        display: flex;
+        display: grid;
+		grid-template-columns: repeat(5, 1fr);
         gap: 5px;
-       }
+	   }
 
-
+	   #mano button{
+		width: 45px;
+	   }
+		
 
        #briscolaCentro {
         position: absolute;
