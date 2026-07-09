@@ -285,7 +285,7 @@ const db = firebase.database();
         let tavolo=[];
         let fasePronostico=true;
         let indiceTurno=0;
-
+		let partitaAvviata = false;
         let puntiGiocatori=[];
         let preseGiocatori=[];
         let pronostici=[];
@@ -420,7 +420,7 @@ const db = firebase.database();
         }
 
         function nuovaMano(){
-
+		 partitaAvviata = false;
          mazzo=creaMazzo();
          mani=[];
 
@@ -490,6 +490,9 @@ const db = firebase.database();
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
           b.onclick=()=>giocaUtente(c.index);
+			 if(!partitaAvviata){
+				b.disabled = true;
+			 }
           d.appendChild(b);
          });
 		  let righe = Math.ceil(mani[0].length / 5);
@@ -712,7 +715,7 @@ const db = firebase.database();
         // ---------------------
 
         function giocaUtente(i){
-
+		 if(!partitaAvviata) return;
          if(fasePronostico || indiceTurno!==0) return;
 
          let carta=mani[0][i];
@@ -825,6 +828,8 @@ function invitaAmici(){
 
 
         function iniziaPresa(){
+		 partitaAvviata = true;
+		 mostraMano();
          tavolo=[];
 		 mostraTavolo();
          indiceTurno=leader;
@@ -835,7 +840,7 @@ function invitaAmici(){
 
 
         function finePresa(){
-
+		 
          let rank = Object.fromEntries(valori.map((v,i)=>[v,i]));
          let win=tavolo[0];
 
