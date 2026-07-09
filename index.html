@@ -26,9 +26,9 @@ DOCTYPE html>
         #campoGioco{
         position: relative;
         width: 90vw;
-        height: 90vw;
+        height: 110vw;
         max-width: 400px;
-        max-height: 400px;
+        max-height: 520px;
         margin: 0 auto;
         margin-top: 80px;
         }
@@ -70,7 +70,7 @@ DOCTYPE html>
 	   }
 
 	   #storicoContainer{
-			margin-top: 80px;
+			margin-top: 150px;
 	   }
 		
 
@@ -230,7 +230,7 @@ DOCTYPE html>
     </button>-->
 
 
-    <div style="storicoContainer">
+    <div id="storicoContainer">
         <h3>Storico:</h3>
         <table border="1" id="classificaTabella"></table>
     </div>
@@ -485,7 +485,7 @@ const db = firebase.database();
          });
 		  let righe = Math.ceil(mani[0].length / 5);
 		  document.getElementById("storicoContainer").style.marginTop =
-		  	(80 + (righe - 1) * 50) + "px";
+		  	(150 + (righe - 1) * 60) + "px";
         }
 
         // ---------------------
