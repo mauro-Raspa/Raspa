@@ -68,6 +68,10 @@ DOCTYPE html>
 	   #mano button{
 		width: 45px;
 	   }
+
+	   #storicoContainer{
+			margin-top: 80px;
+	   }
 		
 
        #briscolaCentro {
@@ -226,7 +230,7 @@ DOCTYPE html>
     </button>-->
 
 
-    <div style="margin-top:200px;">
+    <div style="storicoContainer">
         <h3>Storico:</h3>
         <table border="1" id="classificaTabella"></table>
     </div>
@@ -479,6 +483,9 @@ const db = firebase.database();
           b.onclick=()=>giocaUtente(c.index);
           d.appendChild(b);
          });
+		  let righe = Math.ceil(mani[0].length / 5);
+		  document.getElementById("storicoContainer").style.marginTop =
+		  	(80 + (righe - 1) * 50) + "px";
         }
 
         // ---------------------
