@@ -200,7 +200,11 @@
 
         <!-- ✅ riga con i due bottoni -->
         <div style="display:flex; gap:10px;">
-            <button onclick="avviaPronostici()">Avvia Pronostici</button>
+			
+            <button id="btnAvviaPronostici" onclick="avviaPronostici()">
+				Avvia Pronostici
+			</button>
+			
             <button id="continuaBtn" onclick="continuaGioco()" style="display:none;">
                 ▶ Inizia Mano
             </button>
@@ -433,6 +437,7 @@ const db = firebase.database();
 
         function nuovaMano(){
 		 partitaAvviata = false;
+		 document.getElementById("btnAvviaPronostici").style.display = "inline-block";
          mazzo=creaMazzo();
          mani=[];
 
@@ -548,6 +553,8 @@ const db = firebase.database();
 		
 		
         function avviaPronostici(){
+
+		document.getElementById("btnAvviaPronostici").style.display = "none";
 
          let ordine = [];
          for(let i=0;i<numGiocatori;i++){
