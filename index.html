@@ -394,6 +394,10 @@ const db = firebase.database();
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
 
+		document.getElementById("numGiocatoriInput").disabled = true;
+		document.getElementById("livelloBot").disabled = true;
+		document.getElementById("mazzoTipo").disabled = true;
+
          numGiocatori=parseInt(document.getElementById("numGiocatoriInput").value)||3;
          if (numGiocatori < 3) numGiocatori = 3;
 
