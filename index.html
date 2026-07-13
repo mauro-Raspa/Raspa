@@ -391,6 +391,9 @@ const db = firebase.database();
 
         function avviaPartita(){
 
+		document.getElementById("btnStart").style.display = "none";
+		document.getElementById("btnReset").style.display = "inline-block";
+
          numGiocatori=parseInt(document.getElementById("numGiocatoriInput").value)||3;
          if (numGiocatori < 3) numGiocatori = 3;
 
@@ -1010,7 +1013,12 @@ function invitaAmici(){
          t.innerHTML=html;
         }
 
-
+	function resetPartita(){
+			if(!confirm("Vuoi davvero azzerare la partita?")){
+				return;
+			}
+			location.reload();
+	}
 
 
 let stanza = getStanzaDaURL();
