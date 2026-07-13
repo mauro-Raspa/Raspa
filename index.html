@@ -154,6 +154,11 @@
 <div id="header">
     <h1>RASPA 🃏</h1>
     <button id="btnStart" onclick="avviaPartita()">Avvia Partita</button>
+	<button id="btnReset"
+		onclick="resetPartita()"
+		style="display:none;">
+	  🔄 Reset
+	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
 </div>
 
@@ -390,10 +395,10 @@ const db = firebase.database();
 
 
         function avviaPartita(){
-
+		
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
-
+		
 		document.getElementById("numGiocatoriInput").disabled = true;
 		document.getElementById("livelloBot").disabled = true;
 		document.getElementById("mazzoTipo").disabled = true;
@@ -497,9 +502,9 @@ const db = firebase.database();
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
           b.onclick=()=>giocaUtente(c.index);
-			 if(!partitaAvviata){
+			if(!partitaAvviata){
 				b.disabled = true;
-			 }
+			}	
           d.appendChild(b);
          });
 		  let righe = Math.ceil(mani[0].length / 5);
@@ -847,7 +852,7 @@ function invitaAmici(){
 
 
         function finePresa(){
-		 
+
          let rank = Object.fromEntries(valori.map((v,i)=>[v,i]));
          let win=tavolo[0];
 
@@ -1017,13 +1022,16 @@ function invitaAmici(){
          t.innerHTML=html;
         }
 
-	function resetPartita(){
+		function resetPartita(){
 			if(!confirm("Vuoi davvero azzerare la partita?")){
 				return;
 			}
 			location.reload();
-	}
-
+		}
+		
+		
+		
+		
 
 let stanza = getStanzaDaURL();
 let isHost = (!stanza) || (localStorage.getItem("hostStanza") === stanza);
