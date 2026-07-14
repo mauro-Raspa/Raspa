@@ -158,7 +158,7 @@
 
 <div id="header">
     <h1>RASPA 🃏</h1>
-    <button id="btnStart" onclick="avviaPartita()">Avvia Partita</button>
+    <button id="btnStart" onclick="avviaPartita()"disabled>Avvia Partita</button>
 	<button id="btnReset"
 		onclick="resetPartita()"
 		style="display:none;">
@@ -812,9 +812,23 @@ function invitaAmici(){
     localStorage.setItem("hostStanza", stanza);
 
     let link = "https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
+	
+	let messaggio =
+		"Vieni a giocare a RASPA! 🃏\n\n" +
+		"Apri questo link:\n" +
+		link;
+	let whatsappURL =
+		"https://wa.me/?text=" +
+		encodeURIComponent(messaggio);	
+				
 
     // ✅ ENTRA SUBITO NELLA STANZA
     window.location.href = link;
+	
+	
+	setTimeout(() => {
+		window.open(whatsappURL, "_blank");
+	}, 500);
 
 }
 
@@ -1089,9 +1103,16 @@ if(stanza){
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 
-let nome = prompt("Inserisci il tuo nome:");
-if(!nome) nome = "Giocatore";
+let nome = localStorage.getItem("nomeGiocatore");
 
+if(!nome){
+	nome = prompt("Inserisci il tuo nome:");
+	if(!nome){
+		nome = "Giocatore";
+	}
+	localStorage.setItem("nomeGiocatore", nome);
+}
+	
 window.myPlayerId = id;
 window.myPlayerName = nome;
 
@@ -1133,6 +1154,11 @@ if(stanza){
 		numGiocatori =
 			window.giocatoriLobby.length;
 		disegnaGiocatori();
+	}
+	if(isHost){
+
+			document.getElementById("btnStart").disabled =
+				window.giocatoriLobby.length < 3;
 	}
 
     });
