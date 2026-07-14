@@ -357,10 +357,24 @@ const db = firebase.database();
             div.style.color = "white";
         }
 
-        div.innerHTML = `
-            ${(i === 0) ? "Tu" : "Bot " + i}
-            <div id="score_g${i}" style="font-size:12px;"></div>
-         `;
+        let nomeVisualizzato;
+		
+		if(window.giocatoriLobby &&
+			window.giocatoriLobby[i]){
+		
+			nomeVisualizzato =
+				window.giocatoriLobby[i][1].nome;
+		}else{
+			nomeVisualizzato =
+				(i === 0) ? "Tu" : "Bot " + i;
+			
+		}	
+		div.innerHTML = `	
+			${nomeVisualizzato}
+			<div id="score_g${i}"
+			style="font-size:12px;"></div>
+			
+		`;
 
 
 
@@ -412,7 +426,14 @@ const db = firebase.database();
 		document.getElementById("livelloBot").disabled = true;
 		document.getElementById("mazzoTipo").disabled = true;
 
-         numGiocatori=parseInt(document.getElementById("numGiocatoriInput").value)||3;
+         if(stanza && window.giocatoriLobby){ 
+		
+			numGiocatori =window.giocatoriLobby.length;
+		}else{	
+		 
+			numGiocatori=parseInt(document.getElementById("numGiocatoriInput").value)||3;
+		}
+			
          if (numGiocatori < 3) numGiocatori = 3;
 
          livelloBot = parseInt(document.getElementById("livelloBot").value) || 5;
@@ -1060,6 +1081,8 @@ if(stanza){
     // nascondi bottone invita
     document.getElementById("btnInvita").style.display = "none";
 
+	document.getElementById("numGiocatoriInput").style.display = "none";
+
     // ✅ REGISTRA GIOCATORE SU FIREBASE
     let id = "player_" + Math.random().toString(36).substring(2,8);
 
@@ -1068,6 +1091,9 @@ let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 
 let nome = prompt("Inserisci il tuo nome:");
 if(!nome) nome = "Giocatore";
+
+window.myPlayerId = id;
+window.myPlayerName = nome;
 
 // lo registro
 
@@ -1091,14 +1117,23 @@ if(stanza){
 
         let data = snapshot.val() || {};
         
-		let nomi = Object.values(data).map(p => p.nome);
-
+		window.giocatoriLobby = Object.entries(data);
 		
-		document.getElementById("playersBox").innerText =
-        (isHost ? "👑 Host - " : "👤 Ospite - ") +
-        document.getElementById("playersBox").innerText;
-
-
+		let elenco = window.giocatoriLobby
+			.map(x => x[1].nome)
+			.join(", ");
+		
+		document.getElementById("playersBox").innerHTML =
+			"Giocatori connessi (" +
+			window.giocatoriLobby.length +
+			"):<br>" +
+			elenco;
+	if(window.giocatoriLobby.length >= 3){
+		
+		numGiocatori =
+			window.giocatoriLobby.length;
+		disegnaGiocatori();
+	}
 
     });
 
