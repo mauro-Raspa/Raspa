@@ -282,7 +282,15 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 alert("Firebase caricato");		
-
+db.ref("test").set({
+	prova: "ok"
+})
+.then(() => {
+	alert("SCRITTURA OK");
+})
+.catch((err) => {
+	alert("ERRORE SCRITTURA: " + err.message);
+});	
         const semi=["♠","♥","♣","♦"];
         let valori=[];
 
