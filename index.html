@@ -287,11 +287,10 @@ alert("PRIMA DELLA SCRITTURA");
 		
 db.ref("test").set({
 	prova: "ok"
-});
-alert("DOPO LA CHIAMATA SET");		
+})
 .then(() => {
 	alert("SCRITTURA OK");
-});
+})
 .catch((err) => {
 	alert("ERRORE SCRITTURA: " + err.message);
 });	
