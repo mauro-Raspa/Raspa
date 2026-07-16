@@ -159,13 +159,12 @@
 <div id="header">
     <h1>RASPA 🃏</h1>
     <button id="btnStart" onclick="avviaPartita()">Avvia Partita</button>
-	<button id="btnReset" onclick="resetPartita()" style="display:none;">
+	<button id="btnReset"
+		onclick="resetPartita()"
+		style="display:none;">
 	  🔄 Reset
 	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
-	<button id="btnCondividi" onclick="condividiInvito()"style="display:none;">
-	  📤 Condividi
-	</button>
 </div>
 
 
@@ -281,19 +280,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-alert("Firebase caricato");	
-
-alert("PRIMA DELLA SCRITTURA");		
 		
-db.ref("test").set({
-	prova: "ok"
-})
-.then(() => {
-	alert("SCRITTURA OK");
-})
-.catch((err) => {
-	alert("ERRORE SCRITTURA: " + err.message);
-});	
+
         const semi=["♠","♥","♣","♦"];
         let valori=[];
 
@@ -1064,23 +1052,15 @@ let isHost = (!stanza) || (localStorage.getItem("hostStanza") === stanza);
 // ✅ AGGIUNGI QUI
 if(!isHost){
     document.getElementById("btnStart").style.display = "none";
-	document.getElementById("btnInvita").style.display = "none";
-}
-		
-const MIN_GIOCATORI = 3;
-if(stanza && isHost){
-	document.getElementById("btnStart").disabled = true;
 }
 
 
 if(stanza){
     console.log("Stanza:", stanza);
-	alert("Stanza: " + stanza);
 
     // nascondi bottone invita
     document.getElementById("btnInvita").style.display = "none";
-	document.getElementById("btnCondividi").style.display = "inline-block";
-	
+
     // ✅ REGISTRA GIOCATORE SU FIREBASE
     let id = "player_" + Math.random().toString(36).substring(2,8);
 
@@ -1106,63 +1086,28 @@ playerRef.onDisconnect().remove();
 // ✅ CONTATORE GIOCATORI LIVE
 if(stanza){
 
-	const refPlayers = db.ref("stanze/" + stanza + "/players");
-	refPlayers.on("value", (snapshot) => {
+    const refPlayers = db.ref("stanze/" + stanza + "/players");
+
+    refPlayers.on("value", (snapshot) => {
+
+        let data = snapshot.val() || {};
+        
+		let nomi = Object.values(data).map(p => p.nome);
+
 		
-		alert(
-		"Giocatori letti: " +
-		Object.keys(snapshot.val() || {}).length
-		);
-		
-		let data = snapshot.val() || {};
+		document.getElementById("playersBox").innerText =
+        (isHost ? "👑 Host - " : "👤 Ospite - ") +
+        document.getElementById("playersBox").innerText;
 
-		console.log("PLAYERS:", data);
-		alert("Giocatori Firebase: " + Object.keys(data).length);
-		
-		let giocatori = Object.values(data);
-		let html = "";
-		giocatori.forEach((p, index) => {
-			if(index === 0){
-				html += "👑 " + p.nome + "<br>";
-			}else{
-				html += "👤 " + p.nome + "<br>";
-			}
-		});
-		html += "<br>Giocatori: " +
-				giocatori.length +
-				"/" +
-				MIN_GIOCATORI;
 
-		document.getElementById("playersBox").innerHTML = html;
-		if(isHost){
 
-			document.getElementById("btnStart").disabled =
-				giocatori.length < MIN_GIOCATORI;
-		}
-	});
-	
-}
-		
-
-function condividiInvito(){
-
-	const link = window.location.href;
-
-	if(navigator.share){
-
-		navigator.share({
-			title: "RASPA",
-			text: "Vuoi giocare a Raspa con me?",
-			url: link
-		});
-
-	}else{
-
-		prompt("Copia questo link:", link);
-
-	}
+    });
 
 }
+
+		
+
+
 
 
     </script>
