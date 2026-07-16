@@ -1053,6 +1053,7 @@ let isHost = (!stanza) || (localStorage.getItem("hostStanza") === stanza);
 // ✅ AGGIUNGI QUI
 if(!isHost){
     document.getElementById("btnStart").style.display = "none";
+	document.getElementById("btnInvita").style.display = "none";
 }
 		
 const MIN_GIOCATORI = 3;
@@ -1096,11 +1097,17 @@ if(stanza){
 
 	const refPlayers = db.ref("stanze/" + stanza + "/players");
 	refPlayers.on("value", (snapshot) => {
+		
 		alert(
 		"Giocatori letti: " +
 		Object.keys(snapshot.val() || {}).length
 		);
+		
 		let data = snapshot.val() || {};
+
+		console.log("PLAYERS:", data);
+		alert("Giocatori Firebase: " + Object.keys(data).length);
+		
 		let giocatori = Object.values(data);
 		let html = "";
 		giocatori.forEach((p, index) => {
