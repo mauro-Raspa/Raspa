@@ -159,12 +159,13 @@
 <div id="header">
     <h1>RASPA 🃏</h1>
     <button id="btnStart" onclick="avviaPartita()">Avvia Partita</button>
-	<button id="btnReset"
-		onclick="resetPartita()"
-		style="display:none;">
+	<button id="btnReset" onclick="resetPartita()" style="display:none;">
 	  🔄 Reset
 	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
+	<button id="btnCondividi" onclick="condividiInvito()"style="display:none;">
+	  📤 Condividi
+	</button>
 </div>
 
 
@@ -1065,7 +1066,8 @@ if(stanza){
 
     // nascondi bottone invita
     document.getElementById("btnInvita").style.display = "none";
-
+	document.getElementById("btnCondividi").style.display = "inline-block";
+	
     // ✅ REGISTRA GIOCATORE SU FIREBASE
     let id = "player_" + Math.random().toString(36).substring(2,8);
 
@@ -1119,7 +1121,25 @@ if(stanza){
 }
 		
 
+function condividiInvito(){
 
+	const link = window.location.href;
+
+	if(navigator.share){
+
+		navigator.share({
+			title: "RASPA",
+			text: "Vuoi giocare a Raspa con me?",
+			url: link
+		});
+
+	}else{
+
+		prompt("Copia questo link:", link);
+
+	}
+
+}
 
 
     </script>
