@@ -1053,6 +1053,11 @@ let isHost = (!stanza) || (localStorage.getItem("hostStanza") === stanza);
 if(!isHost){
     document.getElementById("btnStart").style.display = "none";
 }
+		
+const MIN_GIOCATORI = 3;
+if(stanza && isHost){
+	document.getElementById("btnStart").disabled = true;
+}
 
 
 if(stanza){
@@ -1086,25 +1091,32 @@ playerRef.onDisconnect().remove();
 // ✅ CONTATORE GIOCATORI LIVE
 if(stanza){
 
-    const refPlayers = db.ref("stanze/" + stanza + "/players");
+	const refPlayers = db.ref("stanze/" + stanza + "/players");
+	refPlayers.on("value", (snapshot) => {
+		let data = snapshot.val() || {};
+		let giocatori = Object.values(data);
+		let html = "";
+		giocatori.forEach((p, index) => {
+			if(index === 0){
+				html += "👑 " + p.nome + "<br>";
+			}else{
+				html += "👤 " + p.nome + "<br>";
+			}
+		});
+		html += "<br>Giocatori: " +
+				giocatori.length +
+				"/" +
+				MIN_GIOCATORI;
 
-    refPlayers.on("value", (snapshot) => {
+		document.getElementById("playersBox").innerHTML = html;
+		if(isHost){
 
-        let data = snapshot.val() || {};
-        
-		let nomi = Object.values(data).map(p => p.nome);
-
-		
-		document.getElementById("playersBox").innerText =
-        (isHost ? "👑 Host - " : "👤 Ospite - ") +
-        document.getElementById("playersBox").innerText;
-
-
-
-    });
-
+			document.getElementById("btnStart").disabled =
+				giocatori.length < MIN_GIOCATORI;
+		}
+	});
+	
 }
-
 		
 
 
