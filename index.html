@@ -1096,6 +1096,10 @@ if(stanza){
 
 	const refPlayers = db.ref("stanze/" + stanza + "/players");
 	refPlayers.on("value", (snapshot) => {
+		alert(
+		"Giocatori letti: " +
+		Object.keys(snapshot.val() || {}).length
+		);
 		let data = snapshot.val() || {};
 		let giocatori = Object.values(data);
 		let html = "";
