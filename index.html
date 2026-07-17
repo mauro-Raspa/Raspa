@@ -167,6 +167,11 @@
 	  🔄 Reset
 	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
+	<button id="btnChiudiStanza"
+		onclick="chiudiStanza()"
+		style="display:none;">
+	 🚪 Chiudi Stanza
+	</button>	
 	<!--
 	<button id="btnCondividi"
 		onclick="condividiStanza()"
@@ -1107,6 +1112,31 @@ function invitaAmici(){
 			}
 		}
 		*/	
+
+
+		function chiudiStanza(){
+			if(!confirm("Vuoi davvero chiudere la stanza?")){
+				return;
+			}
+
+			let stanza = getStanzaDaURL();
+			if(!stanza){
+				return;
+			}
+
+			db.ref("stanze/" + stanza)
+			  .remove()
+			  .then(() => {
+				 localStorage.removeItem("hostStanza");
+				 alert("Stanza chiusa");
+				 window.location.href =
+					"https://mauro-raspa.github.io/Raspa/";
+			});
+		}
+
+
+
+
 		
 
 let stanza = getStanzaDaURL();
@@ -1120,6 +1150,12 @@ if(!isHost){
 
 if(stanza){
 	modalitaMultiplayer = true;
+	
+	if(isHost){
+		document.getElementById("btnChiudiStanza").style.display = "inline-block";
+	}
+		
+	
 	/*
 	if(isHost){
 		document.getElementById("btnCondividi").style.display = "inline-block";
