@@ -1125,6 +1125,8 @@ if(!nome) nome = "Giocatore";
 
 // lo registro
 
+alert("PRIMA DEL SET");
+
 playerRef.set({
     nome: nome
 })		
@@ -1134,6 +1136,7 @@ playerRef.set({
 .catch((err) => {
 	alert("ERRORE FIREBASE: " + err.message);
 });
+alert("DOPO IL SET");	
 
 // 🔥 IMPORTANTISSIMO
 playerRef.onDisconnect().remove();
