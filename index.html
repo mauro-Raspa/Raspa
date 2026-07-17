@@ -1127,6 +1127,12 @@ if(!nome) nome = "Giocatore";
 
 playerRef.set({
     nome: nome
+})		
+.then(() => {
+	alert("SCRITTURA OK");
+})
+.catch((err) => {
+	alert("ERRORE FIREBASE: " + err.message);
 });
 
 // 🔥 IMPORTANTISSIMO
