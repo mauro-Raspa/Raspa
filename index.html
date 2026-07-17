@@ -1105,6 +1105,7 @@ if(stanza){
 
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
+let stanzaRef = db.ref("stanze/" + stanza);
 
 let nome;
 if(isHost){
@@ -1136,7 +1137,9 @@ playerRef.set({
 
 // 🔥 IMPORTANTISSIMO
 playerRef.onDisconnect().remove();
-
+if(isHost){
+	stanzaRef.onDisconnect().remove();
+}
 	// alert("giocatore registrato ✅");
 	
 }
