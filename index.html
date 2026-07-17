@@ -1188,6 +1188,7 @@ if(stanza){
 		let data = snapshot.val() || {};
         
 		let nomi = Object.values(data).map(p => p.nome);
+		alert(JSON.stringify(data));
 
 		let numeroGiocatoriConnessi = nomi.length;
 		document.getElementById("playersBox").innerText =
