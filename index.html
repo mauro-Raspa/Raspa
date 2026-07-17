@@ -593,7 +593,20 @@ const db = firebase.database();
             btn.style.display = "inline-block";
 
             btn.onclick = () => {
-              let mio = parseInt(document.getElementById("pronostico").value) || 0;
+              let mio = parseInt(document.getElementById("pronostico").value);
+				if(isNaN(mio)){
+					alert("Inserisci un pronostico valido");
+					return;
+				}
+				if(mio < 0){
+					alert("Il pronostico non può essere negativo");
+					return;
+				}
+				if(mio > cartePerMano){
+					alert("Non puoi pronosticare più di " + cartePerMano + " prese");
+					return;
+				}
+				
               if (mio < 0) mio = 0;
 
               pronostici[0]=mio;
@@ -935,7 +948,7 @@ function invitaAmici(){
           let maxCarte = valori.length * semi.length;
 
 
-        if((cartePerMano+1)*numGiocatori > maxCarte){
+        if((cartePerMano+1)*numGiocatori >= maxCarte){
 
           let max = Math.max(...puntiGiocatori);
           let vincitori = [];
