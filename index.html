@@ -173,11 +173,15 @@
 
 <!--<h1>RASPA 🃏</h1>-->
 <div id="container">
+	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
     Giocatori connessi: 1
 	</div>
 
-
+	<div id="listaGiocatori"
+		style="margin-bottom:10px;font-size:14px;">
+	</div>
+	
     Mazzo:
     <select id="mazzoTipo" class="hostOnly">
         <option value="40">40 carte</option>
@@ -1084,6 +1088,9 @@ if(stanza){
 
     // nascondi bottone invita
     document.getElementById("btnInvita").style.display = "none";
+	document.getElementById("numGiocatoriInput").style.display = "none";
+	document.getElementById("livelloBot").style.display = "none";
+	document.getElementById("mazzoTipo").style.display = "none";
 
     // ✅ REGISTRA GIOCATORE SU FIREBASE
     let id = "player_" + Math.random().toString(36).substring(2,8);
@@ -1136,6 +1143,8 @@ if(stanza){
 		document.getElementById("playersBox").innerText =
         	(isHost ? "👑 Host - " : "👤 Ospite - ") +
         	"Giocatori connessi: " + numeroGiocatoriConnessi;
+		document.getElementById("listaGiocatori").innerHTML =
+			nomi.map(n => "• " + n).join("<br>");
 		/*
 		if(isHost){
 			document.getElementById("btnStart").disabled =
