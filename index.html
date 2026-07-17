@@ -158,7 +158,9 @@
 
 <div id="header">
     <h1>RASPA 🃏</h1>
-    <button id="btnStart" onclick="avviaPartita()">Avvia Partita</button>
+    <button id="btnStart" onclick="avviaPartita()"disabled>
+		Avvia Partita
+	</button>
 	<button id="btnReset"
 		onclick="resetPartita()"
 		style="display:none;">
@@ -798,11 +800,19 @@ const db = firebase.database();
 
 
 function invitaAmici(){
-
+	
+	let nome = prompt("Inserisci il tuo nome:");
+	
+	if(!nome){
+		alert("Devi inserire un nome");
+		return;
+	}
+	
     let stanza = Math.random().toString(36).substring(2,8);
 
     // ✅ memorizza host
     localStorage.setItem("hostStanza", stanza);
+	localStorage.setItem("nomeGiocatore", nome);
 
     let link = "https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
 
@@ -1080,7 +1090,21 @@ if(stanza){
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 
-let nome = prompt("Inserisci il tuo nome:");
+let nome;
+if(isHost){
+	nome = localStorage.getItem("nomeGiocatore");
+	if(!nome){
+		nome = prompt("Inserisci il tuo nome:") || "Host";
+	}
+}
+else{
+	nome = prompt("Inserisci il tuo nome:");
+	if(!nome){
+		nome = "Giocatore";
+	}
+}
+
+	
 if(!nome) nome = "Giocatore";
 
 // lo registro
@@ -1107,12 +1131,14 @@ if(stanza){
         
 		let nomi = Object.values(data).map(p => p.nome);
 
-		
+		let numeroGiocatoriConnessi = nomi.length;
 		document.getElementById("playersBox").innerText =
-        (isHost ? "👑 Host - " : "👤 Ospite - ") +
-        document.getElementById("playersBox").innerText;
-
-
+        	(isHost ? "👑 Host - " : "👤 Ospite - ") +
+        	"Giocatori connessi: " + numeroGiocatoriConnessi;
+		if(isHost){
+			document.getElementById("btnStart").disabled =
+				numeroGiocatoriConnessi < 3;
+		}
 
     });
 
