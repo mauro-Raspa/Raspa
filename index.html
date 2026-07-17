@@ -1143,14 +1143,21 @@ if(stanza){
 
     refPlayers.on("value", (snapshot) => {
 
+		console.log("Firebase ricevuto:", snapshot.val());
+
         let data = snapshot.val() || {};
         
 		let nomi = Object.values(data).map(p => p.nome);
+
+		console.log("Nomi:", nomi);
 
 		let numeroGiocatoriConnessi = nomi.length;
 		document.getElementById("playersBox").innerText =
         	(isHost ? "👑 Host - " : "👤 Ospite - ") +
         	"Giocatori connessi: " + numeroGiocatoriConnessi;
+		
+		console.log("Aggiorno playersBox");
+		
 		document.getElementById("listaGiocatori").innerHTML =
 			nomi.map(n => "• " + n).join("<br>");
 		/*
