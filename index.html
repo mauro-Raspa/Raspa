@@ -313,6 +313,8 @@ const db = firebase.database();
 
         let livelloBot = 5;
 
+		let modalitaMultiplayer = false;
+
         // ---------------------
 
         function creaMazzo(){
@@ -410,6 +412,10 @@ const db = firebase.database();
 
 
         function avviaPartita(){
+			if(modalitaMultiplayer){
+				alert("Modalità multiplayer in sviluppo");
+				return;
+			}	
 		
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
@@ -1084,7 +1090,9 @@ if(!isHost){
 
 
 if(stanza){
+	modalitaMultiplayer = true;
     console.log("Stanza:", stanza);
+	document.getElementById("btnStart").disabled = true;
 
     // nascondi bottone invita
     document.getElementById("btnInvita").style.display = "none";
