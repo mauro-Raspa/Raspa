@@ -1144,7 +1144,11 @@ if(stanza){
 	
     const refPlayers = db.ref("stanze/" + stanza + "/players");
 
+	alert("Ref Players creato");
+
     refPlayers.on("value", (snapshot) => {
+
+		alert("Listener VALUE partito");
 
 		console.log("Firebase ricevuto:", snapshot.val());
 
