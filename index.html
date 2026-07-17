@@ -167,6 +167,11 @@
 	  🔄 Reset
 	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
+	<button id="btnCondividi"
+		onclick="condividiStanza()"
+		style="display:none;">
+	📨 Condividi
+	</button>
 </div>
 
 
@@ -1077,7 +1082,29 @@ function invitaAmici(){
 		}
 		
 		
-		
+		function condividiStanza(){	
+			let stanza = getStanzaDaURL();
+
+			if(!stanza){
+				return;
+			}
+			lrt link =
+				"https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
+
+			if(navigator.share){
+
+				navigator.share({
+					title: "Partita Raspa",
+					text: "Unisciti alla mia partita!",
+					url: link
+				});
+			} else {
+
+				navigator.clipboard.writeText(link);
+				alert("Link copiato negli appunti");
+			}
+		}
+			
 		
 
 let stanza = getStanzaDaURL();
@@ -1091,6 +1118,9 @@ if(!isHost){
 
 if(stanza){
 	modalitaMultiplayer = true;
+	if(isHost){
+		document.getElementById("btnCondividi").style.display = "inline-block";
+	}	
     console.log("Stanza:", stanza);
 	document.getElementById("btnStart").disabled = true;
 
