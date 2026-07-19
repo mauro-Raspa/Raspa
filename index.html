@@ -173,6 +173,13 @@
 		style="display:none;">
 	📨 Condividi
 	</button>
+
+	<button id="btnChiudiStanza"
+		onclick="chiudiStanza()"
+		style="display:none;">
+	🚪 Chiudi Stanza
+	</button>
+
 	
 </div>
 
@@ -1082,6 +1089,27 @@ function invitaAmici(){
 			}
 			location.reload();
 		}
+
+		function chiudiStanza(){
+			if(!confirm("Vuoi davvero chiudere la stanza?")){
+				return;
+			}
+			let stanza = getStanzaDaURL();
+			if(!stanza){
+				return;
+			}
+			db.ref("stanze/" + stanza)
+			.remove()
+			.then(() => {
+				localStorage.removeItem("hostStanza");
+					alert("Stanza chiusa");
+				window.location.href =
+					"https://mauro-raspa.github.io/Raspa/";
+			});
+		}
+
+
+
 		
 		
 		function condividiStanza(){	
@@ -1123,6 +1151,7 @@ if(stanza){
 	
 	if(isHost){
 		document.getElementById("btnCondividi").style.display = "inline-block";
+		document.getElementById("btnChiudiStanza").style.display = "inline-block";
 	}
 	
     console.log("Stanza:", stanza);
