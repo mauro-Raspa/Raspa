@@ -1140,6 +1140,13 @@ function invitaAmici(){
 let stanza = getStanzaDaURL();
 let isHost = (!stanza) || (localStorage.getItem("hostStanza") === stanza);
 
+	alert(
+		"isHost = " +isHost +
+		"\nstanza = " + stanza +
+		"\nhostStanza = " + localStorage.getItem("hostStanza")
+	);
+		
+
 // ✅ AGGIUNGI QUI
 if(!isHost){
     document.getElementById("btnStart").style.display = "none";
