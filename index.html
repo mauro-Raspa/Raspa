@@ -1139,13 +1139,13 @@ function invitaAmici(){
 
 let stanza = getStanzaDaURL();
 let isHost = (!stanza) || (localStorage.getItem("hostStanza") === stanza);
-
+/*
 	alert(
 		"isHost = " +isHost +
 		"\nstanza = " + stanza +
 		"\nhostStanza = " + localStorage.getItem("hostStanza")
 	);
-		
+*/		
 
 // ✅ AGGIUNGI QUI
 if(!isHost){
@@ -1196,12 +1196,13 @@ if(!nome) nome = "Giocatore";
 
 // lo registro
 
+/*
 alert(
 	"Sto registrando:\n" +
 	nome + "\n" +
 	id
 );
-
+*/
 	
 playerRef.set({
     nome: nome
