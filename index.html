@@ -167,13 +167,13 @@
 	  🔄 Reset
 	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
-	<!--
+	
 	<button id="btnCondividi"
 		onclick="condividiStanza()"
 		style="display:none;">
 	📨 Condividi
 	</button>
-	-->
+	
 </div>
 
 
@@ -1083,7 +1083,7 @@ function invitaAmici(){
 			location.reload();
 		}
 		
-		/*
+		
 		function condividiStanza(){	
 			let stanza = getStanzaDaURL();
 
@@ -1096,8 +1096,8 @@ function invitaAmici(){
 			if(navigator.share){
 
 				navigator.share({
-					title: "Partita Raspa",
-					text: "Unisciti alla mia partita!",
+					title: "RASPA",
+					text: "TI VA DI FARE UNA PARTITA A RASPA? 🃏",
 					url: link
 				});
 			} else {
@@ -1106,7 +1106,7 @@ function invitaAmici(){
 				alert("Link copiato negli appunti");
 			}
 		}
-		*/	
+			
 		
 
 let stanza = getStanzaDaURL();
@@ -1120,11 +1120,11 @@ if(!isHost){
 
 if(stanza){
 	modalitaMultiplayer = true;
-	/*
+	
 	if(isHost){
 		document.getElementById("btnCondividi").style.display = "inline-block";
 	}
-	*/
+	
     console.log("Stanza:", stanza);
 	document.getElementById("btnStart").disabled = true;
 
@@ -1188,7 +1188,7 @@ if(stanza){
 		let data = snapshot.val() || {};
         
 		let nomi = Object.values(data).map(p => p.nome);
-		alert(JSON.stringify(data));
+		//alert(JSON.stringify(data));
 
 		let numeroGiocatoriConnessi = nomi.length;
 		document.getElementById("playersBox").innerText =
@@ -1197,12 +1197,12 @@ if(stanza){
 		
 		document.getElementById("listaGiocatori").innerHTML =
 			nomi.map(n => "• " + n).join("<br>");
-		/*
+		
 		if(isHost){
 			document.getElementById("btnStart").disabled =
 				numeroGiocatoriConnessi < 3;
 		}
-		*/
+		
     });
 
 }
