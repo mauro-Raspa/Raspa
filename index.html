@@ -167,19 +167,13 @@
 	  🔄 Reset
 	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
-	
-	<button id="btnChiudiStanza"
-		onclick="chiudiStanza()"
-		style="display:none;">
-	 🚪 Chiudi Stanza
-	</button>	
-	
+	<!--
 	<button id="btnCondividi"
 		onclick="condividiStanza()"
 		style="display:none;">
 	📨 Condividi
 	</button>
-	
+	-->
 </div>
 
 
@@ -1089,21 +1083,21 @@ function invitaAmici(){
 			location.reload();
 		}
 		
-		
+		/*
 		function condividiStanza(){	
 			let stanza = getStanzaDaURL();
 
 			if(!stanza){
 				return;
 			}
-			let link =
+			lrt link =
 				"https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
 
 			if(navigator.share){
 
 				navigator.share({
-					title: "RASPA 🃏",
-					text: "TI VA DI FARE UNA PARTITA A RASPA?",
+					title: "Partita Raspa",
+					text: "Unisciti alla mia partita!",
 					url: link
 				});
 			} else {
@@ -1112,32 +1106,7 @@ function invitaAmici(){
 				alert("Link copiato negli appunti");
 			}
 		}
-			
-
-
-		function chiudiStanza(){
-			if(!confirm("Vuoi davvero chiudere la stanza?")){
-				return;
-			}
-
-			let stanza = getStanzaDaURL();
-			if(!stanza){
-				return;
-			}
-
-			db.ref("stanze/" + stanza)
-			  .remove()
-			  .then(() => {
-				 localStorage.removeItem("hostStanza");
-				 alert("Stanza chiusa");
-				 window.location.href =
-					"https://mauro-raspa.github.io/Raspa/";
-			});
-		}
-
-
-
-
+		*/	
 		
 
 let stanza = getStanzaDaURL();
@@ -1151,16 +1120,11 @@ if(!isHost){
 
 if(stanza){
 	modalitaMultiplayer = true;
-	
-	if(isHost){
-		document.getElementById("btnChiudiStanza").style.display = "inline-block";
-	}
-		
-	
+	/*
 	if(isHost){
 		document.getElementById("btnCondividi").style.display = "inline-block";
 	}
-	
+	*/
     console.log("Stanza:", stanza);
 	document.getElementById("btnStart").disabled = true;
 
@@ -1171,13 +1135,7 @@ if(stanza){
 	document.getElementById("mazzoTipo").style.display = "none";
 
     // ✅ REGISTRA GIOCATORE SU FIREBASE
-    // let id = "player_" + Math.random().toString(36).substring(2,8);
-	let id = sessionStorage.getItem("playerId");
-		if(!id){
-			id = "player_" + Math.random().toString(36).substring(2,8);
-			sessionStorage.setItem("playerId", id);
-		}
-	
+    let id = "player_" + Math.random().toString(36).substring(2,8);
 
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
@@ -1200,7 +1158,6 @@ else{
 	
 if(!nome) nome = "Giocatore";
 
-		
 // lo registro
 playerRef.set({
     nome: nome
@@ -1209,11 +1166,11 @@ playerRef.set({
 	
 })
 .catch((err) => {
-	console.error("Errore registrazione player:", err);
+	
 });
 
 // 🔥 IMPORTANTISSIMO
- playerRef.onDisconnect().remove();
+playerRef.onDisconnect().remove();
 if(isHost){
 	stanzaRef.onDisconnect().remove();
 }
@@ -1225,26 +1182,13 @@ if(isHost){
 if(stanza){
 	
 	const refPlayers = db.ref("stanze/" + stanza + "/players");
-	const connectedRef = db.ref(".info/connected");
-	connectedRef.on("value", (snap) => {
-		if(snap.val() === true){
-			console.log("Firebase connesso");
-		} else {
-			console.log("Firebase disconnesso");
-			document.getElementById("playersBox").innerText =
-				"⚠️ Connessione persa";
-		}
-
-		
 
 	refPlayers.on("value", (snapshot) => {
 
 		let data = snapshot.val() || {};
-     
+        
 		let nomi = Object.values(data).map(p => p.nome);
-		
-		// alert(JSON.stringify(data));
-		console.log("PLAYERS", data);
+		alert(JSON.stringify(data));
 
 		let numeroGiocatoriConnessi = nomi.length;
 		document.getElementById("playersBox").innerText =
@@ -1253,13 +1197,12 @@ if(stanza){
 		
 		document.getElementById("listaGiocatori").innerHTML =
 			nomi.map(n => "• " + n).join("<br>");
-			//JSON.stringify(data, null, 2);
-		
+		/*
 		if(isHost){
 			document.getElementById("btnStart").disabled =
 				numeroGiocatoriConnessi < 3;
 		}
-		
+		*/
     });
 
 }
