@@ -1233,7 +1233,8 @@ if(stanza){
         	"Giocatori connessi: " + numeroGiocatoriConnessi;
 		
 		document.getElementById("listaGiocatori").innerHTML =
-			nomi.map(n => "• " + n).join("<br>");
+			//nomi.map(n => "• " + n).join("<br>");
+			JSON.stringify(data, null, 2);
 		
 		if(isHost){
 			document.getElementById("btnStart").disabled =
