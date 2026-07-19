@@ -1200,14 +1200,7 @@ else{
 	
 if(!nome) nome = "Giocatore";
 
-	alert(
-		"Registrazione player\n" +
-		"ID = " + id + "\n" +
-		"Nome = " + nome + "\n" +
-		"Host = " + isHost
-	);
-
-	
+		
 // lo registro
 playerRef.set({
     nome: nome
@@ -1247,8 +1240,8 @@ if(stanza){
         	"Giocatori connessi: " + numeroGiocatoriConnessi;
 		
 		document.getElementById("listaGiocatori").innerHTML =
-			//nomi.map(n => "• " + n).join("<br>");
-			JSON.stringify(data, null, 2);
+			nomi.map(n => "• " + n).join("<br>");
+			//JSON.stringify(data, null, 2);
 		
 		if(isHost){
 			document.getElementById("btnStart").disabled =
