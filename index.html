@@ -167,18 +167,19 @@
 	  🔄 Reset
 	</button>
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
+	
 	<button id="btnChiudiStanza"
 		onclick="chiudiStanza()"
 		style="display:none;">
 	 🚪 Chiudi Stanza
 	</button>	
-	<!--
+	
 	<button id="btnCondividi"
 		onclick="condividiStanza()"
 		style="display:none;">
 	📨 Condividi
 	</button>
-	-->
+	
 </div>
 
 
@@ -1088,21 +1089,21 @@ function invitaAmici(){
 			location.reload();
 		}
 		
-		/*
+		
 		function condividiStanza(){	
 			let stanza = getStanzaDaURL();
 
 			if(!stanza){
 				return;
 			}
-			lrt link =
+			let link =
 				"https://mauro-raspa.github.io/Raspa/?stanza=" + stanza;
 
 			if(navigator.share){
 
 				navigator.share({
-					title: "Partita Raspa",
-					text: "Unisciti alla mia partita!",
+					title: "RASPA 🃏",
+					text: "TI VA DI FARE UNA PARTITA A RASPA?",
 					url: link
 				});
 			} else {
@@ -1111,7 +1112,7 @@ function invitaAmici(){
 				alert("Link copiato negli appunti");
 			}
 		}
-		*/	
+			
 
 
 		function chiudiStanza(){
@@ -1156,11 +1157,10 @@ if(stanza){
 	}
 		
 	
-	/*
 	if(isHost){
 		document.getElementById("btnCondividi").style.display = "inline-block";
 	}
-	*/
+	
     console.log("Stanza:", stanza);
 	document.getElementById("btnStart").disabled = true;
 
