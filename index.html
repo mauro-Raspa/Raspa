@@ -1200,6 +1200,14 @@ else{
 	
 if(!nome) nome = "Giocatore";
 
+	alert(
+		"Registrazione player\n" +
+		"ID = " + id + "\n" +
+		"Nome = " + nome + "\n" +
+		"Host = " + isHost
+	);
+
+	
 // lo registro
 playerRef.set({
     nome: nome
@@ -1208,7 +1216,7 @@ playerRef.set({
 	
 })
 .catch((err) => {
-	
+	console.error("Errore registrazione player:", err);
 });
 
 // 🔥 IMPORTANTISSIMO
