@@ -1171,7 +1171,13 @@ if(stanza){
 	document.getElementById("mazzoTipo").style.display = "none";
 
     // ✅ REGISTRA GIOCATORE SU FIREBASE
-    let id = "player_" + Math.random().toString(36).substring(2,8);
+    // let id = "player_" + Math.random().toString(36).substring(2,8);
+	let id = sessionStorage.getItem("playerId");
+		if(!id){
+			id = "player_" + Math.random().toString(36).substring(2,8);
+			sessionStorage.setItem("playerId", id);
+		}
+	
 
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
