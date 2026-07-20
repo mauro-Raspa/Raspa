@@ -1268,32 +1268,36 @@ if(isHost){
 */
 	// alert("giocatore registrato ✅");
 	
-}
+});
 
 // ✅ CONTATORE GIOCATORI LIVE
+
+if(stanza){
+	db.ref("stanze/" + stanza).on("value", (snapshot) => {
+		let data = snapshot.val();
+		if(data && data.chiusa === true){
+			document.body.innerHTML = `
+				<div style="
+					text-align:center;
+					margin-top:100px;
+					font-family:Arial;
+				">
+					<h1>🚫 Stanza chiusa</h1>
+					<p>L'host ha chiuso la partita.</p>
+					<p>Sarai disconnesso dalla stanza.</p>
+				</div>
+			`;
+			return;
+		}
+	});
+}
+
+	
 if(stanza){
 	
 	const refPlayers = db.ref("stanze/" + stanza + "/players");
 
 	refPlayers.on("value", (snapshot) => {
-
-db.ref("stanze/" + stanza).on("value", (snapshot) => {
-	let data = snapshot.val();
-	if(data && data.chiusa === true){
-		document.body.innerHTML = `
-			<div style="
-				text-align:center;
-				margin-top:100px;
-				font-family:Arial;
-			">
-				<h1>🚫 Stanza chiusa</h1>
-				<p>L'host ha chiuso la partita.</p>
-				<p>Sarai disconnesso dalla stanza.</p>
-			</div>
-		`;
-		return;
-	}
-});
 
 		let data = snapshot.val() || {};
         
