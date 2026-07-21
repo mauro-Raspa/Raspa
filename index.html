@@ -1098,8 +1098,8 @@ function invitaAmici(){
 			if(!stanza){
 				return;
 			}
-			db.ref("stanze/" + stanza)
-			.remove()
+			db.ref("stanze/" + stanza + "/chiusa")
+			.set(true)
 			.then(() => {
 				localStorage.removeItem("hostStanza");
 					alert("Stanza chiusa");
