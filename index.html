@@ -1098,9 +1098,12 @@ function invitaAmici(){
 			if(!stanza){
 				return;
 			}
+			alert("Sto cancellando la stanza: " + stanza);
+			
 			db.ref("stanze/" + stanza)
 			.remove()
 			.then(() => {
+				alert("Cancellazione completata");
 				localStorage.removeItem("hostStanza");
 					alert("Stanza chiusa");
 				window.location.href =
