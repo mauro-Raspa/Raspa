@@ -1101,7 +1101,9 @@ function invitaAmici(){
 			alert("Sto cancellando la stanza: " + stanza);
 			
 			db.ref("stanze/" + stanza)
-			.remove()
+			.update({
+				chiusa: true
+			})
 			.then(() => {
 				alert("Cancellazione completata");
 				localStorage.removeItem("hostStanza");
@@ -1179,9 +1181,21 @@ if(stanza){
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
-	
+stanzaRef.once("value").then((snapshot) => {
+	let data = snapshot.val();
+	if(data && data.chiusa === true){
+		alert(
+			"L'host ha chiuso la stanza.\n\n" +
+			"Questo link non è più valido."
+		);
+		return;
+	}
+	playerRef.set({
+		nome: nome
+	});
+});
 	stanzaRef.once("value").then((snapshot) => {
-		alert(JSON.stringify(snapshot.val()));
+		
 	});
 	
 let nome;
