@@ -1178,7 +1178,7 @@ let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
 	
 	stanzaRef.once("value").then((snapshot) => {
-		alert("La stanza esiste? " + snapshot.exists());
+		alert(JSON.stringify(snapshot.val()));
 	});
 	
 let nome;
