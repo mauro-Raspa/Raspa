@@ -1203,6 +1203,23 @@ alert(
 	id
 );
 */
+
+stanzaRef.once("value").then((snapshot) => {
+	if(!snapshot.exists()){
+		document.body.innerHTML = `
+			<div style="
+				text-align:center;
+				margin-top:100px;
+				font-family:Arial;
+			">
+				<h1>🚫 Stanza inesistente</h1>
+				<p>Questa partita è stata chiusa.</p>
+			</div>
+		`;
+		return;
+	}
+
+	
 	
 playerRef.set({
     nome: nome
