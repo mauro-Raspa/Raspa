@@ -833,12 +833,6 @@ function invitaAmici(){
 	}
 	
     let stanza = Math.random().toString(36).substring(2,8);
-	
-		db.ref("stanze/" + stanza).set({
-			creataDaHost: true,
-			chiusa: false
-		});
-
 
     // ✅ memorizza host
     localStorage.setItem("hostStanza", stanza);
@@ -1104,15 +1098,8 @@ function invitaAmici(){
 			if(!stanza){
 				return;
 			}
-			/*
 			db.ref("stanze/" + stanza)
 			.remove()
-			*/
-			db.ref("stanze/" + stanza).update({
-				chiusa: true
-			})
-			
-			
 			.then(() => {
 				localStorage.removeItem("hostStanza");
 					alert("Stanza chiusa");
@@ -1216,39 +1203,7 @@ alert(
 	id
 );
 */
-
-stanzaRef.once("value").then((snapshot) => {
-	let data = snapshot.val();
-	if (!data) {
-		document.body.innerHTML = `
-			<div style="
-				text-align:center;
-				margin-top:100px;
-				font-family:Arial;
-			">
-				<h1>🚫 Stanza inesistente</h1>
-				<p>Questa stanza non esiste più.</p>
-				<p>Il link non è valido.</p>
-			</div>
-		`;
-	return;
-	}
-	if (data.chiusa === true) {
-		document.body.innerHTML = `
-			<div style="
-				text-align:center;
-				margin-top:100px;
-				font-family:Arial;
-			">
-				<h1>🚫 Stanza chiusa</h1>
-				<p>Questa partita è stata chiusa dall'host.</p>
-				<p>Il link non è più valido.</p>
-			</div>
-		`;
-		
-		return;
-	}
-
+	
 playerRef.set({
     nome: nome
 })		
@@ -1268,37 +1223,7 @@ if(isHost){
 */
 	// alert("giocatore registrato ✅");
 	
-});
-
-
-if(stanza){
-
-	db.ref("stanze/" + stanza).on("value", (snapshot) => {
-		let data = snapshot.val();
-		if(data && data.chiusa === true){
-			document.body.innerHTML = `
-				<div style="
-					text-align:center;
-					margin-top:100px;
-					font-family:Arial;
-				">
-					<h1>🚫 Stanza chiusa</h1>
-					<p>L'host ha chiuso la partita.</p>
-					<p>Sarai disconnesso dalla stanza.</p>
-				</div>
-		`	;
-			return;
-		}
-	});
-
-
 }
-
-
-
-
-
-
 
 // ✅ CONTATORE GIOCATORI LIVE
 if(stanza){
@@ -1306,7 +1231,7 @@ if(stanza){
 	const refPlayers = db.ref("stanze/" + stanza + "/players");
 
 	refPlayers.on("value", (snapshot) => {
-	
+
 		let data = snapshot.val() || {};
         
 		let nomi = Object.values(data).map(p => p.nome);
