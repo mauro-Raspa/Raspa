@@ -1098,14 +1098,11 @@ function invitaAmici(){
 			if(!stanza){
 				return;
 			}
-			alert("Sto cancellando la stanza: " + stanza);
-			
 			db.ref("stanze/" + stanza)
 			.update({
 				chiusa: true
 			})
 			.then(() => {
-				alert("Cancellazione completata");
 				localStorage.removeItem("hostStanza");
 					alert("Stanza chiusa");
 				window.location.href =
@@ -1181,23 +1178,7 @@ if(stanza){
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
-stanzaRef.once("value").then((snapshot) => {
-	let data = snapshot.val();
-	if(data && data.chiusa === true){
-		alert(
-			"L'host ha chiuso la stanza.\n\n" +
-			"Questo link non è più valido."
-		);
-		return;
-	}
-	playerRef.set({
-		nome: nome
-	});
-});
-	stanzaRef.once("value").then((snapshot) => {
-		
-	});
-	
+
 let nome;
 if(isHost){
 	nome = localStorage.getItem("nomeGiocatore");
@@ -1224,32 +1205,18 @@ alert(
 	id
 );
 */
-/*
+	
 stanzaRef.once("value").then((snapshot) => {
-	if(!snapshot.exists()){
-		document.body.innerHTML = `
-			<div style="
-				text-align:center;
-				margin-top:100px;
-				font-family:Arial;
-			">
-				<h1>🚫 Stanza inesistente</h1>
-				<p>Questa partita è stata chiusa.</p>
-			</div>
-		`;
-		return;
-	}
-*/
-	
-	
-playerRef.set({
-    nome: nome
-})		
-.then(() => {
-	
-})
-.catch((err) => {
-	
+	 let data = snapshot.val();
+	 if(data && data.chiusa === true){
+		 alert(
+			 "L'host ha chiuso la stanza.\n\n" +
+			 "Questo link non è più valido."
+		 );
+		 return;
+	 }
+playerRef.set({	
+	nome: nome
 });
 
 // 🔥 IMPORTANTISSIMO
