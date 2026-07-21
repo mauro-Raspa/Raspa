@@ -1177,28 +1177,6 @@ if(stanza){
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
 
-
-	
-if(!isHost){
-
-	stanzaRef.once("value").then((snapshot) => {
-
-		if(!snapshot.exists()){
-
-			document.body.innerHTML = `
-				<h2>🚪 L'host ha chiuso la stanza</h2>
-				<p>Questo link non è più valido.</p>
-			`;
-
-			throw new Error("stanza chiusa");
-		}
-
-	});
-
-}
-
-
-
 	
 let nome;
 if(isHost){
@@ -1261,6 +1239,22 @@ if(stanza){
 		//alert(JSON.stringify(data));
 
 		let numeroGiocatoriConnessi = nomi.length;
+
+if(!isHost && numeroGiocatoriConnessi === 0){
+
+	document.body.innerHTML = `
+		<div style="
+			margin-top:100px;
+			text-align:center;
+			font-family:Arial;
+		">
+			<h2>🚪 L'host ha chiuso la stanza</h2>
+			<p>Questo link non è più valido.</p>
+		</div>
+	`;
+
+	return;
+}
 		document.getElementById("playersBox").innerText =
         	(isHost ? "👑 Host - " : "👤 Ospite - ") +
         	"Giocatori connessi: " + numeroGiocatoriConnessi;
