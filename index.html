@@ -1177,19 +1177,47 @@ if(stanza){
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
 
-let nome;
-if(isHost){
-	nome = localStorage.getItem("nomeGiocatore");
-	if(!nome){
-		nome = prompt("Inserisci il tuo nome:") || "Host";
+db.ref("stanze/" + stanza).once("value").then(snapshot => {
+
+	if(!isHost && !snapshot.exists()){
+
+		document.body.innerHTML = `
+			<div style="
+				margin-top:100px;
+				text-align:center;
+				font-size:24px;
+				font-family:Arial;
+			">
+				🚪 L'host ha chiuso la stanza.<br><br>
+				Questo link non è più valido.
+			</div>
+		`;
+
+		return;
 	}
-}
-else{
-	nome = prompt("Inserisci il tuo nome:");
-	if(!nome){
-		nome = "Giocatore";
+
+	let nome;
+
+	if(isHost){
+		nome = localStorage.getItem("nomeGiocatore");
+		if(!nome){
+			nome = prompt("Inserisci il tuo nome:") || "Host";
+		}
 	}
-}
+	else{
+		nome = prompt("Inserisci il tuo nome:");
+		if(!nome){
+			nome = "Giocatore";
+		}
+	}
+
+	if(!nome) nome = "Giocatore";
+
+	playerRef.set({
+		nome: nome
+	});
+
+});
 
 	
 if(!nome) nome = "Giocatore";
