@@ -1098,8 +1098,11 @@ function invitaAmici(){
 			if(!stanza){
 				return;
 			}
-			db.ref("stanze/" + stanza)
-			.remove()
+			db.ref("stanzeChiuse/" + stanza)
+			.set(true)
+			.then(() => {
+					return db.ref("stanze/" + stanza).remove();
+			})
 			.then(() => {
 				localStorage.removeItem("hostStanza");
 					alert("Stanza chiusa");
@@ -1176,15 +1179,7 @@ if(stanza){
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
-if(!isHost){
 
-	stanzaRef.once("value").then((snapshot) => {
-
-		alert("ESISTE = " + snapshot.exists());
-
-	});
-
-}
 
 let nome;
 if(isHost){
