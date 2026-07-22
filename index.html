@@ -1179,7 +1179,32 @@ if(stanza){
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
+	
+if(!isHost){
 
+	db.ref("stanzeChiuse/" + stanza)
+	.once("value")
+	.then((snapshot) => {
+
+		if(snapshot.val() === true){
+
+			document.body.innerHTML = `
+				<div style="
+					margin-top:100px;
+					text-align:center;
+					font-family:Arial;
+				">
+					<h2>🚪 L'host ha chiuso la stanza</h2>
+					<p>Questo link non è più valido.</p>
+				</div>
+			`;
+
+			throw new Error("STANZA_CHIUSA");
+		}
+
+	});
+
+}
 
 let nome;
 if(isHost){
