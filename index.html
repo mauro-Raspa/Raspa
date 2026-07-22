@@ -1180,7 +1180,45 @@ if(stanza){
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
 	
-if(!isHost){
+function registraGiocatore(){
+
+	let nome;
+
+	if(isHost){
+		nome = localStorage.getItem("nomeGiocatore");
+
+		if(!nome){
+			nome = prompt("Inserisci il tuo nome:") || "Host";
+		}
+	}
+	else{
+
+		nome = prompt("Inserisci il tuo nome:");
+
+		if(!nome){
+			nome = "Giocatore";
+		}
+	}
+
+	if(!nome) nome = "Giocatore";
+
+	playerRef.set({
+		nome: nome
+	})
+	.then(() => {
+
+	})
+	.catch((err) => {
+
+	});
+}
+
+if(isHost){
+
+	registraGiocatore();
+
+}
+else{
 
 	db.ref("stanzeChiuse/" + stanza)
 	.once("value")
@@ -1199,49 +1237,16 @@ if(!isHost){
 				</div>
 			`;
 
-			throw new Error("STANZA_CHIUSA");
+			return;
 		}
+
+		registraGiocatore();
 
 	});
 
 }
 
-let nome;
-if(isHost){
-	nome = localStorage.getItem("nomeGiocatore");
-	if(!nome){
-		nome = prompt("Inserisci il tuo nome:") || "Host";
-	}
-}
-else{
-	nome = prompt("Inserisci il tuo nome:");
-	if(!nome){
-		nome = "Giocatore";
-	}
-}
-
 	
-if(!nome) nome = "Giocatore";
-
-// lo registro
-
-/*
-alert(
-	"Sto registrando:\n" +
-	nome + "\n" +
-	id
-);
-*/
-	
-playerRef.set({
-    nome: nome
-})		
-.then(() => {
-	
-})
-.catch((err) => {
-	
-});
 
 // 🔥 IMPORTANTISSIMO
 /*
