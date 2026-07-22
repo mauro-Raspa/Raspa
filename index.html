@@ -328,6 +328,7 @@ const db = firebase.database();
         let livelloBot = 5;
 
 		let modalitaMultiplayer = false;
+		let giocatoriMultiplayer = [];
 
         // ---------------------
 
@@ -379,11 +380,19 @@ const db = firebase.database();
             div.style.color = "white";
         }
 
-        div.innerHTML = `
-            ${(i === 0) ? "Tu" : "Bot " + i}
-            <div id="score_g${i}" style="font-size:12px;"></div>
-         `;
+let nomeVisualizzato;
 
+if(modalitaMultiplayer && giocatoriMultiplayer.length > i){
+	nomeVisualizzato = giocatoriMultiplayer[i];
+}
+else{
+	nomeVisualizzato = (i === 0) ? "Tu" : "Bot " + i;
+}
+
+div.innerHTML = `
+    ${nomeVisualizzato}
+    <div id="score_g${i}" style="font-size:12px;"></div>
+`;
 
 
             div.style.left = x + "px";
@@ -427,7 +436,12 @@ const db = firebase.database();
 
         function avviaPartita(){
 			if(modalitaMultiplayer){
-				alert("Modalità multiplayer in sviluppo");
+				numGiocatori = giocatoriMultiplayer.length;
+				
+				document.getElementById("btnStart").style.display = "none";
+				document.getElementById("btnInvita").style.display = "none";
+				
+				nuovaMano();
 				return;
 			}	
 		
@@ -1269,6 +1283,8 @@ if(stanza){
 		let data = snapshot.val() || {};
         
 		let nomi = Object.values(data).map(p => p.nome);
+		giocatoriMultiplayer = nomi;
+		
 		//alert(JSON.stringify(data));
 
 		let numeroGiocatoriConnessi = nomi.length;
