@@ -435,15 +435,37 @@ div.innerHTML = `
 
 
         function avviaPartita(){
-			if(modalitaMultiplayer){
-				numGiocatori = giocatoriMultiplayer.length;
-				
-				document.getElementById("btnStart").style.display = "none";
-				document.getElementById("btnInvita").style.display = "none";
-				
-				nuovaMano();
-				return;
-			}	
+if(modalitaMultiplayer){
+
+	numGiocatori = giocatoriMultiplayer.length;
+
+	let tipo = document.getElementById("mazzoTipo").value;
+
+	if(tipo=="40"){
+		valori = ["2","3","4","5","6","7","J","Q","K","A"];
+	}
+	else{
+		valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+	}
+
+	numeroMano = 1;
+	cartePerMano = 1;
+
+	puntiGiocatori = new Array(numGiocatori).fill(0);
+	storicoMani = [];
+
+	let maxCarte = valori.length * semi.length;
+	totaleMani = Math.floor((maxCarte - 1) / numGiocatori);
+
+	leaderMano = 0;
+	leader = 0;
+
+	document.getElementById("btnStart").style.display = "none";
+	document.getElementById("btnInvita").style.display = "none";
+
+	nuovaMano();
+	return;
+}	
 		
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
@@ -1185,7 +1207,9 @@ if(stanza){
     document.getElementById("btnInvita").style.display = "none";
 	document.getElementById("numGiocatoriInput").style.display = "none";
 	document.getElementById("livelloBot").style.display = "none";
-	document.getElementById("mazzoTipo").style.display = "none";
+		if(!isHost){
+			document.getElementById("mazzoTipo").style.display = "none";
+		}
 
     // ✅ REGISTRA GIOCATORE SU FIREBASE
     let id = "player_" + Math.random().toString(36).substring(2,8);
