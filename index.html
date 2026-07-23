@@ -435,37 +435,23 @@ div.innerHTML = `
 
 
         function avviaPartita(){
-if(modalitaMultiplayer){
+			if(modalitaMultiplayer){
 
-	numGiocatori = giocatoriMultiplayer.length;
+   			 let tipo = document.getElementById("mazzoTipo").value;
 
-	let tipo = document.getElementById("mazzoTipo").value;
+    		db.ref("stanze/" + stanza + "/partita").set({
 
-	if(tipo=="40"){
-		valori = ["2","3","4","5","6","7","J","Q","K","A"];
-	}
-	else{
-		valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
-	}
+  		     avviata: true,
+   		     numGiocatori: giocatoriMultiplayer.length,
+     		 leader: 0,
+       		 tipoMazzo: tipo,
+       		 giocatori: giocatoriMultiplayer
 
-	numeroMano = 1;
-	cartePerMano = 1;
+    		});
 
-	puntiGiocatori = new Array(numGiocatori).fill(0);
-	storicoMani = [];
-
-	let maxCarte = valori.length * semi.length;
-	totaleMani = Math.floor((maxCarte - 1) / numGiocatori);
-
-	leaderMano = 0;
-	leader = 0;
-
-	document.getElementById("btnStart").style.display = "none";
-	document.getElementById("btnInvita").style.display = "none";
-
-	nuovaMano();
-	return;
-}	
+    		return;
+			}
+			
 		
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
@@ -1313,7 +1299,7 @@ if(stanza){
 
 		let numeroGiocatoriConnessi = nomi.length;
 		
-if(!isHost && numeroGiocatoriConnessi === 0){
+	if(!isHost && numeroGiocatoriConnessi === 0){
 
 	document.body.innerHTML = `
 		<div style="
@@ -1327,7 +1313,7 @@ if(!isHost && numeroGiocatoriConnessi === 0){
 	`;
 
 	return;
-}
+	}
 		document.getElementById("playersBox").innerText =
         	(isHost ? "👑 Host - " : "👤 Ospite - ") +
         	"Giocatori connessi: " + numeroGiocatoriConnessi;
@@ -1345,7 +1331,53 @@ if(!isHost && numeroGiocatoriConnessi === 0){
 }
 
 		
+if(stanza){
 
+    db.ref("stanze/" + stanza + "/partita")
+    .on("value", (snapshot) => {
+
+        let partita = snapshot.val();
+
+        if(!partita) return;
+
+		if(partita.avviata === true){
+
+    giocatoriMultiplayer = partita.giocatori;
+    numGiocatori = partita.numGiocatori;
+
+    let tipo = partita.tipoMazzo;
+
+    if(tipo=="40"){
+        valori = ["2","3","4","5","6","7","J","Q","K","A"];
+    }
+    else{
+        valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+    }
+
+    numeroMano = 1;
+    cartePerMano = 1;
+
+    puntiGiocatori = new Array(numGiocatori).fill(0);
+    storicoMani = [];
+
+    let maxCarte = valori.length * semi.length;
+
+    totaleMani =
+        Math.floor((maxCarte - 1) / numGiocatori);
+
+    leaderMano = partita.leader;
+    leader = partita.leader;
+
+    document.getElementById("btnStart").style.display = "none";
+    document.getElementById("btnInvita").style.display = "none";
+
+    nuovaMano();
+
+}
+
+    });
+
+}
 
 
 
