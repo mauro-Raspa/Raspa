@@ -538,11 +538,15 @@ div.innerHTML = `
 
          leader = leaderMano;
 
-         for(let i=0;i<numGiocatori;i++){
-          mani.push(mazzo.splice(0,cartePerMano));
-         }
+         if(!modalitaMultiplayer){
 
-         briscola=mazzo.shift();
+   			 for(let i=0;i<numGiocatori;i++){
+    		    mani.push(mazzo.splice(0,cartePerMano));
+		    }
+
+   			 briscola = mazzo.shift();
+
+		}
 
          preseGiocatori=new Array(numGiocatori).fill(0);
          pronostici=[];
