@@ -594,7 +594,7 @@ div.innerHTML = `
 
          const ordineSemi=["♠","♥","♦","♣"];
 
-         let sorted = mani[0]
+         let sorted = mani[indiceLocale]
           .map((c,i)=>({...c,index:i}))
           .sort((a,b)=>{
             let s=ordineSemi.indexOf(a.s)-ordineSemi.indexOf(b.s);
@@ -612,7 +612,7 @@ div.innerHTML = `
 			}	
           d.appendChild(b);
          });
-		  let righe = Math.ceil(mani[0].length / 5);
+		  let righe = Math.ceil(mani[indiceLocale].length / 5);
 		  document.getElementById("storicoContainer").style.marginTop =
 		  	(150 + (righe - 1) * 60) + "px";
         }
@@ -850,11 +850,11 @@ div.innerHTML = `
 		 if(!partitaAvviata) return;
          if(fasePronostico || indiceTurno!==0) return;
 
-         let carta=mani[0][i];
+         let carta = mani[indiceLocale][i];;
 
          if(tavolo.length>0){
           let seme=tavolo[0].c.s;
-          let hai=mani[0].some(c=>c.s===seme);
+          let hai = mani[indiceLocale].some(c => c.s === seme);
 
           if(hai && carta.s!==seme){
            alert("Devi rispondere al seme: "+seme);
@@ -862,7 +862,7 @@ div.innerHTML = `
           }
          }
 
-         carta=mani[0].splice(i,1)[0];
+         carta = mani[indiceLocale].splice(i,1)[0];
 
          tavolo.push({g:0,c:carta});
          mostraTavolo();
