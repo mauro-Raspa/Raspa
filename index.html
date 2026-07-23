@@ -329,6 +329,7 @@ const db = firebase.database();
 
 		let modalitaMultiplayer = false;
 		let giocatoriMultiplayer = [];
+		let partitaCorrente = null;
 
         // ---------------------
 
@@ -435,22 +436,47 @@ div.innerHTML = `
 
 
         function avviaPartita(){
+
 			if(modalitaMultiplayer){
 
-   			 let tipo = document.getElementById("mazzoTipo").value;
+    let tipo = document.getElementById("mazzoTipo").value;
 
-    		db.ref("stanze/" + stanza + "/partita").set({
+    if(tipo=="40"){
+        valori = ["2","3","4","5","6","7","J","Q","K","A"];
+    }
+    else{
+        valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+    }
 
-  		     avviata: true,
-   		     numGiocatori: giocatoriMultiplayer.length,
-     		 leader: 0,
-       		 tipoMazzo: tipo,
-       		 giocatori: giocatoriMultiplayer
+    let mazzoMP = creaMazzo();
 
-    		});
+    let maniMP = [];
 
-    		return;
-			}
+    let numG = giocatoriMultiplayer.length;
+
+    for(let i=0; i<numG; i++){
+        maniMP.push(
+            mazzoMP.splice(0,1)
+        );
+    }
+
+    let briscolaMP = mazzoMP.shift();
+
+    db.ref("stanze/" + stanza + "/partita").set({
+
+        avviata: true,
+        numGiocatori: numG,
+        leader: 0,
+        tipoMazzo: tipo,
+        giocatori: giocatoriMultiplayer,
+
+        mani: maniMP,
+        briscola: briscolaMP
+
+    });
+
+    return;
+}
 			
 		
 		document.getElementById("btnStart").style.display = "none";
@@ -492,8 +518,19 @@ div.innerHTML = `
         function nuovaMano(){
 		 partitaAvviata = false;
 		 document.getElementById("btnAvviaPronostici").style.display = "inline-block";
-         mazzo=creaMazzo();
-         mani=[];
+
+			if(modalitaMultiplayer){
+
+		    mani = partitaCorrente.mani;
+		    briscola = partitaCorrente.briscola;
+
+			}
+			else{
+
+  			  mazzo = creaMazzo();
+  			  mani = [];
+
+			}
 
          if(numeroMano !== 1){
           leaderMano = (leaderMano + 1) % numGiocatori;
@@ -1337,6 +1374,8 @@ if(stanza){
     .on("value", (snapshot) => {
 
         let partita = snapshot.val();
+
+		partitaCorrente = partita;
 
         if(!partita) return;
 
