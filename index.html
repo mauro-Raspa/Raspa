@@ -653,21 +653,7 @@ div.innerHTML = `
 		
 		
         function avviaPronostici(){
-
-   		 if(modalitaMultiplayer){
-
-    		    if(!isHost){
-        		    return;
-        		}
-
-       		 db.ref("stanze/" + stanza + "/partita/fase")
-        	  .set("pronostici");
-
-      		 return;
-   		 }
-
-
-			
+		
 		document.getElementById("btnAvviaPronostici").style.display = "none";
 
          let ordine = [];
@@ -1400,15 +1386,6 @@ if(stanza){
 
 		partitaCorrente = partita;
 
-		if(partita.fase === "pronostici"){
-
-			document.getElementById("btnAvviaPronostici").style.display = "none";
-
-		    avviaPronostici();
-
-		    return;
-		}
-		
         if(!partita) return;
 
 		if(partita.avviata === true){
