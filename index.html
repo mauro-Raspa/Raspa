@@ -1171,12 +1171,26 @@ function invitaAmici(){
 			.then(() => {
 					return db.ref("stanze/" + stanza).remove();
 			})
+
 			.then(() => {
-				localStorage.removeItem("hostStanza");
-					alert("Stanza chiusa");
-				window.location.href =
-					"https://mauro-raspa.github.io/Raspa/";
+
+			    localStorage.removeItem("hostStanza");
+
+			    document.body.innerHTML = `
+			        <div style="
+			           margin-top:100px;
+ 			           text-align:center;
+ 			           font-family:Arial;
+			        ">
+			           <h2>✅ Stanza chiusa</h2>
+			           <p>Puoi chiudere il browser.</p>
+ 			        </div>
+ 			   `;
+
 			});
+
+
+			
 		}
 
 
