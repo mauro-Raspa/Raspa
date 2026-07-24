@@ -1171,26 +1171,12 @@ function invitaAmici(){
 			.then(() => {
 					return db.ref("stanze/" + stanza).remove();
 			})
-
 			.then(() => {
-
-			    localStorage.removeItem("hostStanza");
-
-			    document.body.innerHTML = `
-			        <div style="
-			           margin-top:100px;
- 			           text-align:center;
- 			           font-family:Arial;
-			        ">
-			           <h2>✅ Stanza chiusa</h2>
-			           <p>Puoi chiudere il browser.</p>
- 			        </div>
- 			   `;
-
+				localStorage.removeItem("hostStanza");
+					alert("Stanza chiusa");
+				window.location.href =
+					"https://mauro-raspa.github.io/Raspa/";
 			});
-
-
-			
 		}
 
 
@@ -1258,19 +1244,18 @@ if(stanza){
 		}
 
     // ✅ REGISTRA GIOCATORE SU FIREBASE
-    let id = "player_" + Math.random().toString(36).substring(2,8);
+    let id = localStorage.getItem("playerId");
+
+	if(!id){
+	    id = "player_" + Math.random().toString(36).substring(2,8);
+	    localStorage.setItem("playerId", id);
+	}
 
     // riferimento al player
 let playerRef = db.ref("stanze/" + stanza + "/players/" + id);
 let stanzaRef = db.ref("stanze/" + stanza);
 	
 function registraGiocatore(){
-
-	alert(
-    "REGISTRA GIOCATORE\n\n" +
-    "isHost = " + isHost + "\n" +
-    "stanza = " + stanza
-	);
 
 	let nome;
 
@@ -1292,13 +1277,8 @@ function registraGiocatore(){
 
 	if(!nome) nome = "Giocatore";
 
-	alert(
-	    "SCRIVO SU FIREBASE\n\n" +
-	    "Nome = " + nome
-	);
-
 	playerRef.set({
-	    nome: nome
+		nome: nome
 	})
 	.then(() => {
 		localStorage.setItem("nomeGiocatore", nome);
@@ -1344,6 +1324,9 @@ else{
 	
 
 // 🔥 IMPORTANTISSIMO
+
+playerRef.onDisconnect().remove();
+
 /*
 playerRef.onDisconnect().remove();
 if(isHost){
@@ -1362,12 +1345,6 @@ if(stanza){
 	refPlayers.on("value", (snapshot) => {
 
 		let data = snapshot.val() || {};
-		alert(
-			"PLAYERS FIREBASE:\n\n" +
-			Object.keys(data).join("\n") +
-			"\n\n" +
-			JSON.stringify(data, null, 2)
-		);
         
 		let nomi = Object.values(data).map(p => p.nome);
 		giocatoriMultiplayer = nomi;
