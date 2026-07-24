@@ -1271,11 +1271,13 @@ function registraGiocatore(){
 		nome = prompt("Inserisci il tuo nome:");
 
 		if(!nome){
-			nome = "Giocatore";
+			return;
 		}
 	}
 
-	if(!nome) nome = "Giocatore";
+	if(!nome){ 
+		return;
+	}
 
 	playerRef.set({
 		nome: nome
