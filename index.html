@@ -1364,6 +1364,8 @@ if(stanza){
 		let data = snapshot.val() || {};
 		alert(
 			"PLAYERS FIREBASE:\n\n" +
+			Object.keys(data).join("\n") +
+			"\n\n" +
 			JSON.stringify(data, null, 2)
 		);
         
