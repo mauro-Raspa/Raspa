@@ -1351,6 +1351,8 @@ if(stanza){
 	refPlayers.on("value", (snapshot) => {
 
 		let data = snapshot.val() || {};
+		console.log("PLAYERS FIREBASE:");
+		console.log(data);
         
 		let nomi = Object.values(data).map(p => p.nome);
 		giocatoriMultiplayer = nomi;
