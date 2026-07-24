@@ -1266,6 +1266,12 @@ let stanzaRef = db.ref("stanze/" + stanza);
 	
 function registraGiocatore(){
 
+	alert(
+    "REGISTRA GIOCATORE\n\n" +
+    "isHost = " + isHost + "\n" +
+    "stanza = " + stanza
+	);
+
 	let nome;
 
 	if(isHost){
@@ -1286,8 +1292,13 @@ function registraGiocatore(){
 
 	if(!nome) nome = "Giocatore";
 
+	alert(
+	    "SCRIVO SU FIREBASE\n\n" +
+	    "Nome = " + nome
+	);
+
 	playerRef.set({
-		nome: nome
+	    nome: nome
 	})
 	.then(() => {
 		localStorage.setItem("nomeGiocatore", nome);
