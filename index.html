@@ -1496,6 +1496,21 @@ if(stanza){
 
 			if(partita.fase === "pronostici"){
 
+				if(partita.pronostici){
+
+    				for(let i=0; i<numGiocatori; i++){
+
+        				if(partita.pronostici[i] !== undefined){
+
+            				document.getElementById("score_g"+i).innerText =
+                				"🎯 " + partita.pronostici[i] +
+                				" | 🏆 0";
+        				}
+
+    				}
+
+			}
+
 				if(partita.fase === "finePronostici"){
 					document.getElementById("areaPronostico").style.display =
 						"none";
