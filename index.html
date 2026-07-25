@@ -478,7 +478,7 @@ div.innerHTML = `
 
         avviata: true,
         numGiocatori: numG,
-        leader: 0,
+        leader: Math.floor(Math.random() * numG),
         tipoMazzo: tipo,
         giocatori: giocatoriMultiplayer,
 
