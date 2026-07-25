@@ -1522,6 +1522,28 @@ if(stanza){
 
 				if(partita.fase === "finePronostici"){
 
+					if(partita.pronostici){
+
+    					setTimeout(() => {
+
+        					for(let i=0; i<numGiocatori; i++){
+
+            					let score =
+                					document.getElementById("score_g"+i);
+
+            					if(score){
+
+                					score.innerText =
+                    					"🎯 " + partita.pronostici[i] +
+                    					" | 🏆 0";
+            					}
+
+        					}
+
+    				},100);
+
+				}
+
     				document.getElementById("areaPronostico").style.display =
         				"none";
 
