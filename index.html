@@ -1498,18 +1498,27 @@ if(stanza){
 
 				if(partita.pronostici){
 
-    				for(let i=0; i<numGiocatori; i++){
+    				setTimeout(() => {
 
-        				if(partita.pronostici[i] !== undefined){
+        				for(let i=0; i<numGiocatori; i++){
 
-            				document.getElementById("score_g"+i).innerText =
-                				"🎯 " + partita.pronostici[i] +
-                				" | 🏆 0";
+            				let score =
+                				document.getElementById("score_g"+i);
+
+            				if(
+                				score &&
+                				partita.pronostici[i] !== undefined
+            				){
+
+                				score.innerText =
+                    				"🎯 " + partita.pronostici[i] +
+                    				" | 🏆 0";
+            				}
         				}
 
-    				}
+    				}, 100);
 
-			}
+				}
 
 				if(partita.fase === "finePronostici"){
 					document.getElementById("areaPronostico").style.display =
