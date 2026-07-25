@@ -236,11 +236,18 @@
         </div>
 
         <!-- ✅ input pronostico -->
-        <div style="display:flex; align-items:center; gap:10px;">
-            Pronostico:
-            <input id="pronostico" type="number" min="0" style="width:60px;">
-            <button id="btnPronostico" style="display:none;">Conferma</button>
-        </div>
+        
+		<div id="areaPronostico"
+     		style="display:none; align-items:center; gap:10px;">
+
+    		Pronostico:
+    		<input id="pronostico" type="number" min="0" style="width:60px;">
+
+    		<button id="btnPronostico" style="display:none;">
+        		Conferma
+    		</button>
+
+		</div>
 
     </div>
 
@@ -1490,6 +1497,8 @@ if(stanza){
 			if(partita.fase === "pronostici"){
 
 				if(partita.fase === "finePronostici"){
+					document.getElementById("areaPronostico").style.display =
+						"none";
 
     				document.getElementById("btnPronostico").style.display =
         				"none";
@@ -1500,7 +1509,9 @@ if(stanza){
     			document.getElementById("btnAvviaPronostici").style.display = "none";
 
     			if(indiceLocale === partita.turnoPronostico){
-
+					document.getElementById("areaPronostico").style.display =
+						"flex";
+					
     			let btn =
         			document.getElementById("btnPronostico");
 
@@ -1510,6 +1521,8 @@ if(stanza){
         			confermaPronosticoMultiplayer;
 				}
     			else{
+					document.getElementById("areaPronostico").style.display =
+						"none";
 
         			document.getElementById("btnPronostico").style.display =
             			"none";
