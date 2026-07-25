@@ -1521,13 +1521,34 @@ if(stanza){
 				}
 
 				if(partita.fase === "finePronostici"){
-					document.getElementById("areaPronostico").style.display =
-						"none";
+
+    				document.getElementById("areaPronostico").style.display =
+        				"none";
 
     				document.getElementById("btnPronostico").style.display =
         				"none";
 
-    				alert("Tutti i pronostici completati");
+    				setTimeout(() => {
+
+        				for(let i=0; i<numGiocatori; i++){
+
+            				let score =
+                				document.getElementById("score_g"+i);
+
+            				if(
+                				score &&
+                				partita.pronostici &&
+                				partita.pronostici[i] !== undefined
+            				){
+
+                				score.innerText =
+                    				"🎯 " + partita.pronostici[i] +
+                    				" | 🏆 0";
+            				}
+        				}
+
+    				},100);
+
 				}
 
     			document.getElementById("btnAvviaPronostici").style.display = "none";
