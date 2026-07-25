@@ -666,76 +666,10 @@ div.innerHTML = `
 		
 
 
-		function confermaPronosticoMultiplayer(){
-
-    			let mio = parseInt(document.getElementById("pronostico").value);
-
-    			if(isNaN(mio)){
-        			alert("Inserisci un pronostico valido");
-        			return;
-    			}
-
-    			if(mio < 0 || mio > cartePerMano){
-        			alert("Pronostico non valido");
-        			return;
-    			}
-
-    			let nuoviPronostici =
-        			partitaCorrente.pronostici || [];
-
-    			nuoviPronostici[indiceLocale] = mio;
-
-    			let prossimo =
-        			(partitaCorrente.turnoPronostico + 1) %
-        			numGiocatori;
-
-    			let pronosticiCompletati =
-        			nuoviPronostici.filter(
-            			p => p !== undefined
-        			).length;
-
-    			if(pronosticiCompletati >= numGiocatori){
-
-        			db.ref("stanze/" + stanza + "/partita").update({
-
-            			pronostici: nuoviPronostici,
-            			fase: "finePronostici"
-
-        			});
-
-    			}
-    			else{
-
-        			db.ref("stanze/" + stanza + "/partita").update({
-
-            			pronostici: nuoviPronostici,
-            			turnoPronostico: prossimo
-
-        			});
-
-    			}
-
-			}
-
-
-
-
 
 		
         function avviaPronostici(){
-
-			if(modalitaMultiplayer){
-
-    			db.ref("stanze/" + stanza + "/partita").update({
-
-       			 fase: "pronostici",
-        			turnoPronostico: leader
-
-			    });
-
-			    return;
-			}
-		
+	
 		document.getElementById("btnAvviaPronostici").style.display = "none";
 
          let ordine = [];
@@ -973,7 +907,7 @@ div.innerHTML = `
 
 
 
-function invitaAmici(){
+	function invitaAmici(){
 	
 	let nome = prompt("Inserisci il tuo nome:");
 	
@@ -994,7 +928,7 @@ function invitaAmici(){
 	// ✅ ENTRA SUBITO NELLA STANZA
     window.location.href = link;
 
-}
+	}
 
 
 
@@ -1273,8 +1207,8 @@ function invitaAmici(){
 
 
 
-		
-		
+  
+  
 		function condividiStanza(){	
 			let stanza = getStanzaDaURL();
 
@@ -1325,7 +1259,7 @@ if(stanza){
 	}
 	if(!isHost){
     	document.getElementById("btnAvviaPronostici").style.display = "none";
-	}
+	}			 
 	
     console.log("Stanza:", stanza);
 	document.getElementById("btnStart").disabled = true;
@@ -1493,113 +1427,6 @@ if(stanza){
         if(!partita) return;
 
 		if(partita.avviata === true){
-
-			if(partita.fase === "pronostici"){
-
-				if(partita.pronostici){
-
-    				setTimeout(() => {
-
-        				for(let i=0; i<numGiocatori; i++){
-
-            				let score =
-                				document.getElementById("score_g"+i);
-
-            				if(
-                				score &&
-                				partita.pronostici[i] !== undefined
-            				){
-
-                				score.innerText =
-                    				"🎯 " + partita.pronostici[i] +
-                    				" | 🏆 0";
-            				}
-        				}
-
-    				}, 100);
-
-				}
-
-				if(partita.fase === "finePronostici"){
-
-					if(partita.pronostici){
-
-    					setTimeout(() => {
-
-        					for(let i=0; i<numGiocatori; i++){
-
-            					let score =
-                					document.getElementById("score_g"+i);
-
-            					if(score){
-
-                					score.innerText =
-                    					"🎯 " + partita.pronostici[i] +
-                    					" | 🏆 0";
-            					}
-
-        					}
-
-    				},100);
-
-				}
-
-    				document.getElementById("areaPronostico").style.display =
-        				"none";
-
-    				document.getElementById("btnPronostico").style.display =
-        				"none";
-
-    				setTimeout(() => {
-
-        				for(let i=0; i<numGiocatori; i++){
-
-            				let score =
-                				document.getElementById("score_g"+i);
-
-            				if(
-                				score &&
-                				partita.pronostici &&
-                				partita.pronostici[i] !== undefined
-            				){
-
-                				score.innerText =
-                    				"🎯 " + partita.pronostici[i] +
-                    				" | 🏆 0";
-            				}
-        				}
-
-    				},100);
-
-				}
-
-    			document.getElementById("btnAvviaPronostici").style.display = "none";
-
-    			if(indiceLocale === partita.turnoPronostico){
-					document.getElementById("areaPronostico").style.display =
-						"flex";
-					
-    			let btn =
-        			document.getElementById("btnPronostico");
-
-    			btn.style.display = "inline-block";
-
-    			btn.onclick =
-        			confermaPronosticoMultiplayer;
-				}
-    			else{
-					document.getElementById("areaPronostico").style.display =
-						"none";
-
-        			document.getElementById("btnPronostico").style.display =
-            			"none";
-
-        			alert(
-            			"Attendi il pronostico di " +
-            			giocatoriMultiplayer[partita.turnoPronostico]
-        			);
-    			}
-			}
 
 
     giocatoriMultiplayer = partita.giocatori;
