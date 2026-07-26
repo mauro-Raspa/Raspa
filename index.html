@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -1417,6 +1417,13 @@ if(stanza){
 
     		indiceLocale =
         		partita.giocatori.indexOf(mioNome);
+
+    		numGiocatori = partita.numGiocatori;
+
+    		document.getElementById("tavoloShape").style.clipPath =
+        		generaPoligono(numGiocatori);
+
+    		disegnaGiocatori();
 
     		console.log("Partita avviata");
     		console.log("Io sono:", mioNome);
