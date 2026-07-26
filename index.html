@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -376,6 +376,15 @@ const db = firebase.database();
 
         let indiceVisuale =
     		(i - indiceLocale + numGiocatori) % numGiocatori;
+
+console.log(
+    "Giocatore reale:",
+    i,
+    "Indice locale:",
+    indiceLocale,
+    "Indice visuale:",
+    indiceVisuale
+);
 
 		let angolo =
     		(2 * Math.PI * indiceVisuale / numGiocatori)
