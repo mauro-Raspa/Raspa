@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE 1 SINGOLO 
+    MODALITA GIOCATORE SINGOLO
 	</div>
 
 	<div id="listaGiocatori"
@@ -1104,19 +1104,27 @@ function invitaAmici(){
 					return db.ref("stanze/" + stanza).remove();
 			})
 			.then(() => {
-			    localStorage.removeItem("hostStanza");
+				localStorage.removeItem("hostStanza");
+					alert("Stanza chiusa");
+				window.location.href =
+					"https://mauro-raspa.github.io/Raspa/";
+			});
+		}
 
-    			document.body.innerHTML = `
-        			<div style="
-            			margin-top:100px;
-            			text-align:center;
-            			font-family:Arial;
-        			">
-            			<h2>✅ Stanza chiusa</h2>
-            			<p>Puoi chiudere il browser.</p>
-        			</div>
-   		 		`;
 
+								  
+					   
+								
+								 
+								 
+			 
+										 
+											   
+				 
+		  
+
+		
+		
 		function condividiStanza(){	
 			let stanza = getStanzaDaURL();
 
@@ -1198,13 +1206,13 @@ function registraGiocatore(){
 		nome = prompt("Inserisci il tuo nome:");
 
 		if(!nome){
-			return;
+			nome = "Giocatore";
 		}
 	}
 
-	if(!nome){ 
-		return;
-	}
+	if(!nome) nome = "Giocatore";
+		 
+  
 
 	playerRef.set({
 		nome: nome
