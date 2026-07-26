@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -399,10 +399,19 @@ const db = firebase.database();
             div.style.color = "white";
         }
 
-        div.innerHTML = `
-            ${(i === 0) ? "Tu" : "Bot " + i}
-            <div id="score_g${i}" style="font-size:12px;"></div>
-         `;
+        let nomeVisualizzato;
+
+		if(modalitaMultiplayer && giocatoriMultiplayer.length > i){
+    		nomeVisualizzato = giocatoriMultiplayer[i];
+		}
+		else{
+    		nomeVisualizzato = (i === 0) ? "Tu" : "Bot " + i;
+		}
+
+		div.innerHTML = `
+    		${nomeVisualizzato}
+    		<div id="score_g${i}" style="font-size:12px;"></div>
+		`;
 
 
 
@@ -1401,13 +1410,19 @@ if(stanza){
 
         if(partita.avviata === true){
 
-            alert(
-                "Partita avviata\n" +
-                "Giocatori: " +
-                partita.giocatori.join(", ")
-            );
+    		partitaCorrente = partita;
 
-        }
+    		let mioNome =
+        		localStorage.getItem("nomeGiocatore");
+
+    		indiceLocale =
+        		partita.giocatori.indexOf(mioNome);
+
+    		console.log("Partita avviata");
+    		console.log("Io sono:", mioNome);
+    		console.log("Indice locale:", indiceLocale);
+
+		}
 
     });
 
