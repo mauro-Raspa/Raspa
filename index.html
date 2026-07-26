@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -345,6 +345,10 @@ const db = firebase.database();
 
 		let modalitaMultiplayer = false;
 
+		let giocatoriMultiplayer = [];
+		let partitaCorrente = null;
+		let indiceLocale = 0;
+
         // ---------------------
 
         function creaMazzo(){
@@ -443,9 +447,52 @@ const db = firebase.database();
 
         function avviaPartita(){
 			if(modalitaMultiplayer){
-				alert("Modalità multiplayer in sviluppo");
-				return;
-			}	
+
+    		let tipo = document.getElementById("mazzoTipo").value;
+
+    		if(tipo=="40"){
+        		valori = ["2","3","4","5","6","7","J","Q","K","A"];
+    		}
+    		else{
+        		valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+    		}
+
+    		let mazzoMP = creaMazzo();
+
+    		let numG = giocatoriMultiplayer.length;
+
+    		let maniMP = [];
+
+    		for(let i=0;i<numG;i++){
+        		maniMP.push(
+            		mazzoMP.splice(0,1)
+        		);
+    		}
+
+    		let briscolaMP = mazzoMP.shift();
+
+    		db.ref("stanze/" + stanza + "/partita").set({
+
+        		avviata: true,
+
+        		numGiocatori: numG,
+
+        		tipoMazzo: tipo,
+
+        		leader: Math.floor(
+            		Math.random() * numG
+        		),
+
+        		giocatori: giocatoriMultiplayer,
+
+        		mani: maniMP,
+
+        		briscola: briscolaMP
+
+    		});
+
+    		return;
+		}	
 		
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
@@ -1303,7 +1350,7 @@ if(stanza){
 		let data = snapshot.val() || {};
         
 		let nomi = Object.values(data).map(p => p.nome);
-		//alert(JSON.stringify(data));
+		giocatoriMultiplayer = nomi;
 
 		let numeroGiocatoriConnessi = nomi.length;
 		
@@ -1339,7 +1386,32 @@ if(!isHost && numeroGiocatoriConnessi === 0){
 }
 
 		
+if(stanza){
 
+    db.ref("stanze/" + stanza + "/partita")
+    .on("value",(snapshot)=>{
+
+        let partita = snapshot.val();
+
+        if(!partita){
+            return;
+        }
+
+        partitaCorrente = partita;
+
+        if(partita.avviata === true){
+
+            alert(
+                "Partita avviata\n" +
+                "Giocatori: " +
+                partita.giocatori.join(", ")
+            );
+
+        }
+
+    });
+
+}
 
 
 
