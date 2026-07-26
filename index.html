@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1305,7 +1305,10 @@ function registraGiocatore(){
 	if(!nome){ 
 		return;
 	}
-
+	localStorage.setItem(
+    "nomeGiocatore",
+    nome
+	);
 	playerRef.set({
 		nome: nome
 	})
