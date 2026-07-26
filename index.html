@@ -195,21 +195,37 @@
 	<div id="listaGiocatori"
 		style="margin-bottom:10px;font-size:14px;">
 	</div>
+
 	
+    <div id="boxMazzo">
     Mazzo:
     <select id="mazzoTipo" class="hostOnly">
         <option value="40">40 carte</option>
         <option value="52">52 carte</option>
     </select>
+	</div>
 
+	
+    <div id="boxGiocatori">
     Giocatori:
-    <input type="number" id="numGiocatoriInput" class="hostOnly" value="3" min="3" style="width:60px;">
+    <input type="number"
+           id="numGiocatoriInput"
+           class="hostOnly"
+           value="3"
+           min="3"
+           style="width:60px;">
+	</div>
 
 
-    <div>
-        Difficoltà Bot:
-        <input type="number" id="livelloBot" class="hostOnly" value="5" min="1" max="10">
-    </div>
+    <div id="boxBot">
+    Difficoltà Bot:
+    <input type="number"
+           id="livelloBot"
+           class="hostOnly"
+           value="5"
+           min="1"
+           max="10">
+	</div>
 
 
     <!--<button onclick="avviaPartita()">Avvia Partita</button>-->
