@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -346,6 +346,7 @@ const db = firebase.database();
 		let modalitaMultiplayer = false;
 
 		let giocatoriMultiplayer = [];
+		let giocatoriCompleti = [];
 		let partitaCorrente = null;
 		let indiceLocale = 0;
 
@@ -506,8 +507,8 @@ console.log(
             		Math.random() * numG
         		),
 
-        		giocatori: giocatoriMultiplayer,
-
+        		giocatori: giocatoriCompleti,
+				
         		mani: maniMP,
 
         		briscola: briscolaMP
@@ -1375,8 +1376,11 @@ if(stanza){
 	refPlayers.on("value", (snapshot) => {
 
 		let data = snapshot.val() || {};
-        
-		let nomi = Object.values(data).map(p => p.nome);
+
+		giocatoriCompleti = Object.values(data);
+
+		let nomi = giocatoriCompleti.map(p => p.nome);
+
 		giocatoriMultiplayer = nomi;
 
 		let numeroGiocatoriConnessi = nomi.length;
@@ -1430,11 +1434,14 @@ if(stanza){
 
     		partitaCorrente = partita;
 
-    		let mioNome =
-        		localStorage.getItem("nomeGiocatore");
+    		let mioId = id;
 
-    		indiceLocale =
-        		partita.giocatori.indexOf(mioNome);
+			indiceLocale =
+    			partita.giocatori.findIndex(
+        			g => g.id === mioId
+    			);
+			console.log("Mio ID:", mioId);
+			console.log("Indice locale:", indiceLocale);
 
     		numGiocatori = partita.numGiocatori;
 
