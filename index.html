@@ -469,14 +469,11 @@ const db = firebase.database();
         			document.getElementById("listaGiocatori")
         			.innerHTML
         			.split("<br>")
+        			.map(x => x.replace("• ",""))
         			.filter(x => x.trim() !== "");
 
-    			numGiocatori = nomi.length;
-
-    			document.getElementById("tavoloShape").style.clipPath =
-        			generaPoligono(numGiocatori);
-
-    			disegnaGiocatori();
+    			db.ref("stanze/" + stanza + "/ordineGiocatori")
+        			.set(nomi);
 
     			return;
 			}	
@@ -1344,21 +1341,21 @@ if(stanza){
 
 		let numeroGiocatoriConnessi = nomi.length;
 		
-if(!isHost && numeroGiocatoriConnessi === 0){
+	if(!isHost && numeroGiocatoriConnessi === 0){
 
-	document.body.innerHTML = `
-		<div style="
-			margin-top:100px;
-			text-align:center;
-			font-family:Arial;
-		">
-			<h2>🚪 L'host ha chiuso la stanza</h2>
-			<p>Questo link non è più valido.</p>
-		</div>
-	`;
+		document.body.innerHTML = `
+			<div style="
+				margin-top:100px;
+				text-align:center;
+				font-family:Arial;
+			">
+				<h2>🚪 L'host ha chiuso la stanza</h2>
+				<p>Questo link non è più valido.</p>
+			</div>
+		`;
 
-	return;
-}
+		return;
+	}
 		document.getElementById("playersBox").innerText =
         	(isHost ? "👑 Host - " : "👤 Ospite - ") +
         	"Giocatori connessi: " + numeroGiocatoriConnessi;
@@ -1376,7 +1373,27 @@ if(!isHost && numeroGiocatoriConnessi === 0){
 }
 
 		
-		   
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/ordineGiocatori")
+	.on("value", (snapshot) => {
+
+		let ordine = snapshot.val();
+
+		if(!ordine){
+			return;
+		}
+
+		numGiocatori = ordine.length;
+
+		document.getElementById("tavoloShape").style.clipPath =
+			generaPoligono(numGiocatori);
+
+		disegnaGiocatori();
+
+	});
+
+}		   
 
 										   
 							 
