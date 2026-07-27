@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -464,51 +464,21 @@ const db = firebase.database();
 
         function avviaPartita(){
 			if(modalitaMultiplayer){
-				alert("Modalità multiplayer in sviluppo");
-															
 
-					 
-															 
-	   
-		   
-																		  
-	   
+    			let nomi =
+        			document.getElementById("listaGiocatori")
+        			.innerHTML
+        			.split("<br>")
+        			.filter(x => x.trim() !== "");
 
-								
+    			numGiocatori = nomi.length;
 
-											 
+    			document.getElementById("tavoloShape").style.clipPath =
+        			generaPoligono(numGiocatori);
 
-					  
+    			disegnaGiocatori();
 
-							  
-					  
-								 
-			
-	   
-
-									   
-
-												   
-
-						
-
-							 
-
-						  
-
-							 
-								  
-			
-
-										  
-
-					   
-
-							  
-
-		 
-
-				return;
+    			return;
 			}	
 		
 		document.getElementById("btnStart").style.display = "none";
