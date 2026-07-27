@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -345,10 +345,9 @@ const db = firebase.database();
 
 		let modalitaMultiplayer = false;
 
-		let giocatoriMultiplayer = [];
-		let giocatoriCompleti = [];
-		let partitaCorrente = null;
-		let indiceLocale = 0;
+								
+							 
+					   
 
         // ---------------------
 
@@ -375,21 +374,12 @@ const db = firebase.database();
 
         for(let i = 0; i < numGiocatori; i++){
 
-        let indiceVisuale =
-    		(i - indiceLocale + numGiocatori) % numGiocatori;
+        let angolo = (2 * Math.PI * i / numGiocatori) + Math.PI / 2;
+													   
 
-console.log(
-    "Giocatore reale:",
-    i,
-    "Indice locale:",
-    indiceLocale,
-    "Indice visuale:",
-    indiceVisuale
-);
-
-		let angolo =
-    		(2 * Math.PI * indiceVisuale / numGiocatori)
-    		+ Math.PI / 2;
+			  
+												  
+					
 
 
         let campo = document.getElementById("campoGioco");
@@ -414,19 +404,22 @@ console.log(
             div.style.color = "white";
         }
 
-        let nomeVisualizzato;
+        div.innerHTML = `
+            ${(i === 0) ? "Tu" : "Bot " + i}
+            <div id="score_g${i}" style="font-size:12px;"></div>
+         `;
 
-		if(modalitaMultiplayer && giocatoriMultiplayer.length > i){
-    		nomeVisualizzato = giocatoriMultiplayer[i];
-		}
-		else{
-    		nomeVisualizzato = (i === 0) ? "Tu" : "Bot " + i;
-		}
+															 
+												 
+   
+	   
+													   
+   
 
-		div.innerHTML = `
-    		${nomeVisualizzato}
-    		<div id="score_g${i}" style="font-size:12px;"></div>
-		`;
+				   
+						 
+														  
+	
 
 
 
@@ -471,52 +464,52 @@ console.log(
 
         function avviaPartita(){
 			if(modalitaMultiplayer){
+				alert("Modalità multiplayer in sviluppo");
+															
 
-    		let tipo = document.getElementById("mazzoTipo").value;
+					 
+															 
+	   
+		   
+																		  
+	   
 
-    		if(tipo=="40"){
-        		valori = ["2","3","4","5","6","7","J","Q","K","A"];
-    		}
-    		else{
-        		valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
-    		}
+								
 
-    		let mazzoMP = creaMazzo();
+											 
 
-    		let numG = giocatoriMultiplayer.length;
+					  
 
-    		let maniMP = [];
+							  
+					  
+								 
+			
+	   
 
-    		for(let i=0;i<numG;i++){
-        		maniMP.push(
-            		mazzoMP.splice(0,1)
-        		);
-    		}
+									   
 
-    		let briscolaMP = mazzoMP.shift();
+												   
 
-    		db.ref("stanze/" + stanza + "/partita").set({
+						
 
-        		avviata: true,
+							 
 
-        		numGiocatori: numG,
+						  
 
-        		tipoMazzo: tipo,
+							 
+								  
+			
 
-        		leader: Math.floor(
-            		Math.random() * numG
-        		),
+										  
 
-        		giocatori: giocatoriCompleti,
-				
-        		mani: maniMP,
+					   
 
-        		briscola: briscolaMP
+							  
 
-    		});
+		 
 
-    		return;
-		}	
+				return;
+			}	
 		
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
@@ -1264,18 +1257,18 @@ if(stanza){
 
     // nascondi bottone invita
     document.getElementById("btnInvita").style.display = "none";
-	
-	if(isHost){
-    document.getElementById("boxGiocatori").style.display = "none";
-    document.getElementById("boxBot").style.display = "none";
-	}
-	else{
-    document.getElementById("boxGiocatori").style.display = "none";
-    document.getElementById("boxBot").style.display = "none";
-    document.getElementById("boxMazzo").style.display = "none";
-	}
+ 
+			
+	document.getElementById("numGiocatoriInput").style.display = "none";
+	document.getElementById("livelloBot").style.display = "none";
+  
+	  
+	document.getElementById("mazzoTipo").style.display = "none";
+															 
+															   
+  
 
-	
+ 
     // ✅ REGISTRA GIOCATORE SU FIREBASE
     let id = "player_" + Math.random().toString(36).substring(2,8);
 
@@ -1306,12 +1299,8 @@ function registraGiocatore(){
 	if(!nome){ 
 		return;
 	}
-	localStorage.setItem(
-    "nomeGiocatore",
-    nome
-	);
+
 	playerRef.set({
-		id: id,
 		nome: nome
 	})
 	.then(() => {
@@ -1376,12 +1365,9 @@ if(stanza){
 	refPlayers.on("value", (snapshot) => {
 
 		let data = snapshot.val() || {};
-
-		giocatoriCompleti = Object.values(data);
-
-		let nomi = giocatoriCompleti.map(p => p.nome);
-
-		giocatoriMultiplayer = nomi;
+        
+		let nomi = Object.values(data).map(p => p.nome);
+		//alert(JSON.stringify(data));
 
 		let numeroGiocatoriConnessi = nomi.length;
 		
@@ -1417,48 +1403,45 @@ if(!isHost && numeroGiocatoriConnessi === 0){
 }
 
 		
-if(stanza){
+		   
 
-    db.ref("stanze/" + stanza + "/partita")
-    .on("value",(snapshot)=>{
+										   
+							 
 
-        let partita = snapshot.val();
+									 
 
-        if(!partita){
-            return;
-        }
+					 
+				   
+		 
 
-        partitaCorrente = partita;
+								  
 
-        if(partita.avviata === true){
+									 
 
-    		partitaCorrente = partita;
+								
 
-    		let mioId = id;
+				   
+												
 
-			indiceLocale =
-    			partita.giocatori.findIndex(
-        			g => g.id === mioId
-    			);
-			console.log("Mio ID:", mioId);
-			console.log("Indice locale:", indiceLocale);
+					
+											 
 
-    		numGiocatori = partita.numGiocatori;
+										  
 
-    		document.getElementById("tavoloShape").style.clipPath =
-        		generaPoligono(numGiocatori);
+															 
+									   
 
-    		disegnaGiocatori();
+						 
 
-    		console.log("Partita avviata");
-    		console.log("Io sono:", mioNome);
-    		console.log("Indice locale:", indiceLocale);
+									 
+									   
+												  
 
-		}
+   
 
-    });
+	   
 
-}
+ 
 
 
 
