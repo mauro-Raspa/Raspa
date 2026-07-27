@@ -1259,11 +1259,12 @@ if(stanza){
     document.getElementById("btnInvita").style.display = "none";
  
 			
-	document.getElementById("numGiocatoriInput").style.display = "none";
-	document.getElementById("livelloBot").style.display = "none";
-  
-	  
-	document.getElementById("mazzoTipo").style.display = "none";
+	document.getElementById("boxGiocatori").style.display = "none";
+	document.getElementById("boxBot").style.display = "none";
+
+	if(!isHost){
+		document.getElementById("boxMazzo").style.display = "none";
+	}
 															 
 															   
   
