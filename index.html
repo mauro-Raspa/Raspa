@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 8
 	</div>
 
 	<div id="listaGiocatori"
@@ -457,6 +457,7 @@ const db = firebase.database();
 
 
         function avviaPartita(){
+			
 			if(modalitaMultiplayer){
 
     			let nomi =
@@ -484,10 +485,19 @@ const db = firebase.database();
 
 				let mazzoTemp = creaMazzo();
 
+				let maniTemp = [];
+
+				for(let i=0;i<numGiocatori;i++){
+					maniTemp.push([mazzoTemp.shift()]);
+				}
+
 				let briscolaTemp = mazzoTemp.shift();
 
+				db.ref("stanze/" + stanza + "/mani")
+					.set(maniTemp);
+
 				db.ref("stanze/" + stanza + "/briscola")
-    				.set(briscolaTemp);
+					.set(briscolaTemp);
 
 				return;
 			}	
@@ -1452,6 +1462,27 @@ if(stanza){
 
 }
 
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/mani")
+	.on("value", (snapshot) => {
+
+		let m = snapshot.val();
+
+		if(!m){
+			return;
+		}
+
+		mani = m;
+
+		mostraMano();
+
+	});
+
+}
+
+
+		
     </script>
 
 </div>
