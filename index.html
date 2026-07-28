@@ -1264,6 +1264,8 @@ function registraGiocatore(){
 		return;
 	}
 
+	localStorage.setItem("nomeGiocatore", nome);
+
 	playerRef.set({
 		nome: nome
 	})
