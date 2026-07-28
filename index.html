@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -345,7 +345,9 @@ const db = firebase.database();
 
 		let modalitaMultiplayer = false;
 		let ordineGiocatori = [];
-		let mioIndiceMultiplayer = 0;						
+		let totaleManiMultiplayer = 0;
+		let mioIndiceMultiplayer = 0;
+		
 							 
 					   
 
@@ -483,6 +485,9 @@ const db = firebase.database();
 					valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
 				}
 
+				let maxCarte = valori.length * semi.length;
+				let totaleManiTemp = Math.floor((maxCarte - 1) / numGiocatori);
+
 				let mazzoTemp = creaMazzo();
 
 				let maniTemp = [];
@@ -504,6 +509,9 @@ const db = firebase.database();
 
 				db.ref("stanze/" + stanza + "/cartePerMano")
 					.set(1);
+				
+				db.ref("stanze/" + stanza + "/totaleMani")
+					.set(totaleManiTemp);
 
 				return;
 
@@ -1508,6 +1516,22 @@ if(stanza){
 
 }
 
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/totaleMani")
+	.on("value", (snapshot) => {
+
+		let n = snapshot.val();
+
+		if(n === null){
+			return;
+		}
+
+		totaleManiMultiplayer = n;
+
+	});
+
+}
 
 if(stanza){
 
