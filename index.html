@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -499,7 +499,14 @@ const db = firebase.database();
 				db.ref("stanze/" + stanza + "/briscola")
 					.set(briscolaTemp);
 
+				db.ref("stanze/" + stanza + "/numeroMano")
+					.set(1);
+
+				db.ref("stanze/" + stanza + "/cartePerMano")
+					.set(1);
+
 				return;
+
 			}	
 		
 		document.getElementById("btnStart").style.display = "none";
@@ -1466,6 +1473,41 @@ if(stanza){
 	});
 
 }
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/numeroMano")
+	.on("value", (snapshot) => {
+
+		let n = snapshot.val();
+
+		if(n === null){
+			return;
+		}
+
+		document.getElementById("manoNum").innerText = n;
+
+	});
+
+}
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/cartePerMano")
+	.on("value", (snapshot) => {
+
+		let n = snapshot.val();
+
+		if(n === null){
+			return;
+		}
+
+		document.getElementById("carteNum").innerText = n;
+
+	});
+
+}
+
 
 if(stanza){
 
