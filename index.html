@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -478,6 +478,8 @@ const db = firebase.database();
 				db.ref("stanze/" + stanza + "/ordineGiocatori")
 				    .set(ordine);
 				let tipo = document.getElementById("mazzoTipo").value;
+				db.ref("stanze/" + stanza + "/tipoMazzo")
+    				.set(tipo);
 
 				if(tipo=="40"){
 					valori = ["2","3","4","5","6","7","J","Q","K","A"];
@@ -1740,8 +1742,14 @@ if(stanza && isHost){
 
         if(quanti >= numGiocatori){
 
-            return;
-        }
+    		document.getElementById("continuaBtn")
+        		.style.display = "block";
+
+    		document.getElementById("continuaBtn")
+        		.innerText = "▶ Inizia Mano";
+
+    		return;
+		}
 
         let prossimo = null;
 
@@ -1761,6 +1769,38 @@ if(stanza && isHost){
                 stanza +
                 "/turnoPronostico"
             ).set(prossimo);
+        }
+
+    });
+
+}
+
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/tipoMazzo")
+    .on("value", (snapshot) => {
+
+        let tipo = snapshot.val();
+
+        if(!tipo){
+            return;
+        }
+
+        if(tipo=="40"){
+
+            valori = [
+                "2","3","4","5","6",
+                "7","J","Q","K","A"
+            ];
+
+        }
+        else{
+
+            valori = [
+                "2","3","4","5","6","7",
+                "8","9","10","J","Q","K","A"
+            ];
+
         }
 
     });
