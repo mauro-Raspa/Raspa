@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -472,9 +472,16 @@ const db = firebase.database();
 				}));
 
 				db.ref("stanze/" + stanza + "/ordineGiocatori")
-    				.set(ordine);
+				    .set(ordine);
 
-    			return;
+				let mazzoTemp = creaMazzo();
+
+				let briscolaTemp = mazzoTemp.shift();
+
+				db.ref("stanze/" + stanza + "/briscola")
+    				.set(briscolaTemp);
+
+				return;
 			}	
 		
 		document.getElementById("btnStart").style.display = "none";
@@ -1412,6 +1419,30 @@ if(stanza){
 
 }		   
 
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/briscola")
+	.on("value", (snapshot) => {
+
+		let b = snapshot.val();
+
+		if(!b){
+			return;
+		}
+
+		let bc = document.getElementById("briscolaCentro");
+
+		bc.innerText = b.v + b.s;
+
+		bc.style.color =
+			(b.s==="♥" || b.s==="♦")
+			? "red"
+			: "black";
+
+	});
+
+}
 
     </script>
 
