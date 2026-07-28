@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -412,7 +412,7 @@ const db = firebase.database();
         let nomeVisualizzato;
 
 		if(modalitaMultiplayer && ordineGiocatori.length > 0){
-			nomeVisualizzato = ordineGiocatori[i];
+			nomeVisualizzato = ordineGiocatori[i].nome;
 		}
 		else{
 			nomeVisualizzato = (i === 0) ? "Tu" : "Bot " + i;
@@ -460,14 +460,19 @@ const db = firebase.database();
 			if(modalitaMultiplayer){
 
     			let nomi =
-        			document.getElementById("listaGiocatori")
-        			.innerHTML
-        			.split("<br>")
-        			.map(x => x.replace("• ",""))
-        			.filter(x => x.trim() !== "");
+    				document.getElementById("listaGiocatori")
+    				.innerHTML
+    				.split("<br>")
+    				.map(x => x.replace("• ",""))
+    				.filter(x => x.trim() !== "");
 
-    			db.ref("stanze/" + stanza + "/ordineGiocatori")
-        			.set(nomi);
+				let ordine = nomi.map((nome, indice) => ({
+    				nome: nome,
+    				posizione: indice
+				}));
+
+				db.ref("stanze/" + stanza + "/ordineGiocatori")
+    				.set(ordine);
 
     			return;
 			}	
@@ -1384,10 +1389,14 @@ if(stanza){
 
 		let mioNome = localStorage.getItem("nomeGiocatore");
 
-		mioIndiceMultiplayer =
-			ordineGiocatori.indexOf(mioNome);
+		let mioGiocatore = ordineGiocatori.find(
+			g => g.nome === mioNome
+		);
 
-		if(mioIndiceMultiplayer < 0){
+		if(mioGiocatore){
+			mioIndiceMultiplayer = mioGiocatore.posizione;
+		}
+		else{
 			mioIndiceMultiplayer = 0;
 		}
 
