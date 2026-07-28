@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -1390,13 +1390,6 @@ if(stanza){
 
 		let mioNome = localStorage.getItem("nomeGiocatore");
 
-alert(
-	"Nome locale = " + mioNome
-);
-
-console.log("MIONOME=", mioNome);
-console.log("ORDINE=", ordineGiocatori);
-
 		let mioGiocatore = ordineGiocatori.find(
 			g => g.nome === mioNome
 		);
@@ -1418,10 +1411,6 @@ console.log("ORDINE=", ordineGiocatori);
 	});
 
 }		   
-
-										   
-
-
 
 
     </script>
