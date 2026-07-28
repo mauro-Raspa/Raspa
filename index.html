@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1272,7 +1272,8 @@ function registraGiocatore(){
 	localStorage.setItem("nomeGiocatore", nome);
 
 	playerRef.set({
-		nome: nome
+		nome: nome,
+		mioNome: nome
 	})
 	.then(() => {
 
@@ -1388,6 +1389,9 @@ if(stanza){
 		ordineGiocatori = ordine;
 
 		let mioNome = localStorage.getItem("nomeGiocatore");
+
+console.log("MIONOME=", mioNome);
+console.log("ORDINE=", ordineGiocatori);
 
 		let mioGiocatore = ordineGiocatori.find(
 			g => g.nome === mioNome
