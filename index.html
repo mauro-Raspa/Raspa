@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -252,11 +252,17 @@
         </div>
 
         <!-- ✅ input pronostico -->
-        <div style="display:flex; align-items:center; gap:10px;">
-            Pronostico:
-            <input id="pronostico" type="number" min="0" style="width:60px;">
-            <button id="btnPronostico" style="display:none;">Conferma</button>
-        </div>
+        <div
+    		id="boxPronostico"
+    		style="display:none; align-items:center; gap:10px;">
+
+    		Pronostico:
+    		<input id="pronostico" type="number" min="0" style="width:60px;">
+    		<button id="btnPronostico" style="display:none;">
+        		Conferma
+    		</button>
+
+		</div>
 
     </div>
 
@@ -1546,8 +1552,11 @@ if(stanza){
 			return;
 		}
 
+		let maxCarte = valori.length * semi.length;
+		let totale = Math.floor((maxCarte - 1) / numGiocatori);
+
 		document.getElementById("manoNum").innerText =
-    		n + " / " + totaleManiMultiplayer;
+			n + " / " + totale;
 	});
 
 }
@@ -1617,22 +1626,22 @@ if(stanza){
             return;
         }
 
-        let inputPronostico =
-            document.getElementById("pronostico");
+        let box =
+            document.getElementById("boxPronostico");
 
-        let btnPronostico =
+        let btn =
             document.getElementById("btnPronostico");
 
         if(turno === mioIndiceMultiplayer){
 
-            inputPronostico.style.display = "inline-block";
-            btnPronostico.style.display = "inline-block";
+            box.style.display = "flex";
+            btn.style.display = "inline-block";
 
         }
         else{
 
-            inputPronostico.style.display = "none";
-            btnPronostico.style.display = "none";
+            box.style.display = "none";
+            btn.style.display = "none";
 
         }
 
