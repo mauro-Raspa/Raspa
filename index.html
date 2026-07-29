@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -937,11 +937,13 @@ const db = firebase.database();
 					return;
 				}
 
-				alert("Carta cliccata ✅");
-				return;
 			}
 
-	if(fasePronostico || indiceTurno!==0) return;
+	if(!stanza){
+
+    	if(fasePronostico || indiceTurno!==0) return;
+
+	}
 
 	let carta=mani[0][i];
 
