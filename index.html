@@ -633,7 +633,10 @@ const db = firebase.database();
           let b=document.createElement("button");
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
-          b.onclick=()=>giocaUtente(c.index);
+          b.onclick = () => {
+    		alert("CLICK");
+    		giocaUtente(c.index);
+		  };
 
 		if(!partitaAvviata){
 			b.disabled = true;
