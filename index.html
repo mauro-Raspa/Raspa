@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -933,12 +933,12 @@ const db = firebase.database();
 
 			if(stanza){
 
-				if(turnoMano !== mioIndiceMultiplayer){
-					return;
-				}
+    console.log(
+        "turnoMano=" + turnoMano,
+        "mioIndice=" + mioIndiceMultiplayer
+    );
 
-			}
-
+}
 	if(!stanza){
 
     	if(fasePronostico || indiceTurno!==0) return;
@@ -964,6 +964,7 @@ const db = firebase.database();
     modalitaMultiplayer
     ? mani[mioIndiceMultiplayer].splice(i,1)[0]
     : mani[0].splice(i,1)[0];
+	mostraMano();
 
          tavolo.push({g:0,c:carta});
          mostraTavolo();
