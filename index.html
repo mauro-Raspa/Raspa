@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -337,7 +337,7 @@ const db = firebase.database();
         let fasePronostico=true;
         let indiceTurno=0;
 		let partitaAvviata = false;
-		let turnoGiocatore = null;
+		let turnoMano = null;
         let puntiGiocatori=[];
         let preseGiocatori=[];
         let pronostici=[];
@@ -350,7 +350,7 @@ const db = firebase.database();
 		let totaleManiMultiplayer = 0;
 		let mioIndiceMultiplayer = 0;
 		
-		let possoGiocare = false;					 
+							 
 					   
 
         // ---------------------
@@ -635,29 +635,8 @@ const db = firebase.database();
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
           b.onclick=()=>giocaUtente(c.index);
 
-		if(modalitaMultiplayer){
-
-			if(turnoGiocatore === mioIndiceMultiplayer){
-
-				b.disabled = false;
-				b.style.background = "lime";
-				b.style.border = "3px solid green";
-
-			}
-			else{
-
-				b.disabled = true;
-				b.style.background = "#dddddd";
-
-			}
-
-		}
-		else{
-
-			if(!partitaAvviata){
-				b.disabled = true;
-			}
-
+		if(!partitaAvviata){
+			b.disabled = true;
 		}	
           d.appendChild(b);
          });
@@ -949,13 +928,22 @@ const db = firebase.database();
         // ---------------------
 
         function giocaUtente(i){
-		if(!partitaAvviata) return;
-			if(stanza && !possoGiocare){
+
+			if(!partitaAvviata) return;
+
+			if(stanza){
+
+				if(turnoMano !== mioIndiceMultiplayer){
+					return;
+				}
+
+				alert("Carta cliccata ✅");
 				return;
 			}
-         if(fasePronostico || indiceTurno!==0) return;
 
-         let carta=mani[0][i];
+	if(fasePronostico || indiceTurno!==0) return;
+
+	let carta=mani[0][i];
 
          if(tavolo.length>0){
           let seme=tavolo[0].c.s;
@@ -1144,17 +1132,16 @@ function invitaAmici(){
 
         function continuaGioco(){
 
-			if(stanza && window.prossimaAzione === "iniziaMano"){
+if(stanza && window.prossimaAzione === "iniziaMano"){
 
-				db.ref("stanze/" + stanza + "/turnoGiocatore")
-					.set(leader);
+	db.ref("stanze/" + stanza + "/turnoMano")
+		.set(leader);
 
-				document.getElementById("continuaBtn").style.display =
-					"none";
+	document.getElementById("continuaBtn").style.display =
+		"none";
 
-				return;
-			}
-
+	return;
+}
          document.getElementById("continuaBtn").style.display="none";
 
          if(window.prossimaAzione === "iniziaMano"){
@@ -1852,7 +1839,7 @@ if(stanza){
 
 if(stanza){
 
-	db.ref("stanze/" + stanza + "/turnoGiocatore")
+	db.ref("stanze/" + stanza + "/turnoMano")
 	.on("value", (snapshot) => {
 
 		let turno = snapshot.val();
@@ -1861,17 +1848,11 @@ if(stanza){
 			return;
 		}
 
-		turnoGiocatore = turno;
+		turnoMano = turno;
 
 		partitaAvviata = true;
 
-		possoGiocare =
-			(turnoGiocatore === mioIndiceMultiplayer);
-
-		mostraMano();
-
 	});
-
 }
 
 		
