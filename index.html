@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -635,8 +635,29 @@ const db = firebase.database();
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
           b.onclick=()=>giocaUtente(c.index);
 
-		if(!partitaAvviata){
-			b.disabled = true;
+		if(modalitaMultiplayer){
+
+			if(turnoGiocatore === mioIndiceMultiplayer){
+
+				b.disabled = false;
+				b.style.background = "lime";
+				b.style.border = "3px solid green";
+
+			}
+			else{
+
+				b.disabled = true;
+				b.style.background = "#dddddd";
+
+			}
+
+		}
+		else{
+
+			if(!partitaAvviata){
+				b.disabled = true;
+			}
+
 		}	
           d.appendChild(b);
          });
