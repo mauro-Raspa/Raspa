@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -1850,11 +1850,7 @@ if(stanza){
 
 		turnoMano = turno;
 
-		partitaAvviata = true;
-
-		document.getElementById("playersBox").innerText =
-			"turnoMano=" + turnoMano +
-			" | mioIndice=" + mioIndiceMultiplayer;
+		iniziaPresa();
 
 	});
 }
