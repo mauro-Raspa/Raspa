@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 7
 	</div>
 
 	<div id="listaGiocatori"
@@ -945,7 +945,10 @@ const db = firebase.database();
 
 	}
 
-	let carta=mani[0][i];
+	let carta =
+    modalitaMultiplayer
+    ? mani[mioIndiceMultiplayer][i]
+    : mani[0][i];
 
          if(tavolo.length>0){
           let seme=tavolo[0].c.s;
@@ -957,7 +960,10 @@ const db = firebase.database();
           }
          }
 
-         carta=mani[0].splice(i,1)[0];
+    carta =
+    modalitaMultiplayer
+    ? mani[mioIndiceMultiplayer].splice(i,1)[0]
+    : mani[0].splice(i,1)[0];
 
          tavolo.push({g:0,c:carta});
          mostraTavolo();
