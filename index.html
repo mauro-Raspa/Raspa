@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 0
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -242,9 +242,12 @@
         <!-- ✅ riga con i due bottoni -->
         <div style="display:flex; gap:10px;">
 		
-            <button id="btnAvviaPronostici" onclick="avviaPronostici()">
-				Avvia Pronostici
-			</button>
+		<button
+    		id="btnAvviaPronostici"
+    		onclick="avviaPronostici()"
+    		style="display:none;">
+    		Avvia Pronostici
+		</button>
 			
             <button id="continuaBtn" onclick="continuaGioco()" style="display:none;">
                 ▶ Inizia Mano
@@ -465,6 +468,10 @@ const db = firebase.database();
         function avviaPartita(){
 			
 			if(modalitaMultiplayer){
+				
+				document.getElementById("btnStart").style.display = "none";
+				document.getElementById("btnAvviaPronostici")
+    				.style.display = "inline-block";
 
     			let nomi =
     				document.getElementById("listaGiocatori")
