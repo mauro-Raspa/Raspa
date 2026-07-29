@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 0
 	</div>
 
 	<div id="listaGiocatori"
@@ -253,8 +253,11 @@
 
         <!-- ✅ input pronostico -->
 		
-        <div style="display:flex; align-items:center; gap:10px;">
-    		Pronostico:
+        <div
+    		id="boxPronostico"
+    		style="display:flex; align-items:center; gap:10px;">
+
+		    Pronostico:
     		<input id="pronostico" type="number" min="0" style="width:60px;">
     		<button id="btnPronostico" style="display:none;">Conferma</button>
 		</div>
@@ -1314,8 +1317,7 @@ if(!isHost){
 if(stanza){
 	modalitaMultiplayer = true;
 	
-	document.getElementById("pronostico").style.display = "none";
-	document.getElementById("btnPronostico").style.display = "none";
+	document.getElementById("boxPronostico").style.display = "none";
 	
 	if(isHost){
 		document.getElementById("btnCondividi").style.display = "inline-block";
@@ -1631,19 +1633,22 @@ if(stanza){
 
         let btn =
             document.getElementById("btnPronostico");
+		let box =
+        	document.getElementById("boxPronostico");
 
         if(turno === mioIndiceMultiplayer){
 
-            input.style.display = "inline-block";
-            btn.style.display = "inline-block";
+    		box.style.display = "flex";
 
-        }
-        else{
+    		input.style.display = "inline-block";
+    		btn.style.display = "inline-block";
 
-            input.style.display = "none";
-            btn.style.display = "none";
+		}
+		else{
 
-        }
+    		box.style.display = "none";
+
+		}
 
     });
 
@@ -1740,7 +1745,13 @@ if(stanza && isHost){
         let quanti =
             Object.keys(dati).length;
 
-        if(quanti >= numGiocatori){
+    	if(quanti >= numGiocatori){
+
+    		db.ref(
+        		"stanze/" +
+        		stanza +
+        		"/turnoPronostico"
+    		).set(-1);
 
     		document.getElementById("continuaBtn")
         		.style.display = "block";
