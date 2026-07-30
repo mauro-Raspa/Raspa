@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -936,6 +936,24 @@ const db = firebase.database();
         // ---------------------
 
         function giocaUtente(i){
+
+		if(modalitaMultiplayer){
+
+        	let carta =
+            	mani[mioIndiceMultiplayer][i];
+
+        	db.ref(
+            	"stanze/" +
+            	stanza +
+            	"/cartaGiocata"
+        	).set({
+            	giocatore: mioIndiceMultiplayer,
+            	carta: carta
+        	});
+
+        	return;
+    	}
+			
 		 if(!partitaAvviata) return;
          if(fasePronostico || indiceTurno!==0) return;
 
@@ -1860,6 +1878,31 @@ if(stanza){
 
             mostraMano();
         }
+
+    });
+
+}
+
+
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/cartaGiocata")
+    .on("value", (snapshot) => {
+
+        let dato = snapshot.val();
+
+        if(!dato){
+            return;
+        }
+
+        tavolo = [];
+
+        tavolo.push({
+            g: dato.giocatore,
+            c: dato.carta
+        });
+
+        mostraTavolo();
 
     });
 
