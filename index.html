@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 0
 	</div>
 
 	<div id="listaGiocatori"
@@ -1048,7 +1048,20 @@ function invitaAmici(){
 
          tavolo.forEach(x => {
 
-          let angolo = (2 * Math.PI * x.g / numGiocatori) + Math.PI/2;
+          let posizioneCarta = x.g;
+
+			if(modalitaMultiplayer){
+
+    			posizioneCarta =
+        			(x.g - mioIndiceMultiplayer + numGiocatori)
+        			% numGiocatori;
+
+			}
+
+			let angolo =
+    			(2 * Math.PI * posizioneCarta / numGiocatori)
+    			+ Math.PI/2;
+
 
           let r = document.getElementById("campoGioco").offsetWidth * 0.08;
 
@@ -1920,15 +1933,91 @@ if(stanza){
         }
 
         tavolo.push({
-            g: dato.giocatore,
-            c: dato.carta
-        });
+    g: dato.giocatore,
+    c: dato.carta
+});
 
-        mostraTavolo();
+	mostraTavolo();
+
+	if(
+		isHost &&
+		tavolo.length === numGiocatori
+	){
+		calcolaVincitorePresa();
+	}
 
     });
 
 }
+
+function calcolaVincitorePresa(){
+
+    let rank =
+        Object.fromEntries(
+            valori.map((v,i)=>[v,i])
+        );
+
+    let win = tavolo[0];
+
+    tavolo.forEach(x => {
+
+        if(
+            (x.c.s === briscola.s &&
+             win.c.s !== briscola.s)
+            ||
+            (
+                x.c.s === win.c.s &&
+                rank[x.c.v] > rank[win.c.v]
+            )
+        ){
+            win = x;
+        }
+
+    });
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/vincitorePresa"
+    ).set(win.g);
+
+}
+
+if(stanza){
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/vincitorePresa"
+    )
+    .on("value", (snapshot) => {
+
+        let vincitore = snapshot.val();
+
+        if(vincitore === null){
+            return;
+        }
+
+        leader = vincitore;
+
+        disegnaGiocatori();
+
+        mostraTavolo(vincitore);
+
+        let nome =
+            ordineGiocatori[vincitore].nome;
+
+        alert(
+            "🏆 " +
+            nome +
+            " ha vinto la presa"
+        );
+
+    });
+
+}
+
+
 
 		
     </script>
