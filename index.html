@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 0
+    MODALITA GIOCATORE SINGOLO 7
 	</div>
 
 	<div id="listaGiocatori"
@@ -1060,7 +1060,8 @@ function invitaAmici(){
 
 			let angolo =
     			(2 * Math.PI * posizioneCarta / numGiocatori)
-    			+ Math.PI/2;
+    			+ Math.PI/2
+				+ Math.PI;
 
 
           let r = document.getElementById("campoGioco").offsetWidth * 0.08;
