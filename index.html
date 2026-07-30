@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -1909,7 +1909,13 @@ if(stanza){
             return;
         }
 
-        tavolo = [];
+        let giaPresente = tavolo.some(x =>
+            x.g === dato.giocatore
+        );
+
+        if(giaPresente){
+            return;
+        }
 
         tavolo.push({
             g: dato.giocatore,
