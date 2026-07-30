@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1126,56 +1126,74 @@ function invitaAmici(){
          mostraMano();
         }
 
-        function continuaGioco(){
+function continuaGioco(){
 
-         document.getElementById("continuaBtn").style.display="none";
+    if(stanza){
 
-         if(window.prossimaAzione === "iniziaMano"){
-           iniziaPresa();
-           return;
-         }
+        db.ref(
+            "stanze/" +
+            stanza +
+            "/turnoCarta"
+        ).set(leader);
 
-         if(window.prossimaAzione==="nuovaMano"){
+        document.getElementById("continuaBtn")
+            .style.display = "none";
 
-          let maxCarte = valori.length * semi.length;
+        return;
+    }
 
+    document.getElementById("continuaBtn").style.display="none";
 
-        if((cartePerMano+1)*numGiocatori >= maxCarte){
+    if(window.prossimaAzione === "iniziaMano"){
+        iniziaPresa();
+        return;
+    }
 
-          let max = Math.max(...puntiGiocatori);
-          let vincitori = [];
+    if(window.prossimaAzione==="nuovaMano"){
 
-          for(let i=0;i<numGiocatori;i++){
-            if(puntiGiocatori[i] === max){
-              vincitori.push(i);
+        let maxCarte = valori.length * semi.length;
+
+    	if((cartePerMano+1)*numGiocatori >= maxCarte){
+
+            let max = Math.max(...puntiGiocatori);
+            let vincitori = [];
+
+            for(let i=0;i<numGiocatori;i++){
+                if(puntiGiocatori[i] === max){
+                    vincitori.push(i);
+                }
             }
-          }
 
-          let testo = "";
+            let testo = "";
 
-          if(vincitori.length === 1){
-            testo = (vincitori[0] === 0) ? "Hai vinto! 🎉" : "Vince Bot " + vincitori[0];
-          } else {
-            testo = "Pareggio tra: " +
-              vincitori.map(v => v===0 ? "Tu" : "Bot "+v).join(", ");
-          }
+            if(vincitori.length === 1){
+                testo = (vincitori[0] === 0)
+                    ? "Hai vinto! 🎉"
+                    : "Vince Bot " + vincitori[0];
+            }
+            else{
+                testo =
+                    "Pareggio tra: " +
+                    vincitori
+                        .map(v => v===0 ? "Tu" : "Bot "+v)
+                        .join(", ");
+            }
 
-          alert("Fine partita!\n" + testo);
+            alert("Fine partita!\n" + testo);
 
-          return;
+            return;
         }
 
+        numeroMano++;
+        cartePerMano++;
+        nuovaMano();
+        return;
+    }
 
-          numeroMano++;
-          cartePerMano++;
-          nuovaMano();
-          return;
-         }
-
-         if(window.prossimaAzione==="presa"){
-           iniziaPresa();
-         }
-        }
+    if(window.prossimaAzione==="presa"){
+        iniziaPresa();
+    }
+}
 
 
         function aggiornaClassifica(){
@@ -1819,6 +1837,28 @@ if(stanza){
                 "8","9","10","J","Q","K","A"
             ];
 
+        }
+
+    });
+
+}
+
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/turnoCarta")
+    .on("value", (snapshot) => {
+
+        let turno = snapshot.val();
+
+        if(turno === null){
+            return;
+        }
+
+        if(turno === mioIndiceMultiplayer){
+
+            partitaAvviata = true;
+
+            mostraMano();
         }
 
     });
