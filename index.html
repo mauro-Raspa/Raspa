@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 0
 	</div>
 
 	<div id="listaGiocatori"
@@ -1048,20 +1048,7 @@ function invitaAmici(){
 
          tavolo.forEach(x => {
 
-          let posizioneCarta = x.g;
-
-			if(modalitaMultiplayer){
-
-    			posizioneCarta =
-        			(x.g - mioIndiceMultiplayer + numGiocatori)
-        			% numGiocatori;
-
-			}
-
-			let angolo =
-    			(2 * Math.PI * posizioneCarta / numGiocatori)
-    			+ Math.PI/2
-				+ Math.PI;
+          let angolo = (2 * Math.PI * x.g / numGiocatori) + Math.PI/2;
 
 
           let r = document.getElementById("campoGioco").offsetWidth * 0.08;
