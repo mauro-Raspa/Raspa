@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -2002,6 +2002,7 @@ if(stanza){
 
         let nome =
             ordineGiocatori[vincitore].nome;
+		setTimeout(() => {
 
         alert(
     		"🏆 " +
@@ -2015,7 +2016,7 @@ if(stanza){
     		"/confermePresa/" +
     		mioIndiceMultiplayer
 		).set(true);
-
+	   }, 1000);
     });
 
 }
