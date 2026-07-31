@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -2053,60 +2053,70 @@ if(stanza){
         mostraTavolo();
 
         let miaMano =
-    		mani[mioIndiceMultiplayer];
+            mani[mioIndiceMultiplayer];
 
-		if(miaMano.length === 0){
+        if(miaMano.length === 0){
 
-    		if(isHost){
+            if(isHost){
 
-        		db.ref(
-            		"stanze/" +
-            		stanza +
-            		"/numeroMano"
-        		).once("value")
-        		.then((snapshot) => {
+                let nuoveCarte =
+                    cartePerMano + 1;
 
-            		let nuovaNumeroMano =
-                		snapshot.val() + 1;
+                let nuovoMazzo =
+                    creaMazzo();
 
-            		db.ref(
-                		"stanze/" +
-                		stanza +
-                		"/numeroMano"
-            		).set(nuovaNumeroMano);
+                let nuoveMani = [];
 
-        });
+                for(let i=0;i<numGiocatori;i++){
 
-        db.ref(
-            "stanze/" +
-            stanza +
-            "/cartePerMano"
-        ).once("value")
-        .then((snapshot) => {
+                    nuoveMani.push(
+                        nuovoMazzo.splice(
+                            0,
+                            nuoveCarte
+                        )
+                    );
 
-            let nuoveCarte =
-                snapshot.val() + 1;
+                }
+
+                let nuovaBriscola =
+                    nuovoMazzo.shift();
+
+                db.ref(
+                    "stanze/" +
+                    stanza +
+                    "/mani"
+                ).set(nuoveMani);
+
+                db.ref(
+                    "stanze/" +
+                    stanza +
+                    "/briscola"
+                ).set(nuovaBriscola);
+
+                db.ref(
+                    "stanze/" +
+                    stanza +
+                    "/numeroMano"
+                ).set(numeroMano + 1);
+
+                db.ref(
+                    "stanze/" +
+                    stanza +
+                    "/cartePerMano"
+                ).set(nuoveCarte);
+
+            }
+
+        }
+        else{
 
             db.ref(
                 "stanze/" +
                 stanza +
-                "/cartePerMano"
-            ).set(nuoveCarte);
+                "/turnoCarta"
+            ).set(leader);
 
-        });
-
-    }
-
-}
-else{
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/turnoCarta"
-    ).set(leader);
-
-}
+        }
 
     });
 
