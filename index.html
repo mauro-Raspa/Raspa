@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2053,22 +2053,60 @@ if(stanza){
         mostraTavolo();
 
         let miaMano =
-            mani[mioIndiceMultiplayer];
+    		mani[mioIndiceMultiplayer];
 
-        if(miaMano.length === 0){
+		if(miaMano.length === 0){
 
-            alert("FINE MANO");
+    		if(isHost){
 
-        }
-        else{
+        		db.ref(
+            		"stanze/" +
+            		stanza +
+            		"/numeroMano"
+        		).once("value")
+        		.then((snapshot) => {
+
+            		let nuovaNumeroMano =
+                		snapshot.val() + 1;
+
+            		db.ref(
+                		"stanze/" +
+                		stanza +
+                		"/numeroMano"
+            		).set(nuovaNumeroMano);
+
+        });
+
+        db.ref(
+            "stanze/" +
+            stanza +
+            "/cartePerMano"
+        ).once("value")
+        .then((snapshot) => {
+
+            let nuoveCarte =
+                snapshot.val() + 1;
 
             db.ref(
                 "stanze/" +
                 stanza +
-                "/turnoCarta"
-            ).set(leader);
+                "/cartePerMano"
+            ).set(nuoveCarte);
 
-        }
+        });
+
+    }
+
+}
+else{
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/turnoCarta"
+    ).set(leader);
+
+}
 
     });
 
