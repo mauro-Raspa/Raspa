@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1586,25 +1586,27 @@ if(stanza){
 
 if(stanza){
 
-	db.ref("stanze/" + stanza + "/briscola")
-	.on("value", (snapshot) => {
+    db.ref("stanze/" + stanza + "/briscola")
+    .on("value", (snapshot) => {
 
-		let b = snapshot.val();
+        let b = snapshot.val();
 
-		if(!b){
-			return;
-		}
+        if(!b){
+            return;
+        }
 
-		let bc = document.getElementById("briscolaCentro");
+        briscola = b;
 
-		bc.innerText = b.v + b.s;
+        let bc = document.getElementById("briscolaCentro");
 
-		bc.style.color =
-			(b.s==="♥" || b.s==="♦")
-			? "red"
-			: "black";
+        bc.innerText = b.v + b.s;
 
-	});
+        bc.style.color =
+            (b.s==="♥" || b.s==="♦")
+            ? "red"
+            : "black";
+
+    });
 
 }
 
