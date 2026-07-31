@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -525,7 +525,15 @@ const db = firebase.database();
 				
 				db.ref("stanze/" + stanza + "/totaleMani")
 					.set(totaleManiTemp);
+				
+				let leaderManoRandom =
+    				Math.floor(Math.random() * numGiocatori);
 
+				db.ref("stanze/" + stanza + "/leaderMano")
+    				.set(leaderManoRandom);
+
+				db.ref("stanze/" + stanza + "/leader")
+    				.set(leaderManoRandom);
 				return;
 
 			}	
@@ -1581,7 +1589,28 @@ if(stanza){
 
 	});
 
-}		   
+}
+
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/leaderMano")
+	.on("value", (snapshot) => {
+
+		let valore = snapshot.val();
+
+		if(valore === null){
+			return;
+		}
+
+		leaderMano = valore;
+		leader = leaderMano;
+
+		disegnaGiocatori();
+
+	});
+
+}
 
 
 if(stanza){
@@ -2087,6 +2116,9 @@ if(stanza){
 
                 let nuovaBriscola =
                     nuovoMazzo.shift();
+				// ✅ prossimo leader mano
+				let nuovoLeaderMano =
+    				(leaderMano + 1) % numGiocatori;
 
                 db.ref(
                     "stanze/" +
@@ -2107,12 +2139,20 @@ if(stanza){
                 ).set(numeroMano + 1);
 
                 db.ref(
-                    "stanze/" +
-                    stanza +
-                    "/cartePerMano"
-                ).set(nuoveCarte);
+    				"stanze/" +
+    				stanza +
+    				"/cartePerMano"
+				).set(nuoveCarte);
+
+				// ✅ salva il leader della prossima mano
+				db.ref(
+    				"stanze/" +
+    				stanza +
+    				"/leaderMano"
+				).set(nuovoLeaderMano);
+
 				document.getElementById(
-					"btnAvviaPronostici"
+    				"btnAvviaPronostici"
 				).style.display = "inline-block";
 
             }
