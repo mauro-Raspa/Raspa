@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -2004,10 +2004,43 @@ if(stanza){
             ordineGiocatori[vincitore].nome;
 
         alert(
-            "🏆 " +
-            nome +
-            " ha vinto la presa"
-        );
+    		"🏆 " +
+    		nome +
+    		" ha vinto la presa"
+		);
+
+		db.ref(
+    		"stanze/" +
+    		stanza +
+    		"/confermePresa/" +
+    		mioIndiceMultiplayer
+		).set(true);
+
+    });
+
+}
+
+if(stanza){
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/confermePresa"
+    )
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        let conferme =
+            Object.keys(dati).length;
+
+        if(conferme < numGiocatori){
+            return;
+        }
 
         tavolo = [];
 
@@ -2016,8 +2049,6 @@ if(stanza){
     });
 
 }
-
-
 
 		
     </script>
