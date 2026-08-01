@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -525,12 +525,6 @@ const db = firebase.database();
 				
 				db.ref("stanze/" + stanza + "/totaleMani")
 					.set(totaleManiTemp);
-				
-				db.ref("stanze/" + stanza + "/puntiGiocatori")
-    				.set(new Array(numGiocatori).fill(0));
-
-				db.ref("stanze/" + stanza + "/storicoMani")
-    				.set([]);
 				
 				let leaderManoRandom =
     				Math.floor(Math.random() * numGiocatori);
@@ -1868,17 +1862,14 @@ if(stanza && isHost){
 
         let prossimo = null;
 
-		for(let i=0;i<numGiocatori;i++){
+        for(let i=0;i<numGiocatori;i++){
 
-    		let g =
-        		(leaderMano + i) % numGiocatori;
+            if(dati[i] === undefined){
 
-    		if(dati[g] === undefined){
-
-        		prossimo = g;
-        		break;
-    		}
-		}
+                prossimo = i;
+                break;
+            }
+        }
 
         if(prossimo !== null){
 
@@ -2128,60 +2119,6 @@ if(stanza){
 				// ✅ prossimo leader mano
 				let nuovoLeaderMano =
     				(leaderMano + 1) % numGiocatori;
-
-				// ✅ aggiorna punti giocatori
-				db.ref(
-    				"stanze/" +
-    				stanza +
-    				"/puntiGiocatori"
-				)
-				.once("value")
-				.then((snap) => {
-
-    				let punti = snap.val() ||
-        				new Array(numGiocatori).fill(0);
-
-    				for(let i=0;i<numGiocatori;i++){
-
-        				let puntiMano =
-            				(preseGiocatori[i] === pronostici[i])
-            				? 10 + (preseGiocatori[i] * 5)
-            				: preseGiocatori[i];
-
-        				punti[i] += puntiMano;
-    				}
-
-    				db.ref(
-        				"stanze/" +
-        				stanza +
-        				"/puntiGiocatori"
-    				).set(punti);
-
-				});
-
-				// ✅ salva mano nello storico
-				db.ref(
-    				"stanze/" +
-    				stanza +
-    				"/storicoMani"
-				)
-				.once("value")
-				.then((snap) => {
-
-    				let storico = snap.val() || [];
-
-    				storico.push({
-        				prese: preseGiocatori,
-        				pron: pronostici
-    				});
-
-    				db.ref(
-        				"stanze/" +
-        				stanza +
-        				"/storicoMani"
-    				).set(storico);
-
-				});
 
                 db.ref(
                     "stanze/" +
