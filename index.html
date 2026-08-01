@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -2006,7 +2006,8 @@ if(stanza){
 
         mostraTavolo(vincitore);
 
-        let nome =
+        /*
+		let nome =
             ordineGiocatori[vincitore].nome;
 		setTimeout(() => {
 
@@ -2023,6 +2024,7 @@ if(stanza){
     		mioIndiceMultiplayer
 		).set(true);
 	   }, 1000);
+	   */
     });
 
 }
@@ -2065,6 +2067,25 @@ if(stanza){
         if(miaMano.length === 0){
 
             if(isHost){
+
+				for(let i=0;i<numGiocatori;i++){
+
+    				let punti =
+        				(preseGiocatori[i] === pronostici[i])
+        				? 10 + (preseGiocatori[i] * 5)
+        				: preseGiocatori[i];
+
+    				puntiGiocatori[i] += punti;
+				}
+
+				storicoMani.push({
+    				prese:[...preseGiocatori],
+    				pron:[...pronostici]
+				});
+
+				aggiornaClassifica();
+
+				return;
 
                 let nuoveCarte =
                     cartePerMano + 1;
