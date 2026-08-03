@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1988,23 +1988,41 @@ function calcolaVincitorePresa(){
 if(stanza){
 
     db.ref(
-        "stanze/" +
-        stanza +
-        "/vincitorePresa"
-    )
-    .on("value", (snapshot) => {
+    	"stanze/" +
+    	stanza +
+    	"/vincitorePresa"
+	)
+	.on("value", (snapshot) => {
 
-        let vincitore = snapshot.val();
+    	let vincitore = snapshot.val();
 
-        if(vincitore === null){
-            return;
-        }
+    	if(vincitore === null){
+        	return;
+    	}
 
-        leader = vincitore;
+    	leader = vincitore;
 
-        // disegnaGiocatori();
+    	preseGiocatori[leader] =
+        	(preseGiocatori[leader] || 0) + 1;
 
-        mostraTavolo(vincitore);
+    	for(let i=0;i<numGiocatori;i++){
+
+        	let score =
+            	document.getElementById(
+                	"score_g" + i
+            	);
+
+        	if(score){
+
+            	score.innerText =
+                	"🎯 " +
+                	(pronostici[i] ?? 0) +
+                	" | 🏆 " +
+                	(preseGiocatori[i] || 0);
+        	}
+    	}
+
+    	mostraTavolo(vincitore);
 
 		  
         /*
@@ -2069,26 +2087,7 @@ if(stanza){
         if(miaMano.length === 0){
 
             if(isHost){
-	  
-									
-
-				   
-												 
-										  
-								
-
-								   
-	 
-
-					  
-								  
-							
-	   
-
-						 
-
-		   
-	  
+	  	
                 let nuoveCarte =
                     cartePerMano + 1;
 
