@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -2177,9 +2177,27 @@ if(stanza){
         			(puntiGiocatori[i] || 0) + punti;
 			}
 
+			let pronReali = [];
+
+			for(let i=0;i<numGiocatori;i++){
+
+    			let score =
+        			document.getElementById("score_g" + i);
+
+    			let testo =
+        			score ? score.innerText : "";
+
+    			let match =
+        			testo.match(/🎯\s*(\d+)/);
+
+    			pronReali.push(
+        			match ? Number(match[1]) : 0
+    			);
+			}
+
 			storicoMani.push({
     			prese:[...preseGiocatori],
-    			pron:[...pronostici]
+    			pron:[...pronReali]
 			});
 
 			aggiornaClassifica();
