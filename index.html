@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -2086,6 +2086,8 @@ if(stanza){
         "/confermePresa"
     )
     .on("value", (snapshot) => {
+
+		alert("SONO ENTRATO IN CONFERMEPRESA");
 
         let dati = snapshot.val();
 
