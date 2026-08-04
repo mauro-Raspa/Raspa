@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1271,9 +1271,22 @@ function continuaGioco(){
 
          let html="<tr><th>Mano</th>";
 
-         for(let i=0;i<numGiocatori;i++){
-          html+="<th>"+(i===0?"Tu":"Bot "+i)+"</th>";
-         }
+			for(let i=0;i<numGiocatori;i++){
+
+    			let nome;
+
+    			if(modalitaMultiplayer &&
+       			ordineGiocatori &&
+       			ordineGiocatori[i]){
+
+        			nome = ordineGiocatori[i].nome;
+    			}
+    			else{
+        			nome = (i===0 ? "Tu" : "Bot " + i);
+    			}
+
+    			html += "<th>" + nome + "</th>";
+			}
 
          html+="</tr>";
 
@@ -2175,24 +2188,6 @@ if(stanza){
 
     			puntiGiocatori[i] =
         			(puntiGiocatori[i] || 0) + punti;
-			}
-
-			let pronReali = [];
-
-			for(let i=0;i<numGiocatori;i++){
-
-    			let score =
-        			document.getElementById("score_g" + i);
-
-    			let testo =
-        			score ? score.innerText : "";
-
-    			let match =
-        			testo.match(/🎯\s*(\d+)/);
-
-    			pronReali.push(
-        			match ? Number(match[1]) : 0
-    			);
 			}
 
 			storicoMani.push({
