@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 8
 	</div>
 
 	<div id="listaGiocatori"
@@ -2062,6 +2062,7 @@ if(stanza){
     		nome +
     		" ha vinto la presa"
 		);
+		*/
 
 		db.ref(
     		"stanze/" +
@@ -2069,6 +2070,7 @@ if(stanza){
     		"/confermePresa/" +
     		mioIndiceMultiplayer
 		).set(true);
+		/*
 	   }, 1000);
 	   */
 	  
@@ -2111,7 +2113,7 @@ if(stanza){
         let miaMano =
             mani[mioIndiceMultiplayer];
 
-        if(miaMano.length <= 1){
+        if(miaMano.length === 0){
 
 
 			for(let i=0;i<numGiocatori;i++){
