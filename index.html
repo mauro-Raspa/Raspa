@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1285,7 +1285,7 @@ function continuaGioco(){
            let ok=m.prese[g]===m.pron[g];
 
            html+="<td class='"+(ok?"ok":"ko")+"'>"
-           + m.pron[g]+"/"+m.prese[g]
+           + Number(m.pron[g] ?? 0)+"/"+m.prese[g]
            +"</td>";
           }
 
