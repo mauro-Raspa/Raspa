@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -376,12 +376,37 @@ const db = firebase.database();
 
 
 
-        function disegnaGiocatori(){
+        function disegnaGiocatori(soloLeader = false){
 
         let container = document.getElementById("nomiGiocatori");
-        container.innerHTML = "";
+		if(!soloLeader){
+        	container.innerHTML = "";
+		}
 
         for(let i = 0; i < numGiocatori; i++){
+
+			        if(soloLeader){
+
+            			let div =
+                			document.getElementById(
+                    			"giocatore_" + i
+                			);
+
+            			if(!div){
+                			continue;
+            			}
+
+            			if(i === leader){
+                			div.style.background = "red";
+                			div.style.color = "white";
+            			}
+            			else{
+                			div.style.background = "white";
+                			div.style.color = "black";
+            			}
+
+            			continue;
+        			}
 
         let posizione = i;
 
@@ -411,6 +436,7 @@ const db = firebase.database();
 
 
         let div = document.createElement("div");
+		div.id = "giocatore_" + i;
         div.className = "nomeGiocatore";
 
         if(i === leader){
@@ -2001,6 +2027,7 @@ if(stanza){
     	}
 
     	leader = vincitore;
+		disegnaGiocatori(true);
 
     	preseGiocatori[leader] =
         	(preseGiocatori[leader] || 0) + 1;
