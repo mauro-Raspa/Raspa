@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -2095,6 +2095,16 @@ if(stanza){
 			});
 
     		aggiornaClassifica();
+			if(isHost){
+				alert("SONO ARRIVATO AL BOTTONE CONTINUA");
+
+				document.getElementById("continuaBtn")
+    				.style.display = "inline-block";
+
+				document.getElementById("continuaBtn")
+    				.innerText = "➡️ Continua";
+			}
+
 		}
 
     	for(let i=0;i<numGiocatori;i++){
@@ -2201,13 +2211,6 @@ if(stanza){
 			
             if(isHost){
 
-				alert("SONO ARRIVATO AL BOTTONE CONTINUA");
-
-				document.getElementById("continuaBtn")
-    				.style.display = "inline-block";
-
-				document.getElementById("continuaBtn")
-    				.innerText = "➡️ Continua";
 
 				return;
 	  	
