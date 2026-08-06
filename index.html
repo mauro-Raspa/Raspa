@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1199,17 +1199,29 @@ function continuaGioco(){
 
     if(stanza){
 
-        db.ref(
-            "stanze/" +
-            stanza +
-            "/turnoCarta"
-        ).set(leader);
+    	document.getElementById("continuaBtn")
+        	.style.display = "none";
 
-        document.getElementById("continuaBtn")
-            .style.display = "none";
+    	if(window.prossimaAzione === "iniziaMano"){
 
-        return;
-    }
+        	db.ref(
+            	"stanze/" +
+            	stanza +
+            	"/turnoCarta"
+        	).set(leader);
+
+        	return;
+    	}
+
+    	if(window.prossimaAzione === "nuovaMano"){
+
+        	alert("NUOVA MANO");
+
+        	return;
+    	}
+
+    	return;
+	}
 
     document.getElementById("continuaBtn").style.display="none";
 
@@ -1873,7 +1885,7 @@ if(stanza && isHost){
         		stanza +
         		"/turnoPronostico"
     		).set(-1);
-
+			window.prossimaAzione = "iniziaMano";
     		document.getElementById("continuaBtn")
         		.style.display = "block";
 
@@ -2100,7 +2112,7 @@ if(stanza){
 
     		aggiornaClassifica();
 			if(isHost){
-				
+				window.prossimaAzione = "nuovaMano";
 				document.getElementById("continuaBtn")
     				.style.display = "inline-block";
 
