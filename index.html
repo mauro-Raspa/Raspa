@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1207,59 +1207,7 @@ function continuaGioco(){
 
         document.getElementById("continuaBtn")
             .style.display = "none";
-		
-			if(isHost){
-	  	
-                let nuoveCarte =
-                    cartePerMano + 1;
 
-                let nuovoMazzo =
-                    creaMazzo();
-
-                let nuoveMani = [];
-
-                for(let i=0;i<numGiocatori;i++){
-
-                    nuoveMani.push(
-                        nuovoMazzo.splice(
-                            0,
-                            nuoveCarte
-                        )
-                    );
-
-                }
-
-                let nuovaBriscola =
-                    nuovoMazzo.shift();
-
-                db.ref(
-                    "stanze/" +
-                    stanza +
-                    "/mani"
-                ).set(nuoveMani);
-
-                db.ref(
-                    "stanze/" +
-                    stanza +
-                    "/briscola"
-                ).set(nuovaBriscola);
-
-                db.ref(
-                    "stanze/" +
-                    stanza +
-                    "/numeroMano"
-                ).set(numeroMano + 1);
-
-                db.ref(
-                    "stanze/" +
-                    stanza +
-                    "/cartePerMano"
-                ).set(nuoveCarte);
-				document.getElementById(
-					"btnAvviaPronostici"
-				).style.display = "inline-block";
-
-            }
         return;
     }
 
@@ -1871,11 +1819,7 @@ if(stanza){
         pronostici = [];
 
 		for(let i=0;i<numGiocatori;i++){
-
-    		if(dati[i] !== undefined){
-        		pronostici[i] = Number(dati[i]);
-    		}
-
+    		pronostici[i] = Number(dati[i] ?? 0);
 		}
 
 		aggiornaRiepilogoPronostici();
@@ -2265,6 +2209,9 @@ if(stanza){
 			aggiornaClassifica();
 			
             if(isHost){
+
+
+				return;
 	  	
                 let nuoveCarte =
                     cartePerMano + 1;
