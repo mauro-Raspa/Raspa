@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 9
 	</div>
 
 	<div id="listaGiocatori"
@@ -1819,8 +1819,12 @@ if(stanza){
         pronostici = [];
 
 		for(let i=0;i<numGiocatori;i++){
-    		pronostici[i] = Number(dati[i] ?? 0);
-		}
+
+			if(dati[i] !== undefined){
+				pronostici[i] = Number(dati[i]);
+			}
+
+		}	
 
 		aggiornaRiepilogoPronostici();
 
