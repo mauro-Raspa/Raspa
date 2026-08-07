@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -381,6 +381,12 @@ const db = firebase.database();
 
         function disegnaGiocatori(soloLeader = false){
 
+			let leaderVisuale =
+    			modalitaMultiplayer
+    			? leaderManoMP
+    			: leader;
+
+
         let container = document.getElementById("nomiGiocatori");
 		if(!soloLeader){
         	container.innerHTML = "";
@@ -399,7 +405,7 @@ const db = firebase.database();
                 			continue;
             			}
 
-            			if(i === leader){
+            			if(i === leaderVisuale){
                 			div.style.background = "red";
                 			div.style.color = "white";
             			}
@@ -442,7 +448,7 @@ const db = firebase.database();
 		div.id = "giocatore_" + i;
         div.className = "nomeGiocatore";
 
-        if(i === leader){
+        if(i === leaderVisuale){
             div.style.background = "red";
             div.style.color = "white";
         }
