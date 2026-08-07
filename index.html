@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -1286,6 +1286,29 @@ function continuaGioco(){
     			stanza +
     			"/pronostici"
 			).remove();
+
+			pronostici = [];
+
+			preseGiocatori =
+    			new Array(numGiocatori).fill(0);
+
+			document.getElementById(
+    			"riepilogoPronostici"
+			).innerHTML = "";
+
+			for(let i=0;i<numGiocatori;i++){
+
+    			let score =
+        			document.getElementById(
+            			"score_g" + i
+        			);
+
+    			if(score){
+
+        			score.innerText = "";
+
+    			}
+			}
 
     		document.getElementById(
         		"btnAvviaPronostici"
