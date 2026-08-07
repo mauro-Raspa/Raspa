@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -548,6 +548,11 @@ const db = firebase.database();
 
 				db.ref("stanze/" + stanza + "/cartePerMano")
 					.set(1);
+				let leaderIniziale =
+    				Math.floor(Math.random() * numGiocatori);
+
+				db.ref("stanze/" + stanza +	"/leaderMano")
+					.set(leaderIniziale);
 				
 				db.ref("stanze/" + stanza + "/totaleMani")
 					.set(totaleManiTemp);
@@ -1215,6 +1220,15 @@ function continuaGioco(){
 
     	if(window.prossimaAzione === "nuovaMano"){
 
+			let nuovoLeaderMano =
+    			(leaderMano + 1) % numGiocatori;
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/leaderMano"
+			).set(nuovoLeaderMano);
+
     		let nuoveCarte =
         		cartePerMano + 1;
 
@@ -1260,6 +1274,18 @@ function continuaGioco(){
         		stanza +
         		"/cartePerMano"
     		).set(nuoveCarte);
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/turnoCarta"
+			).set(nuovoLeaderMano);
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/pronostici"
+			).remove();
 
     		document.getElementById(
         		"btnAvviaPronostici"
@@ -2342,6 +2368,33 @@ if(stanza){
     });
 
 }
+
+if(stanza){
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/leaderMano"
+    )
+    .on("value", (snapshot) => {
+
+        let valore = snapshot.val();
+
+        if(valore === null){
+            return;
+        }
+
+        leaderMano = valore;
+        leader = valore;
+
+        disegnaGiocatori(true);
+
+    });
+
+}
+
+
+
 		
     </script>
 
