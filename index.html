@@ -332,6 +332,9 @@ const db = firebase.database();
 
         let leader=0;
         let leaderMano=0;
+		// Multiplayer
+		let leaderPresaMP = 0;
+		let leaderManoMP = 0;
 
         let numGiocatori=3;
         let numeroMano=1, cartePerMano=1;
@@ -550,6 +553,8 @@ const db = firebase.database();
 					.set(1);
 				let leaderIniziale =
     				Math.floor(Math.random() * numGiocatori);
+				leaderManoMP = leaderIniziale;
+				leaderPresaMP = leaderIniziale;
 
 				db.ref("stanze/" + stanza +	"/leaderMano")
 					.set(leaderIniziale);
@@ -840,7 +845,7 @@ const db = firebase.database();
 
     		document.getElementById("btnAvviaPronostici").style.display = "none";
 			db.ref("stanze/" + stanza + "/turnoPronostico")
-    			.set(leader);
+    			.set(leaderManoMP);
 
     		let ordine = [];
 
@@ -1213,7 +1218,7 @@ function continuaGioco(){
             	"stanze/" +
             	stanza +
             	"/turnoCarta"
-        	).set(leaderMano);
+        	).set(leaderManoMP);
 
         	return;
     	}
@@ -1221,7 +1226,7 @@ function continuaGioco(){
     	if(window.prossimaAzione === "nuovaMano"){
 
 			let nuovoLeaderMano =
-    			(leaderMano + 1) % numGiocatori;
+    			(leaderManoMP + 1) % numGiocatori;
 
 			db.ref(
     			"stanze/" +
@@ -1275,11 +1280,14 @@ function continuaGioco(){
         		"/cartePerMano"
     		).set(nuoveCarte);
 
+			leaderManoMP = nuovoLeaderMano;
+			leaderPresaMP = nuovoLeaderMano;
+
 			db.ref(
     			"stanze/" +
     			stanza +
     			"/turnoCarta"
-			).set(nuovoLeaderMano);
+			).set(leaderPresaMP);
 
 			db.ref(
     			"stanze/" +
@@ -2163,6 +2171,7 @@ if(stanza){
         	return;
     	}
 
+		leaderPresaMP = vincitore;
     	leader = vincitore;
 		disegnaGiocatori(true);
 
@@ -2363,6 +2372,26 @@ if(stanza){
 }
 */
 
+if(stanza){
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/leaderMano"
+    )
+    .on("value", (snapshot) => {
+
+        let valore = snapshot.val();
+
+        if(valore === null){
+            return;
+        }
+
+        leaderManoMP = valore;
+
+    });
+
+}
 
 		
     </script>
