@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1213,7 +1213,7 @@ function continuaGioco(){
             	"stanze/" +
             	stanza +
             	"/turnoCarta"
-        	).set(leader);
+        	).set(leaderMano);
 
         	return;
     	}
@@ -1286,9 +1286,11 @@ function continuaGioco(){
     			stanza +
     			"/pronostici"
 			).remove();
+			tavolo = [];
+			mostraTavolo();
 
 			pronostici = [];
-
+			
 			preseGiocatori =
     			new Array(numGiocatori).fill(0);
 
