@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 8
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1833,6 +1833,34 @@ if(stanza){
 
 }
 
+function resetNuovaManoMultiplayer(){
+
+    tavolo = [];
+    mostraTavolo();
+
+    pronostici = [];
+
+    preseGiocatori =
+        new Array(numGiocatori).fill(0);
+
+    document.getElementById(
+        "riepilogoPronostici"
+    ).innerHTML = "";
+
+    for(let i=0;i<numGiocatori;i++){
+
+        let score =
+            document.getElementById(
+                "score_g" + i
+            );
+
+        if(score){
+            score.innerText = "";
+        }
+    }
+}
+
+
 if(stanza){
 
 	db.ref("stanze/" + stanza + "/mani")
@@ -1845,7 +1873,7 @@ if(stanza){
 		}
 
 		mani = m;
-
+		resetNuovaManoMultiplayer();
 		mostraMano();
 
 	});
