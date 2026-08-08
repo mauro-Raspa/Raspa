@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 8
 	</div>
 
 	<div id="listaGiocatori"
@@ -2008,25 +2008,37 @@ if(stanza && isHost){
     		return;
 		}
 
-        let prossimo = null;
+        let ordine = [];
 
-        for(let i=0;i<numGiocatori;i++){
+		for(let i=0;i<numGiocatori;i++){
 
-            if(dati[i] === undefined){
+    		ordine.push(
+        		(leaderManoMP + i) % numGiocatori
+    		);
 
-                prossimo = i;
-                break;
-            }
-        }
+		}
 
-        if(prossimo !== null){
+		let prossimo = null;
 
-            db.ref(
-                "stanze/" +
-                stanza +
-                "/turnoPronostico"
-            ).set(prossimo);
-        }
+		for(let g of ordine){
+
+    		if(dati[g] === undefined){
+
+        		prossimo = g;
+        		break;
+
+    		}
+		}
+
+		if(prossimo !== null){
+
+    		db.ref(
+        		"stanze/" +
+        		stanza +
+        		"/turnoPronostico"
+    		).set(prossimo);
+
+		}
 
     });
 
