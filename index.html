@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1243,6 +1243,21 @@ function continuaGioco(){
 
         	return;
     	}
+
+		if(window.prossimaAzione === "presa"){
+
+    		tavolo = [];
+
+    		mostraTavolo();
+
+    		db.ref(
+        		"stanze/" +
+        		stanza +
+        		"/turnoCarta"
+    		).set(leaderPresaMP);
+
+    		return;
+		}
 
     	if(window.prossimaAzione === "nuovaMano"){
 
@@ -2400,12 +2415,11 @@ if(stanza){
         }
         else{
 
-            db.ref(
-                "stanze/" +
-                stanza +
-                "/turnoCarta"
-            ).set(leader);
-
+            if(isHost){
+                window.prossimaAzione = "presa";
+                document.getElementById("continuaBtn").style.display = "inline-block";
+                document.getElementById("continuaBtn").innerText = "➡️ Continua";
+			}
         }
 
     });
