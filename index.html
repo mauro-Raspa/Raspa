@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -985,7 +985,7 @@ if(modalitaMultiplayer){
         mani[mioIndiceMultiplayer][i];
 
     mani[mioIndiceMultiplayer].splice(i,1);
-
+	partitaAvviata = false;
     mostraMano();
 
     db.ref(
@@ -1906,6 +1906,7 @@ if(stanza){
         if(turno === mioIndiceMultiplayer){
 
     		box.style.display = "flex";
+			input.value = "";
 
     		input.style.display = "inline-block";
     		btn.style.display = "inline-block";
@@ -2117,12 +2118,11 @@ if(stanza){
         if(turno === null){
             return;
         }
+		partitaAvviata =
+			(turno === mioIndiceMultiplayer);
+		mostraMano();
 
-        if(turno === mioIndiceMultiplayer){
-
-            partitaAvviata = true;
-
-            mostraMano();
+        
         }
 
     });
