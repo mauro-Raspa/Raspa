@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -983,6 +983,21 @@ if(modalitaMultiplayer){
 
     let carta =
         mani[mioIndiceMultiplayer][i];
+
+	if(tavolo.length > 0){
+
+    	let seme = tavolo[0].c.s;
+
+    	let haiSeme =
+        	mani[mioIndiceMultiplayer]
+        	.some(c => c.s === seme);
+
+    	if(haiSeme && carta.s !== seme){
+
+        	alert("Devi rispondere al seme: "+seme);
+			return;
+    	}
+	}
 
     mani[mioIndiceMultiplayer].splice(i,1);
 	partitaAvviata = false;
@@ -2413,7 +2428,7 @@ if(stanza){
         }
 
         leaderMano = valore;
-        leader = valore;
+        // leader = valore;
 
         disegnaGiocatori(true);
 
@@ -2438,7 +2453,7 @@ if(stanza){
         }
 
         leaderManoMP = valore;
-		// leader = valore;
+		leader = valore;
 		disegnaGiocatori(true);
 
     });
