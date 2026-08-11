@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1249,7 +1249,14 @@ function continuaGioco(){
     		// tavolo = [];
 
     		// mostraTavolo();
+			
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/resetTavolo"
+			).set(Date.now());
 
+			
     		db.ref(
         		"stanze/" +
         		stanza +
@@ -2535,6 +2542,30 @@ if(stanza){
         leaderManoMP = valore;
 		// leader = valore;
 		disegnaGiocatori(true);
+
+    });
+
+}
+
+
+if(stanza){
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/resetTavolo"
+    )
+    .on("value", (snapshot) => {
+
+        let valore = snapshot.val();
+
+        if(!valore){
+            return;
+        }
+
+        tavolo = [];
+
+        mostraTavolo();
 
     });
 
