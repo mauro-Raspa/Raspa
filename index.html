@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -2356,6 +2356,13 @@ if(stanza){
     	}
 
     	mostraTavolo(vincitore);
+
+		window.prossimaAzione = "presa";
+
+		document.getElementById("continuaBtn").style.display = "inline-block";
+
+		document.getElementById("continuaBtn").innerText = "➡️ Continua";
+		
 		/*
 		let miaMano = mani[mioIndiceMultiplayer];
 
@@ -2442,9 +2449,8 @@ if(stanza){
         let miaMano =
             mani[mioIndiceMultiplayer];
 
-        // if(miaMano.length === 0){
-			if(false){
-			
+        if(miaMano.length === 0){
+						
 
 			for(let i=0;i<numGiocatori;i++){
 
