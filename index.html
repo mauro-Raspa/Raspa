@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2293,10 +2293,10 @@ if(stanza){
     	preseGiocatori[leader] =
         	(preseGiocatori[leader] || 0) + 1;
 
-		// let miaMano = mani[mioIndiceMultiplayer];
+		let miaMano = mani[mioIndiceMultiplayer];
 
-		// if(miaMano && miaMano.length === 0){
-		if(mani[mioIndiceMultiplayer].length === 0)
+		if(miaMano && miaMano.length === 0){
+		
 
     		for(let i=0;i<numGiocatori;i++){
 
