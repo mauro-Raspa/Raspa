@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -2253,7 +2253,35 @@ if(stanza){
 
 		leaderPresaMP = vincitore;
     	leader = vincitore;
-		disegnaGiocatori(true);
+		// disegnaGiocatori(true);
+		// -----------------------
+		for(let i=0;i<numGiocatori;i++){
+
+    		let div =
+        		document.getElementById(
+            		"giocatore_" + i
+        		);
+
+    		if(!div){
+        		continue;
+    		}
+
+    		if(i === vincitore){
+
+        		div.style.background = "red";
+        		div.style.color = "white";
+
+    		}
+    		else{
+
+        		div.style.background = "white";
+        		div.style.color = "black";
+
+    		}
+		}
+
+
+		// -----------------------
 
     	preseGiocatori[leader] =
         	(preseGiocatori[leader] || 0) + 1;
