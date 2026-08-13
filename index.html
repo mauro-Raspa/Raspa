@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1346,6 +1346,19 @@ function continuaGioco(){
     			stanza +
     			"/pronostici"
 			).remove();
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/cartaGiocata"
+			).remove();
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/vincitorePresa"
+			).remove();
+			
 			tavolo = [];
 			mostraTavolo();
 
