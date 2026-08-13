@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1875,11 +1875,7 @@ function resetNuovaManoMultiplayer(){
 	partitaAvviata = false;
 	mostraMano();
 	
-	document.querySelectorAll("#mano button").forEach(b => {
-		b.disabled = true;
-	});
-	
-    tavolo = [];
+	tavolo = [];
     mostraTavolo();
 	
 
@@ -2160,6 +2156,10 @@ if(stanza){
         if(turno === null){
             return;
         }
+
+		if(pronostici.length < numGiocatori){
+			return;
+		}
 		
        if(turno === mioIndiceMultiplayer){
 
