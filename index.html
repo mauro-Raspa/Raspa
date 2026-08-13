@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -1235,10 +1235,7 @@ function continuaGioco(){
 
     	if(window.prossimaAzione === "iniziaMano"){
 
-			partitaAvviata = true;
-			mostraMano();
-
-        	db.ref(
+			db.ref(
             	"stanze/" +
             	stanza +
             	"/turnoCarta"
