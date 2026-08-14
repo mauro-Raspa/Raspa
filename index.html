@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -2231,11 +2231,11 @@ if(stanza){
 	mostraTavolo();
 
 	if(
-		// tavolo.length === numGiocatori
-		tavolo.length === numGiocatori &&
-		isHost
+		tavolo.length === numGiocatori
 	){
-		calcolaVincitorePresa();
+		setTimeout(() => {
+			calcolaVincitorePresa();
+		},500);
 	}
 
     });
