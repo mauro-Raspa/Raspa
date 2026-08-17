@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -2241,7 +2241,7 @@ if(stanza){
 }
 
 function calcolaVincitorePresa(){
-
+	alert("ENTRATO calcolaVincitorePresa");
     let rank =
         Object.fromEntries(
             valori.map((v,i)=>[v,i])
@@ -2290,11 +2290,8 @@ if(stanza){
 
     	let vincitore = snapshot.val();
 
-		if(
-    		vincitore === null ||
-    		vincitore === "reset"
-		){
-    		return;
+		if(	vincitore === null){
+			return;
 		}
 
 		leaderPresaMP = vincitore;
@@ -2497,13 +2494,7 @@ if(stanza){
             "/confermePresa"
         ).remove();
 		
-		db.ref(
-    		"stanze/" +
-    		stanza +
-    		"/vincitorePresa"
-		).set("reset");
-
-        tavolo = [];
+		tavolo = [];
 
         mostraTavolo();
 
