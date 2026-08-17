@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2290,9 +2290,12 @@ if(stanza){
 
     	let vincitore = snapshot.val();
 
-    	if(vincitore === null){
-        	return;
-    	}
+		if(
+    		vincitore === null ||
+    		vincitore === "reset"
+		){
+    		return;
+		}
 
 		leaderPresaMP = vincitore;
     	leader = vincitore;
@@ -2493,6 +2496,12 @@ if(stanza){
             stanza +
             "/confermePresa"
         ).remove();
+		
+		db.ref(
+    		"stanze/" +
+    		stanza +
+    		"/vincitorePresa"
+		).set("reset");
 
         tavolo = [];
 
