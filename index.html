@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -2241,7 +2241,7 @@ if(stanza){
 }
 
 function calcolaVincitorePresa(){
-	alert("ENTRATO calcolaVincitorePresa");
+	
     let rank =
         Object.fromEntries(
             valori.map((v,i)=>[v,i])
@@ -2270,7 +2270,7 @@ function calcolaVincitorePresa(){
         stanza +
         "/confermePresa"
     ).remove();
-	alert("Vincitore trovato = " + win.g);
+	
     db.ref(
         "stanze/" +
         stanza +
@@ -2289,7 +2289,7 @@ if(stanza){
 	.on("value", (snapshot) => {
 
     	let vincitore = snapshot.val();
-
+		alert("Listener vincitorePresa partito: " + vincitore);
 		if(	vincitore === null){
 			return;
 		}
