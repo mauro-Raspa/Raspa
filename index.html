@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -2296,15 +2296,19 @@ if(stanza){
 	)
 	.on("value", (snapshot) => {
 
-    	let dato = snapshot.val();
+    	let vincitore = snapshot.val();
+		
+		if(	vincitore === null){
+			return;
+		}
 
-    	if(!dato){
-        	return;
-    	}
+			   
+				
+	  
 
-    	let vincitore = dato.vincitore;
+									
 
-    	leaderPresaMP = vincitore;
+		leaderPresaMP = vincitore;
     	leader = vincitore;
 		// disegnaGiocatori(true);
 		// -----------------------
@@ -2503,15 +2507,15 @@ if(stanza){
             stanza +
             "/confermePresa"
         ).remove();
-		/*
+		
 		tavolo = [];
 
         mostraTavolo();
-		*/
+	
 
         let miaMano =
             mani[mioIndiceMultiplayer];
-		
+
         if(miaMano.length === 0){
 						
 
