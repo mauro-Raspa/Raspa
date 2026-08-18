@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2271,46 +2271,59 @@ function calcolaVincitorePresa(){
         "/confermePresa"
     ).remove();
 	
+    db.ref(
+    	"stanze/" +
+    	stanza +
+    	"/triggerPresa"
+	).set(Date.now());
+
 	db.ref(
     	"stanze/" +
     	stanza +
-    	"/ultimoVincitore"
-	).once("value")
-	.then((snap) => {
+    	"/vincitorePresa"
+	).set(Number(win.g));
 
-    	let ultimo = snap.val();
+}
 
-    	if(ultimo === Number(win.g)){
+if(stanza){
 
-        	db.ref(
-            	"stanze/" +
-            	stanza +
-            	"/vincitorePresa"
-        	).set(Number(win.g) + 100);
-
-    	}
-
-    	db.ref(
-        	"stanze/" +
-        	stanza +
-        	"/vincitorePresa"
-    	).set(Number(win.g));
-
-    	db.ref(
-        	"stanze/" +
-        	stanza +
-        	"/ultimoVincitore"
-    	).set(Number(win.g));
-
-	});
-	
     db.ref(
         "stanze/" +
         stanza +
-        "/vincitorePresa"
-    ).set(Number(win.g));
+        "/triggerPresa"
+    )
+    .on("value", (snapshot) => {
 
-}
+        let trigger = snapshot.val();
+
+        if(!trigger){
+            return;
+        }
+
+        db.ref(
+            "stanze/" +
+            stanza +
+            "/vincitorePresa"
+        ).once("value")
+        .then((snap) => {
+
+            let vincitore = snap.val();
+
+            if(vincitore === null){
+                return;
+            }
+
+            db.ref(
+                "stanze/" +
+                stanza +
+                "/vincitorePresa"
+            ).set(Number(vincitore));
+
+        });
+
+    });
+
+}		
 
 if(stanza){
 
@@ -2326,10 +2339,7 @@ if(stanza){
 		if(	vincitore === null){
 			return;
 		}
-		
-		if(vincitore >= 100){
-			return;
-		}
+
 			   
 				
 	  
