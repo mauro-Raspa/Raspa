@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2275,13 +2275,16 @@ function calcolaVincitorePresa(){
     	"stanze/" +
     	stanza +
     	"/vincitorePresa"
-	).set(Number(win.g));
+	).set(null)
+	.then(() => {
 
-	db.ref(
-    	"stanze/" +
-    	stanza +
-    	"/eventoPresa"
-	).set(Date.now());
+    	return db.ref(
+        	"stanze/" +
+        	stanza +
+        	"/vincitorePresa"
+    	).set(Number(win.g));
+
+	});
 
 }
 
@@ -2290,29 +2293,21 @@ if(stanza){
     db.ref(
     	"stanze/" +
     	stanza +
-    	"/eventoPresa"
+    	"/vincitorePresa"
 	)
 	.on("value", (snapshot) => {
 
-    	if(snapshot.val() === null){
-    		return;
+    	let vincitore = snapshot.val();
+		
+		if(	vincitore === null){
+			return;
 		}
 
-		db.ref(
-    		"stanze/" +
-    		stanza +
-    		"/vincitorePresa"
-		)
-		.once("value")
-		.then((snap) => {
+			   
+				
+	  
 
-    		let vincitore = snap.val();
-
-    		if(vincitore === null){
-        		return;
-    		}
-
-						
+									
 
 		leaderPresaMP = vincitore;
     	leader = vincitore;
@@ -2478,8 +2473,10 @@ if(stanza){
     		"/confermePresa/" +
     		mioIndiceMultiplayer
 		).set(true);
-		});
-			  
+		/*
+	   }, 1000);
+	   */
+	  
     });
 
 }
