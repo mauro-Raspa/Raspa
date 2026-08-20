@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2270,13 +2270,7 @@ function calcolaVincitorePresa(){
         stanza +
         "/confermePresa"
     ).remove();
-	/*
-	db.ref(
-        "stanze/" +
-        stanza +
-        "/vincitorePresa"
-    ).set(Number(win.g));
-	*/
+	
     db.ref(
     	"stanze/" +
     	stanza +
@@ -2284,9 +2278,9 @@ function calcolaVincitorePresa(){
 	)
 	.once("value")
 	.then(snapshot => {
-
+		/*
     	let valoreDaScrivere = Number(win.g);
-
+		
     	if(win.g === leaderPresaMP){
 
         	let attuale = Number(snapshot.val() || win.g);
@@ -2298,13 +2292,21 @@ function calcolaVincitorePresa(){
             	valoreDaScrivere = win.g + 0.01;
         	}
     	}
-
+		
     	db.ref(
         	"stanze/" +
         	stanza +
         	"/vincitorePresa"
     	).set(valoreDaScrivere);
-
+		*/
+	
+	db.ref(
+        "stanze/" +
+        stanza +
+        "/vincitorePresa"
+    ).set(Number(win.g));
+	
+		
 	});
 
 }
