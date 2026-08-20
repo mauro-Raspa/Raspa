@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -2270,7 +2270,7 @@ function calcolaVincitorePresa(){
         stanza +
         "/confermePresa"
     ).remove();
-	
+	/*
     db.ref(
     	"stanze/" +
     	stanza +
@@ -2278,7 +2278,7 @@ function calcolaVincitorePresa(){
 	)
 	.once("value")
 	.then(snapshot => {
-		/*
+	*/	
     	let valoreDaScrivere = Number(win.g);
 		
     	if(win.g === leaderPresaMP){
@@ -2298,14 +2298,14 @@ function calcolaVincitorePresa(){
         	stanza +
         	"/vincitorePresa"
     	).set(valoreDaScrivere);
-		*/
-	
+		
+	/*
 	db.ref(
         "stanze/" +
         stanza +
         "/vincitorePresa"
     ).set(Number(win.g));
-	
+	*/
 		
 	});
 
