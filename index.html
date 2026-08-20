@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -1359,7 +1359,7 @@ function continuaGioco(){
     			"/vincitorePresa"
 			).remove();
 
-
+			alert("PULIZIA TAVOLO - nuovaMano");
 			tavolo = [];
 			mostraTavolo();
 
@@ -1899,7 +1899,7 @@ function resetNuovaManoMultiplayer(){
 
 	partitaAvviata = false;
 	mostraMano();
-	
+	alert("PULIZIA TAVOLO - resetNuovaManoMultiplayer");
 	tavolo = [];
     mostraTavolo();
 	
@@ -2530,7 +2530,7 @@ if(stanza){
             stanza +
             "/confermePresa"
         ).remove();
-		alert("Sto pulendo il tavolo");
+		alert("PULIZIA TAVOLO - confermePresa");
 		tavolo = [];
 
         mostraTavolo();
@@ -2637,7 +2637,7 @@ if(stanza){
         if(!valore){
             return;
         }
-
+		alert("PULIZIA TAVOLO - resetTavolo");
         tavolo = [];
 
         mostraTavolo();
