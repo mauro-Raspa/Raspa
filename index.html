@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1924,7 +1924,7 @@ function resetNuovaManoMultiplayer(){
             score.innerText = "";
         }
     }
-	disegnaGiocatori(true);
+	
 }
 
 
@@ -2616,8 +2616,8 @@ if(stanza){
         }
 
         leaderManoMP = valore;
-		// leader = valore;
-		disegnaGiocatori(true);
+		leader = valore;
+		disegnaGiocatori();
 
     });
 
