@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -381,10 +381,23 @@ const db = firebase.database();
 
         function disegnaGiocatori(soloLeader = false){
 
-			let leaderVisuale =
-    			modalitaMultiplayer
-    			? leaderManoMP
-    			: leader;
+			let leaderVisuale;
+
+			if(modalitaMultiplayer){
+
+    			if(window.prossimaAzione === "nuovaMano"){
+        			leaderVisuale = leaderManoMP;
+    			}
+    			else{
+        			leaderVisuale = leaderPresaMP;
+    			}
+
+			}
+			else{
+
+    			leaderVisuale = leader;
+
+			}
 
 
         let container = document.getElementById("nomiGiocatori");
