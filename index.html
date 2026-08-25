@@ -383,7 +383,7 @@ const db = firebase.database();
 
 			let leaderVisuale =
     			modalitaMultiplayer
-    			? leaderPresaMP
+    			? leaderManoMP
     			: leader;
 
         let container = document.getElementById("nomiGiocatori");
@@ -2333,7 +2333,7 @@ if(stanza){
 
 		leaderPresaMP = vincitore;
     	leader = vincitore;
-		disegnaGiocatori(true);
+		// disegnaGiocatori(true);
 		// -----------------------
 		/*
 		for(let i=0;i<numGiocatori;i++){
