@@ -189,7 +189,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -258,7 +258,7 @@
 		
         <div
     		id="boxPronostico"
-    		style="display:flex; align-items:center; gap:10px;">
+    		style="display:none; align-items:center; gap:10px;">
 
 		    Pronostico:
     		<input id="pronostico" type="number" min="0" style="width:60px;">
@@ -764,7 +764,7 @@ const db = firebase.database();
 
           // UTENTE
           if(g === 0){
-
+			document.getElementById("boxPronostico").style.display = "flex";
             let btn = document.getElementById("btnPronostico");
             btn.style.display = "inline-block";
 
@@ -791,7 +791,7 @@ const db = firebase.database();
 				"🎯 " + mio + " | 🏆 0";
 				
               btn.style.display = "none";
-
+			document.getElementById("boxPronostico").style.display = "none";
               index++;
               setTimeout(step,200);
             };
