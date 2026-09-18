@@ -166,6 +166,13 @@
 		style="display:none;">
 	  🔄 Reset
 	</button>
+
+	<button id="btnExit"
+		onclick="esciPartita()"
+		style="display:none;">
+		🚪 Esci
+	</button>
+
     <button id="btnInvita" onclick="invitaAmici()">👥 Invita</button>
 	
 	<button id="btnCondividi"
@@ -189,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -573,7 +580,7 @@ const db = firebase.database();
 		
 		document.getElementById("btnStart").style.display = "none";
 		document.getElementById("btnReset").style.display = "inline-block";
-		// document.getElementById("btnExit").style.display = "inline-block";
+		document.getElementById("btnExit").style.display = "inline-block";
 		document.getElementById("btnInvita").style.display = "none";
 		
 		document.getElementById("numGiocatoriInput").disabled = true;
@@ -1530,6 +1537,13 @@ function continuaGioco(){
 				return;
 			}
 			location.reload();
+		}
+
+		function esciPartita(){
+    		if(!confirm("Vuoi uscire dalla partita?")){
+        		return;
+    		}
+    		location.replace("about:blank");
 		}
 
 		function chiudiStanza(){
