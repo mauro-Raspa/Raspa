@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1543,7 +1543,16 @@ function continuaGioco(){
     		if(!confirm("Vuoi uscire dalla partita?")){
         		return;
     		}
-    		location.replace("about:blank");
+    		document.body.innerHTML = `
+        		<div style="
+            		margin-top:100px;
+            		text-align:center;
+            		font-family:Arial;
+        		">
+            		<h2>👋 Grazie per aver giocato a RASPA</h2>
+            		<p>Adesso puoi chiudere il browser con la X.</p>
+        		</div>
+    		`;
 		}
 
 		function chiudiStanza(){
