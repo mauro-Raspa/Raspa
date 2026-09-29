@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -386,42 +386,12 @@ const db = firebase.database();
 
 
 
-        function disegnaGiocatori(soloLeader = false){
-
-			let leaderVisuale =
-    			modalitaMultiplayer
-    			? leaderManoMP
-    			: leader;
+        function disegnaGiocatori(){
 
         let container = document.getElementById("nomiGiocatori");
-		if(!soloLeader){
-        	container.innerHTML = "";
-		}
+        container.innerHTML = "";
 
         for(let i = 0; i < numGiocatori; i++){
-
-			        if(soloLeader){
-
-            			let div =
-                			document.getElementById(
-                    			"giocatore_" + i
-                			);
-
-            			if(!div){
-                			continue;
-            			}
-
-            			if(i === leaderVisuale){
-                			div.style.background = "red";
-                			div.style.color = "white";
-            			}
-            			else{
-                			div.style.background = "white";
-                			div.style.color = "black";
-            			}
-
-            			continue;
-        			}
 
         let posizione = i;
 
@@ -451,10 +421,9 @@ const db = firebase.database();
 
 
         let div = document.createElement("div");
-		div.id = "giocatore_" + i;
         div.className = "nomeGiocatore";
 
-        if(i === leaderVisuale){
+        if(i === leader){
             div.style.background = "red";
             div.style.color = "white";
         }
@@ -563,13 +532,6 @@ const db = firebase.database();
 
 				db.ref("stanze/" + stanza + "/cartePerMano")
 					.set(1);
-				let leaderIniziale =
-    				Math.floor(Math.random() * numGiocatori);
-				leaderManoMP = leaderIniziale;
-				leaderPresaMP = leaderIniziale;
-
-				db.ref("stanze/" + stanza +	"/leaderMano")
-					.set(leaderIniziale);
 				
 				db.ref("stanze/" + stanza + "/totaleMani")
 					.set(totaleManiTemp);
@@ -858,7 +820,7 @@ const db = firebase.database();
 
     		document.getElementById("btnAvviaPronostici").style.display = "none";
 			db.ref("stanze/" + stanza + "/turnoPronostico")
-    			.set(leaderManoMP);
+    			.set(leader);
 
     		let ordine = [];
 
@@ -985,53 +947,6 @@ const db = firebase.database();
         // ---------------------
 
         function giocaUtente(i){
-
-if(modalitaMultiplayer){
-
-    let carta =
-        mani[mioIndiceMultiplayer][i];
-
-	if(tavolo.length > 0){
-
-    	let seme = tavolo[0].c.s;
-
-    	let haiSeme =
-        	mani[mioIndiceMultiplayer]
-        	.some(c => c.s === seme);
-
-    	if(haiSeme && carta.s !== seme){
-
-        	alert("Devi rispondere al seme: "+seme);
-			return;
-    	}
-	}
-
-    mani[mioIndiceMultiplayer].splice(i,1);
-	partitaAvviata = false;
-    mostraMano();
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/cartaGiocata"
-    ).set({
-        giocatore: mioIndiceMultiplayer,
-        carta: carta
-    });
-
-    let prossimo =
-        (mioIndiceMultiplayer + 1)
-        % numGiocatori;
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/turnoCarta"
-    ).set(prossimo);
-
-    return;
-}
-			
 		 if(!partitaAvviata) return;
          if(fasePronostico || indiceTurno!==0) return;
 
@@ -1101,6 +1016,10 @@ function invitaAmici(){
 
 
 
+
+
+
+
         function mostraTavolo(vincente = null){
 
          let d = document.getElementById("tavolo");
@@ -1108,19 +1027,7 @@ function invitaAmici(){
 
          tavolo.forEach(x => {
 
-          let posizione = x.g;
-
-			if(modalitaMultiplayer){
-
-    			posizione =
-        			(x.g - mioIndiceMultiplayer + numGiocatori)
-        			% numGiocatori;
-			}
-
-			let angolo =
-    			(2 * Math.PI * posizione / numGiocatori)
-    			+ Math.PI / 2;
-
+          let angolo = (2 * Math.PI * x.g / numGiocatori) + Math.PI/2;
 
           let r = document.getElementById("campoGioco").offsetWidth * 0.08;
 
@@ -1213,12 +1120,9 @@ function invitaAmici(){
           }
 
           storicoMani.push({
-    		prese:[...preseGiocatori],
-    		pron:Array.from(
-        		{length:numGiocatori},
-        		(_,i)=>Number(pronostici[i] || 0)
-    		)
-		  });
+           prese:[...preseGiocatori],
+           pron:[...pronostici]
+          });
 
           aggiornaClassifica();
           window.prossimaAzione="nuovaMano";
@@ -1233,228 +1137,56 @@ function invitaAmici(){
          mostraMano();
         }
 
-function continuaGioco(){
+        function continuaGioco(){
 
-    if(stanza){
+         document.getElementById("continuaBtn").style.display="none";
 
-    	document.getElementById("continuaBtn")
-        	.style.display = "none";
+         if(window.prossimaAzione === "iniziaMano"){
+           iniziaPresa();
+           return;
+         }
 
-    	if(window.prossimaAzione === "iniziaMano"){
+         if(window.prossimaAzione==="nuovaMano"){
 
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/turnoCarta"
-    		).set(-1)
-    		.then(() => {
+          let maxCarte = valori.length * semi.length;
 
-        		return db.ref(
-            		"stanze/" +
-            		stanza +
-            		"/turnoCarta"
-        		).set(leaderManoMP);
 
-    		});
+        if((cartePerMano+1)*numGiocatori >= maxCarte){
 
-    		return;
-		}
+          let max = Math.max(...puntiGiocatori);
+          let vincitori = [];
 
-		if(window.prossimaAzione === "presa"){
-
-    		// tavolo = [];
-
-    		// mostraTavolo();
-			
-			db.ref(
-    			"stanze/" +
-    			stanza +
-    			"/resetTavolo"
-			).set(Date.now());
-
-			
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/turnoCarta"
-    		).set(leaderPresaMP);
-
-    		return;
-		}
-
-    	if(window.prossimaAzione === "nuovaMano"){
-
-			let nuovoLeaderMano =
-    			(leaderManoMP + 1) % numGiocatori;
-
-			db.ref(
-    			"stanze/" +
-    			stanza +
-    			"/leaderMano"
-			).set(nuovoLeaderMano);
-
-    		let nuoveCarte =
-        		cartePerMano + 1;
-
-    		let nuovoMazzo =
-        		creaMazzo();
-
-    		let nuoveMani = [];
-
-    		for(let i=0;i<numGiocatori;i++){
-
-        		nuoveMani.push(
-            		nuovoMazzo.splice(
-                		0,
-                		nuoveCarte
-            		)
-        		);
-
-    		}
-
-    		let nuovaBriscola =
-        		nuovoMazzo.shift();
-
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/mani"
-    		).set(nuoveMani);
-
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/briscola"
-    		).set(nuovaBriscola);
-
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/numeroMano"
-    		).set(numeroMano + 1);
-
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/cartePerMano"
-    		).set(nuoveCarte);
-
-			leaderManoMP = nuovoLeaderMano;
-			leaderPresaMP = nuovoLeaderMano;
-
-			db.ref(
-    			"stanze/" +
-    			stanza +
-    			"/turnoCarta"
-			).set(leaderPresaMP);
-
-			db.ref(
-    			"stanze/" +
-    			stanza +
-    			"/pronostici"
-			).remove();
-
-			db.ref(
-    			"stanze/" +
-    			stanza +
-    			"/cartaGiocata"
-			).remove();
-
-			db.ref(
-    			"stanze/" +
-    			stanza +
-    			"/vincitorePresa"
-			).remove();
-
-			alert("PULIZIA TAVOLO E PRONOSTICI - nuovaMano");
-			tavolo = [];
-			mostraTavolo();
-
-			pronostici = [];
-			
-			preseGiocatori =
-    			new Array(numGiocatori).fill(0);
-
-			document.getElementById(
-    			"riepilogoPronostici"
-			).innerHTML = "";
-
-			for(let i=0;i<numGiocatori;i++){
-
-    			let score =
-        			document.getElementById(
-            			"score_g" + i
-        			);
-
-    			if(score){
-
-        			score.innerText = "";
-
-    			}
-			}
-
-    		document.getElementById(
-        		"btnAvviaPronostici"
-    		).style.display = "inline-block";
-
-    		return;
-		}
-
-    	return;
-	}
-
-    document.getElementById("continuaBtn").style.display="none";
-
-    if(window.prossimaAzione === "iniziaMano"){
-        iniziaPresa();
-        return;
-    }
-
-    if(window.prossimaAzione==="nuovaMano"){
-
-        let maxCarte = valori.length * semi.length;
-
-    	if((cartePerMano+1)*numGiocatori >= maxCarte){
-
-            let max = Math.max(...puntiGiocatori);
-            let vincitori = [];
-
-            for(let i=0;i<numGiocatori;i++){
-                if(puntiGiocatori[i] === max){
-                    vincitori.push(i);
-                }
+          for(let i=0;i<numGiocatori;i++){
+            if(puntiGiocatori[i] === max){
+              vincitori.push(i);
             }
+          }
 
-            let testo = "";
+          let testo = "";
 
-            if(vincitori.length === 1){
-                testo = (vincitori[0] === 0)
-                    ? "Hai vinto! 🎉"
-                    : "Vince Bot " + vincitori[0];
-            }
-            else{
-                testo =
-                    "Pareggio tra: " +
-                    vincitori
-                        .map(v => v===0 ? "Tu" : "Bot "+v)
-                        .join(", ");
-            }
+          if(vincitori.length === 1){
+            testo = (vincitori[0] === 0) ? "Hai vinto! 🎉" : "Vince Bot " + vincitori[0];
+          } else {
+            testo = "Pareggio tra: " +
+              vincitori.map(v => v===0 ? "Tu" : "Bot "+v).join(", ");
+          }
 
-            alert("Fine partita!\n" + testo);
+          alert("Fine partita!\n" + testo);
 
-            return;
+          return;
         }
 
-        numeroMano++;
-        cartePerMano++;
-        nuovaMano();
-        return;
-    }
 
-    if(window.prossimaAzione==="presa"){
-        iniziaPresa();
-    }
-}
+          numeroMano++;
+          cartePerMano++;
+          nuovaMano();
+          return;
+         }
+
+         if(window.prossimaAzione==="presa"){
+           iniziaPresa();
+         }
+        }
 
 
         function aggiornaClassifica(){
@@ -1463,22 +1195,9 @@ function continuaGioco(){
 
          let html="<tr><th>Mano</th>";
 
-			for(let i=0;i<numGiocatori;i++){
-
-    			let nome;
-
-    			if(modalitaMultiplayer &&
-       			ordineGiocatori &&
-       			ordineGiocatori[i]){
-
-        			nome = ordineGiocatori[i].nome;
-    			}
-    			else{
-        			nome = (i===0 ? "Tu" : "Bot " + i);
-    			}
-
-    			html += "<th>" + nome + "</th>";
-			}
+         for(let i=0;i<numGiocatori;i++){
+          html+="<th>"+(i===0?"Tu":"Bot "+i)+"</th>";
+         }
 
          html+="</tr>";
 
@@ -1490,7 +1209,7 @@ function continuaGioco(){
            let ok=m.prese[g]===m.pron[g];
 
            html+="<td class='"+(ok?"ok":"ko")+"'>"
-           + Number(m.pron[g] ?? 0)+"/"+m.prese[g]
+           + m.pron[g]+"/"+m.prese[g]
            +"</td>";
           }
 
@@ -1824,8 +1543,6 @@ if(stanza){
 
 		numGiocatori = ordine.length;
 
-		preseGiocatori = new Array(numGiocatori).fill(0);
-
 		document.getElementById("tavoloShape").style.clipPath =
 			generaPoligono(numGiocatori);
 
@@ -1838,27 +1555,25 @@ if(stanza){
 
 if(stanza){
 
-    db.ref("stanze/" + stanza + "/briscola")
-    .on("value", (snapshot) => {
+	db.ref("stanze/" + stanza + "/briscola")
+	.on("value", (snapshot) => {
 
-        let b = snapshot.val();
+		let b = snapshot.val();
 
-        if(!b){
-            return;
-        }
+		if(!b){
+			return;
+		}
 
-        briscola = b;
+		let bc = document.getElementById("briscolaCentro");
 
-        let bc = document.getElementById("briscolaCentro");
+		bc.innerText = b.v + b.s;
 
-        bc.innerText = b.v + b.s;
+		bc.style.color =
+			(b.s==="♥" || b.s==="♦")
+			? "red"
+			: "black";
 
-        bc.style.color =
-            (b.s==="♥" || b.s==="♦")
-            ? "red"
-            : "black";
-
-    });
+	});
 
 }
 
@@ -1872,8 +1587,6 @@ if(stanza){
 		if(n === null){
 			return;
 		}
-
-		numeroMano = n;
 
 		let maxCarte = valori.length * semi.length;
 		let totale = Math.floor((maxCarte - 1) / numGiocatori);
@@ -1894,7 +1607,7 @@ if(stanza){
 		if(n === null){
 			return;
 		}
-		cartePerMano = n;
+
 		document.getElementById("carteNum").innerText = n;
 
 	});
@@ -1918,39 +1631,6 @@ if(stanza){
 
 }
 
-function resetNuovaManoMultiplayer(){
-
-	partitaAvviata = false;
-	mostraMano();
-	alert("PULIZIA TAVOLO E PRONOSTICI - resetNuovaManoMultiplayer");
-	tavolo = [];
-    mostraTavolo();
-	
-
-    pronostici = [];
-
-    preseGiocatori =
-        new Array(numGiocatori).fill(0);
-
-    document.getElementById(
-        "riepilogoPronostici"
-    ).innerHTML = "";
-
-    for(let i=0;i<numGiocatori;i++){
-
-        let score =
-            document.getElementById(
-                "score_g" + i
-            );
-
-        if(score){
-            score.innerText = "";
-        }
-    }
-	
-}
-
-
 if(stanza){
 
 	db.ref("stanze/" + stanza + "/mani")
@@ -1963,7 +1643,7 @@ if(stanza){
 		}
 
 		mani = m;
-		resetNuovaManoMultiplayer();
+
 		mostraMano();
 
 	});
@@ -1993,7 +1673,6 @@ if(stanza){
         if(turno === mioIndiceMultiplayer){
 
     		box.style.display = "flex";
-			input.value = "";
 
     		input.style.display = "inline-block";
     		btn.style.display = "inline-block";
@@ -2060,17 +1739,7 @@ if(stanza){
             return;
         }
 
-        pronostici = [];
-
-		for(let i=0;i<numGiocatori;i++){
-
-			if(dati[i] !== undefined){
-				pronostici[i] = Number(dati[i]);
-			}
-
-		}	
-
-		aggiornaRiepilogoPronostici();
+        pronostici = dati;
 
         for(let i=0;i<numGiocatori;i++){
 
@@ -2117,7 +1786,7 @@ if(stanza && isHost){
         		stanza +
         		"/turnoPronostico"
     		).set(-1);
-			window.prossimaAzione = "iniziaMano";
+
     		document.getElementById("continuaBtn")
         		.style.display = "block";
 
@@ -2127,37 +1796,25 @@ if(stanza && isHost){
     		return;
 		}
 
-        let ordine = [];
+        let prossimo = null;
 
-		for(let i=0;i<numGiocatori;i++){
+        for(let i=0;i<numGiocatori;i++){
 
-    		ordine.push(
-        		(leaderManoMP + i) % numGiocatori
-    		);
+            if(dati[i] === undefined){
 
-		}
+                prossimo = i;
+                break;
+            }
+        }
 
-		let prossimo = null;
+        if(prossimo !== null){
 
-		for(let g of ordine){
-
-    		if(dati[g] === undefined){
-
-        		prossimo = g;
-        		break;
-
-    		}
-		}
-
-		if(prossimo !== null){
-
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/turnoPronostico"
-    		).set(prossimo);
-
-		}
+            db.ref(
+                "stanze/" +
+                stanza +
+                "/turnoPronostico"
+            ).set(prossimo);
+        }
 
     });
 
@@ -2190,482 +1847,6 @@ if(stanza){
             ];
 
         }
-
-    });
-
-}
-
-if(stanza){
-
-    db.ref("stanze/" + stanza + "/turnoCarta")
-    .on("value", (snapshot) => {
-
-        let turno = snapshot.val();
-
-        if(turno === null){
-            return;
-        }
-
-		if(pronostici.length < numGiocatori){
-			return;
-		}
-
-		partitaAvviata = false;
-		
-       if(turno === mioIndiceMultiplayer){
-
-            partitaAvviata = true;
-
-            mostraMano();
-	   }
-		else{
-		    partitaAvviata = false;
-		    mostraMano();
-        }
-
-    });
-
-}
-
-
-if(stanza){
-
-    db.ref("stanze/" + stanza + "/cartaGiocata")
-    .on("value", (snapshot) => {
-
-        let dato = snapshot.val();
-
-        if(!dato){
-            return;
-        }
-
-        let giaPresente = tavolo.some(x =>
-            x.g === dato.giocatore
-        );
-
-        if(giaPresente){
-            return;
-        }
-
-        tavolo.push({
-    g: dato.giocatore,
-    c: dato.carta
-});
-
-	mostraTavolo();
-
-	if(
-		tavolo.length === numGiocatori
-	){
-		calcolaVincitorePresa();
-	}
-
-    });
-
-}
-
-function calcolaVincitorePresa(){
-	
-    let rank =
-        Object.fromEntries(
-            valori.map((v,i)=>[v,i])
-        );
-
-    let win = tavolo[0];
-
-    tavolo.forEach(x => {
-
-        if(
-            (x.c.s === briscola.s &&
-             win.c.s !== briscola.s)
-            ||
-            (
-                x.c.s === win.c.s &&
-                rank[x.c.v] > rank[win.c.v]
-            )
-        ){
-            win = x;
-        }
-
-    });
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/confermePresa"
-    ).remove();
-	/*
-	db.ref(
-        "stanze/" +
-        stanza +
-        "/vincitorePresa"
-    ).set(Number(win.g));
-	*/
-    db.ref(
-    	"stanze/" +
-    	stanza +
-    	"/vincitorePresa"
-	)
-	.once("value")
-	.then(snapshot => {
-
-    	let valoreDaScrivere = Number(win.g);
-
-    	if(win.g === leaderPresaMP){
-
-        	let attuale = Number(snapshot.val() || win.g);
-
-        	if(Math.floor(attuale) === win.g){
-            	valoreDaScrivere = attuale + 0.01;
-        	}
-        	else{
-            	valoreDaScrivere = win.g + 0.01;
-        	}
-    	}
-
-    	db.ref(
-        	"stanze/" +
-        	stanza +
-        	"/vincitorePresa"
-    	).set(valoreDaScrivere);
-
-	});
-
-}
-
-if(stanza){
-
-    db.ref(
-    	"stanze/" +
-    	stanza +
-    	"/vincitorePresa"
-	)
-	.on("value", (snapshot) => {
-
-    	// let vincitore = snapshot.val();
-		let vincitore = Math.floor(Number(snapshot.val()));
-		
-		if(	vincitore === null){
-			return;
-		}
-
-			   
-				
-	  
-
-									
-
-		leaderPresaMP = vincitore;
-    	leader = vincitore;
-		// disegnaGiocatori(true);
-		// -----------------------
-		/*
-		for(let i=0;i<numGiocatori;i++){
-
-    		let div =
-        		document.getElementById(
-            		"giocatore_" + i
-        		);
-
-    		if(!div){
-        		continue;
-    		}
-
-    		if(i === vincitore){
-
-        		div.style.background = "red";
-        		div.style.color = "white";
-
-    		}
-    		else{
-
-        		div.style.background = "white";
-        		div.style.color = "black";
-
-    		}
-		}
-		*/
-
-		// -----------------------
-
-    	preseGiocatori[leader] =
-        	(preseGiocatori[leader] || 0) + 1;
-
-		let miaMano = mani[mioIndiceMultiplayer];
-
-		if(miaMano && miaMano.length === 0){
-		
-
-    		for(let i=0;i<numGiocatori;i++){
-
-        		let punti =
-            		(preseGiocatori[i] === pronostici[i])
-            		? 10 + (preseGiocatori[i] * 5)
-            		: preseGiocatori[i];
-
-        		puntiGiocatori[i] =
-            		(puntiGiocatori[i] || 0) + punti;
-    		}
-
-    		let pronReali = [];
-
-			for(let i=0;i<numGiocatori;i++){
-
-    			let score =
-        			document.getElementById("score_g" + i);
-
-    			let testo = score.innerText;
-
-    			let pron =
-        			parseInt(
-            			testo
-                			.split("|")[0]
-                			.replace("🎯","")
-                			.trim()
-        			);
-
-    			pronReali.push(pron);
-			}
-
-			storicoMani.push({
-    			prese:[...preseGiocatori],
-    			pron: pronReali
-			});
-
-    		aggiornaClassifica();
-			if(isHost){
-				window.prossimaAzione = "nuovaMano";
-				document.getElementById("continuaBtn")
-    				.style.display = "inline-block";
-
-				document.getElementById("continuaBtn")
-    				.innerText = "➡️ Continua";
-			}
-
-		}
-
-    	for(let i=0;i<numGiocatori;i++){
-
-        	let score =
-            	document.getElementById(
-                	"score_g" + i
-            	);
-
-        	if(score){
-
-            	score.innerText =
-                	"🎯 " +
-                	(pronostici[i] ?? 0) +
-                	" | 🏆 " +
-                	(preseGiocatori[i] || 0);
-        	}
-    	}
-
-    	mostraTavolo(vincitore);
-
-		if(isHost){
-
-    		if(mani[mioIndiceMultiplayer].length > 0){
-
-        		window.prossimaAzione = "presa";
-
-        		document.getElementById("continuaBtn").style.display = "inline-block";
-
-        		document.getElementById("continuaBtn").innerText = "➡️ Continua";
-
-    		}
-
-		}
-		
-		/*
-		let miaMano = mani[mioIndiceMultiplayer];
-
-		if(isHost){
-
-    		if(miaMano.length > 0){
-
-        		window.prossimaAzione = "presa";
-
-    		}
-    		else{
-
-        		window.prossimaAzione = "nuovaMano";
-
-    		}
-
-    		document.getElementById("continuaBtn")
-        		.style.display = "inline-block";
-
-    		document.getElementById("continuaBtn")
-        		.innerText = "➡️ Continua";
-		}
-		*/
-
-		  
-        /*
-		let nome =
-            ordineGiocatori[vincitore].nome;
-		setTimeout(() => {
-
-        alert(
-    		"🏆 " +
-    		nome +
-    		" ha vinto la presa"
-		);
-		*/
-
-		db.ref(
-    		"stanze/" +
-    		stanza +
-    		"/confermePresa/" +
-    		mioIndiceMultiplayer
-		).set(true);
-		/*
-	   }, 1000);
-	   */
-	  
-    });
-
-}
-
-if(stanza){
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/confermePresa"
-    )
-    .on("value", (snapshot) => {
-
-        let dati = snapshot.val();
-
-        if(!dati){
-            return;
-        }
-
-        let conferme =
-            Object.keys(dati).length;
-
-        if(conferme !== numGiocatori){
-            return;
-        }
-
-        db.ref(
-            "stanze/" +
-            stanza +
-            "/confermePresa"
-        ).remove();
-		alert("PULIZIA TAVOLO - confermePresa");
-		tavolo = [];
-
-        mostraTavolo();
-	
-
-        let miaMano =
-            mani[mioIndiceMultiplayer];
-
-        if(miaMano.length === 0){
-						
-
-			for(let i=0;i<numGiocatori;i++){
-
-    			let punti =
-        			(preseGiocatori[i] === pronostici[i])
-        			? 10 + (preseGiocatori[i] * 5)
-        			: preseGiocatori[i];
-
-    			puntiGiocatori[i] =
-        			(puntiGiocatori[i] || 0) + punti;
-			}
-
-			storicoMani.push({
-    			prese:[...preseGiocatori],
-    			pron:[...pronReali]
-			});
-
-			aggiornaClassifica();
-			
-        }
-        else{
-
-            if(isHost){
-                window.prossimaAzione = "presa";
-                document.getElementById("continuaBtn").style.display = "inline-block";
-                document.getElementById("continuaBtn").innerText = "➡️ Continua";
-			}
-        }
-
-    });
-
-}
-/*
-if(stanza){
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/leaderMano"
-    )
-    .on("value", (snapshot) => {
-
-        let valore = snapshot.val();
-
-        if(valore === null){
-            return;
-        }
-
-        leaderMano = valore;
-        // leader = valore;
-
-        disegnaGiocatori(true);
-
-    });
-
-}
-*/
-
-if(stanza){
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/leaderMano"
-    )
-    .on("value", (snapshot) => {
-
-        let valore = snapshot.val();
-
-        if(valore === null){
-            return;
-        }
-
-        leaderManoMP = valore;
-		// leader = valore;
-		disegnaGiocatori(true);
-
-    });
-
-}
-
-
-if(stanza){
-
-    db.ref(
-        "stanze/" +
-        stanza +
-        "/resetTavolo"
-    )
-    .on("value", (snapshot) => {
-
-        let valore = snapshot.val();
-
-        if(!valore){
-            return;
-        }
-		alert("PULIZIA TAVOLO - resetTavolo");
-        tavolo = [];
-
-        mostraTavolo();
 
     });
 
