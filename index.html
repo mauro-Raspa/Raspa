@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -340,8 +340,8 @@ const db = firebase.database();
         let leader=0;
         let leaderMano=0;
 		// Multiplayer
-		let leaderPresaMP = 0;
-		let leaderManoMP = 0;
+		let leaderPresaMP = -1;
+		let leaderManoMP = -1;
 
         let numGiocatori=3;
         let numeroMano=1, cartePerMano=1;
@@ -423,10 +423,14 @@ const db = firebase.database();
         let div = document.createElement("div");
         div.className = "nomeGiocatore";
 
-        if(i === leader){
-            div.style.background = "red";
-            div.style.color = "white";
-        }
+        if(
+    		(!modalitaMultiplayer && i === leader)
+    		||
+    		(modalitaMultiplayer && i === leaderManoMP)
+		){
+    		div.style.background = "red";
+    		div.style.color = "white";
+		}
 
         let nomeVisualizzato;
 
@@ -535,6 +539,12 @@ const db = firebase.database();
 				
 				db.ref("stanze/" + stanza + "/totaleMani")
 					.set(totaleManiTemp);
+
+				let leaderCasuale =
+    				Math.floor(Math.random() * numGiocatori);
+
+				db.ref("stanze/" + stanza + "/leaderManoMP")
+    				.set(leaderCasuale);
 
 				return;
 
@@ -1138,18 +1148,7 @@ function invitaAmici(){
         }
 
         function continuaGioco(){
-			if(stanza){
-    			if(window.prossimaAzione === "iniziaMano"){
-
-        			db.ref(
-            			"stanze/" +
-            			stanza +
-            			"/turnoGiocatore"
-        			).set(leader);
-        			return;
-    			}
-			}
-			
+						
 
          document.getElementById("continuaBtn").style.display="none";
 
@@ -1865,21 +1864,22 @@ if(stanza){
 }
 
 
+
+
 if(stanza){
 
-    db.ref("stanze/" + stanza + "/turnoGiocatore")
+    db.ref("stanze/" + stanza + "/leaderManoMP")
     .on("value", (snapshot) => {
 
-        let turno = snapshot.val();
+        let valore = snapshot.val();
 
-        if(turno === null){
+        if(valore === null){
             return;
         }
 
-        partitaAvviata =
-            (turno === mioIndiceMultiplayer);
+        leaderManoMP = valore;
 
-        mostraMano();
+        disegnaGiocatori();
 
     });
 
