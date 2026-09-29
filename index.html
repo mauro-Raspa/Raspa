@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1138,6 +1138,18 @@ function invitaAmici(){
         }
 
         function continuaGioco(){
+			if(stanza){
+    			if(window.prossimaAzione === "iniziaMano"){
+
+        			db.ref(
+            			"stanze/" +
+            			stanza +
+            			"/turnoGiocatore"
+        			).set(leader);
+        			return;
+    			}
+			}
+			
 
          document.getElementById("continuaBtn").style.display="none";
 
@@ -1852,6 +1864,28 @@ if(stanza){
 
 }
 
+
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/turnoGiocatore")
+    .on("value", (snapshot) => {
+
+        let turno = snapshot.val();
+
+        if(turno === null){
+            return;
+        }
+
+        partitaAvviata =
+            (turno === mioIndiceMultiplayer);
+
+        mostraMano();
+
+    });
+
+}
+		
+		
 		
     </script>
 
