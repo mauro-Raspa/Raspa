@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -342,7 +342,7 @@ const db = firebase.database();
 		// Multiplayer
 		let leaderPresaMP = -1;
 		let leaderManoMP = -1;
-
+		let turnoGiocatoreMP = -1;
         let numGiocatori=3;
         let numeroMano=1, cartePerMano=1;
         let totaleMani=0;
@@ -958,6 +958,13 @@ const db = firebase.database();
 
         function giocaUtente(i){
 		 if(!partitaAvviata) return;
+			
+			if(stanza){
+    			if(turnoGiocatoreMP !== mioIndiceMultiplayer){
+        			return;
+    			}
+			}
+			
          if(fasePronostico || indiceTurno!==0) return;
 
          let carta=mani[0][i];
@@ -1148,7 +1155,19 @@ function invitaAmici(){
         }
 
         function continuaGioco(){
-						
+		if(stanza){
+
+    		if(window.prossimaAzione === "iniziaMano"){
+
+        		db.ref(
+            		"stanze/" +
+            		stanza +
+            		"/turnoGiocatoreMP"
+        		).set(leaderManoMP);
+
+        		return;
+    		}
+		}				
 
          document.getElementById("continuaBtn").style.display="none";
 
@@ -1884,6 +1903,28 @@ if(stanza){
         leaderManoMP = valore;
 
         disegnaGiocatori();
+
+    });
+
+}
+
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
+    .on("value", (snapshot) => {
+
+        let turno = snapshot.val();
+
+        if(turno === null){
+            return;
+        }
+
+        turnoGiocatoreMP = turno;
+
+        partitaAvviata =
+            (turnoGiocatoreMP === mioIndiceMultiplayer);
+
+        mostraMano();
 
     });
 
