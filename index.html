@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -830,12 +830,12 @@ const db = firebase.database();
 
     		document.getElementById("btnAvviaPronostici").style.display = "none";
 			db.ref("stanze/" + stanza + "/turnoPronostico")
-    			.set(leader);
+    			.set(leaderManoMP);
 
     		let ordine = [];
 
     		for(let i=0;i<numGiocatori;i++){
-        		ordine.push((leader+i)%numGiocatori);
+        		ordine.push((leaderManoMP+i)%numGiocatori);
     		}
 
     		pronostici = new Array(numGiocatori);
