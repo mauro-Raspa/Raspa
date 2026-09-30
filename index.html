@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -257,7 +257,7 @@
 		</button>
 			
             <button id="continuaBtn" onclick="continuaGioco()" style="display:none;">
-                ▶ Inizia Mano
+                ▶ Inizia Presa
             </button>
         </div>
 
@@ -741,7 +741,7 @@ const db = firebase.database();
 
             window.prossimaAzione = "iniziaMano";
 
-            document.getElementById("continuaBtn").innerText="▶ Inizia Mano";
+            document.getElementById("continuaBtn").innerText="▶ Inizia Presa";
             document.getElementById("continuaBtn").style.display="block";
             return;
           }
@@ -859,7 +859,7 @@ const db = firebase.database();
             		window.prossimaAzione = "iniziaMano";
 
             		document.getElementById("continuaBtn").innerText =
-                		"▶ Inizia Mano";
+                		"▶ Inizia Presa";
 
             		document.getElementById("continuaBtn").style.display =
                 		"block";
@@ -1105,8 +1105,7 @@ function invitaAmici(){
 		}
 
 		function iniziaPresaMP(){
-    		turnoGiocatoreMP = leaderPresaMP;
-			partitaAvviata = (mioIndiceMultiplayer === turnoGiocatoreMP);
+    		turnoGiocatoreMP = leaderManoMP;
 			mostraMano();
 		}
 		
@@ -1831,7 +1830,7 @@ if(stanza && isHost){
         		.style.display = "block";
 
     		document.getElementById("continuaBtn")
-        		.innerText = "▶ Inizia Mano";
+        		.innerText = "▶ Inizia Presa";
 
     		return;
 		}
