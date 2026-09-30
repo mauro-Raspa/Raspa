@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 8
 	</div>
 
 	<div id="listaGiocatori"
@@ -664,8 +664,14 @@ const db = firebase.database();
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
           b.onclick=()=>giocaUtente(c.index);
-			if(!partitaAvviata){
-				b.disabled = true;
+			if(modalitaMultiplayer){
+    			b.disabled =
+        			(mioIndiceMultiplayer !== turnoGiocatoreMP);
+			}
+			else{
+    			if(!partitaAvviata){
+        			b.disabled = true;
+    			}
 			}	
           d.appendChild(b);
          });
@@ -959,11 +965,7 @@ const db = firebase.database();
         function giocaUtente(i){
 		 if(!partitaAvviata) return;
 			
-			if(stanza){
-    			if(turnoGiocatoreMP !== mioIndiceMultiplayer){
-        			return;
-    			}
-			}
+			
 			
          if(fasePronostico || indiceTurno!==0) return;
 
@@ -1096,6 +1098,19 @@ function invitaAmici(){
           setTimeout(giocaBot,300);
         }
 
+		function iniziaManoMP(){
+    		fasePronostico = false;
+    		leaderPresaMP = leaderManoMP;
+			iniziaPresaMP();
+		}
+
+		function iniziaPresaMP(){
+    		turnoGiocatoreMP = leaderPresaMP;
+			partitaAvviata = (mioIndiceMultiplayer === turnoGiocatoreMP);
+			mostraMano();
+		}
+		
+
 
         function finePresa(){
 
@@ -1155,27 +1170,22 @@ function invitaAmici(){
         }
 
         function continuaGioco(){
-		if(stanza){
-
-    		if(window.prossimaAzione === "iniziaMano"){
-				fasePronostico = false;
-        		db.ref(
-            		"stanze/" +
-            		stanza +
-            		"/turnoGiocatoreMP"
-        		).set(leaderManoMP);
-
-        		return;
-    		}
-		}				
+		
+							
 
          document.getElementById("continuaBtn").style.display="none";
 
-         if(window.prossimaAzione === "iniziaMano"){
-           iniziaPresa();
-           return;
-         }
+        if(window.prossimaAzione === "iniziaMano"){
 
+    		if(stanza){
+        		iniziaManoMP();
+    		}
+    		else{
+        		iniziaPresa();
+    		}
+
+    		return;
+		}
          if(window.prossimaAzione==="nuovaMano"){
 
           let maxCarte = valori.length * semi.length;
@@ -1908,27 +1918,7 @@ if(stanza){
 
 }
 
-if(stanza){
 
-    db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
-    .on("value", (snapshot) => {
-
-        let turno = snapshot.val();
-
-        if(turno === null){
-            return;
-        }
-
-        turnoGiocatoreMP = turno;
-
-        partitaAvviata =
-            (turnoGiocatoreMP === mioIndiceMultiplayer);
-
-        mostraMano();
-
-    });
-
-}
 		
 		
 		
