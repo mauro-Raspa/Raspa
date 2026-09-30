@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 7
 	</div>
 
 	<div id="listaGiocatori"
@@ -1158,7 +1158,7 @@ function invitaAmici(){
 		if(stanza){
 
     		if(window.prossimaAzione === "iniziaMano"){
-
+				fasePronostico = false;
         		db.ref(
             		"stanze/" +
             		stanza +
