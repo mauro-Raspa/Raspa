@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -1809,14 +1809,18 @@ if(stanza && isHost){
 
         let prossimo = null;
 
-        for(let i=0;i<numGiocatori;i++){
+		for(let offset=0; offset<numGiocatori; offset++){
 
-            if(dati[i] === undefined){
+    		let indice =
+        		(leaderManoMP + offset) %
+        		numGiocatori;
 
-                prossimo = i;
-                break;
-            }
-        }
+    		if(dati[indice] === undefined){
+
+        		prossimo = indice;
+        		break;
+    		}
+		}
 
         if(prossimo !== null){
 
