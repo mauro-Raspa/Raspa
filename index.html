@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -835,9 +835,13 @@ const db = firebase.database();
 		function avviaPronosticiMultiplayer(){
 
     		document.getElementById("btnAvviaPronostici").style.display = "none";
-			db.ref("stanze/" + stanza + "/pronostici").remove();
-			db.ref("stanze/" + stanza + "/turnoPronostico")
-    			.set(leaderManoMP);
+
+			db.ref("stanze/" + stanza + "/pronostici")
+    			.remove()
+    			.then(() => {
+        			db.ref("stanze/" + stanza + "/turnoPronostico")
+            			.set(leaderManoMP);
+    			});
 
     		let ordine = [];
 
