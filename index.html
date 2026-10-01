@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 8
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1001,11 +1001,7 @@ const db = firebase.database();
 		
 		function giocaUtenteMP(i){
 
-    		if(mioIndiceMultiplayer !== turnoGiocatoreMP){
-        		return;
-    		}
-    		alert("CLICK MP OK");
-		}
+    	}
 
         function prossimoTurno(){
 
@@ -1123,11 +1119,8 @@ function invitaAmici(){
 		}
 
 		function iniziaPresaMP(){
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/turnoGiocatoreMP"
-    		).set(leaderManoMP);
+    		turnoGiocatoreMP = leaderManoMP;
+    		mostraMano();
 		}
 		
 
@@ -1937,24 +1930,6 @@ if(stanza){
         leaderManoMP = valore;
 
         disegnaGiocatori();
-
-    });
-
-}
-if(stanza){
-
-    db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
-    .on("value", (snapshot) => {
-
-        let turno = snapshot.val();
-
-        if(turno === null){
-            return;
-        }
-
-        turnoGiocatoreMP = turno;
-
-        mostraMano();
 
     });
 
