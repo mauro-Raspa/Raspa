@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 8
 	</div>
 
 	<div id="listaGiocatori"
@@ -663,7 +663,14 @@ const db = firebase.database();
           let b=document.createElement("button");
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
-          b.onclick=()=>giocaUtente(c.index);
+    	
+			if(modalitaMultiplayer){
+    		  b.onclick = () => giocaUtenteMP(c.index);
+			}
+			else{
+    		  b.onclick = () => giocaUtente(c.index);
+			}
+			 
 			if(modalitaMultiplayer){
     			b.disabled =
         			(mioIndiceMultiplayer !== turnoGiocatoreMP);
@@ -969,9 +976,7 @@ const db = firebase.database();
 
         function giocaUtente(i){
 		 if(!partitaAvviata) return;
-			
-			
-			
+				
          if(fasePronostico || indiceTurno!==0) return;
 
          let carta=mani[0][i];
@@ -993,6 +998,14 @@ const db = firebase.database();
 
          prossimoTurno();
         }
+		
+		function giocaUtenteMP(i){
+
+    		if(mioIndiceMultiplayer !== turnoGiocatoreMP){
+        		return;
+    		}
+    		alert("CLICK MP OK");
+		}
 
         function prossimoTurno(){
 
