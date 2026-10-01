@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1119,7 +1119,14 @@ function invitaAmici(){
 		}
 
 		function iniziaPresaMP(){
-    		turnoGiocatoreMP = leaderManoMP;
+
+    		if(mioIndiceMultiplayer === leaderManoMP){
+        		turnoGiocatoreMP = mioIndiceMultiplayer;
+    		}
+    		else{
+        		turnoGiocatoreMP = -1;
+    		}
+
     		mostraMano();
 		}
 		
