@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -687,6 +687,46 @@ const db = firebase.database();
 		  	(150 + (righe - 1) * 60) + "px";
         }
 
+		function mostraManoMP(){
+
+         let d=document.getElementById("mano");
+         d.innerHTML="";
+
+         const ordineSemi=["♠","♥","♦","♣"];
+
+        let miaMano =
+			modalitaMultiplayer
+			? mani[mioIndiceMultiplayer]
+			: mani[0];
+
+		let sorted = miaMano
+          .map((c,i)=>({...c,index:i}))
+          .sort((a,b)=>{
+            let s=ordineSemi.indexOf(a.s)-ordineSemi.indexOf(b.s);
+            if(s!==0) return s;
+            return valori.indexOf(a.v)-valori.indexOf(b.v);
+          });
+
+         sorted.forEach(c=>{
+          let b=document.createElement("button");
+          b.innerText=c.v+c.s;
+          b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
+    	
+			if(modalitaMultiplayer){
+    		  b.onclick = () => giocaUtenteMP(c.index);
+			}
+			else{
+    		  b.onclick = () => giocaUtente(c.index);
+			}
+		  b.disabled = false;
+				
+          d.appendChild(b);
+         });
+		  let righe = Math.ceil(miaMano.length / 5);
+		  document.getElementById("storicoContainer").style.marginTop =
+		  	(150 + (righe - 1) * 60) + "px";
+        }
+
         // ---------------------
 
 
@@ -1119,8 +1159,8 @@ function invitaAmici(){
 		}
 
 		function iniziaPresaMP(){
-    		turnoGiocatoreMP = mioIndiceMultiplayer;
-    		mostraMano();
+    		turnoGiocatoreMP = leaderManoMP;
+    		mostraManoMP();
 		}
 		
 
@@ -1697,7 +1737,7 @@ if(stanza){
 
 		mani = m;
 
-		mostraMano();
+		mostraManoMP();
 
 	});
 
