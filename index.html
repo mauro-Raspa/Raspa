@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -1783,9 +1783,11 @@ if(stanza){
             return;
         }
 
-        pronostici = Array.isArray(dati)
-    		? dati
-    		: Object.values(dati);
+        pronostici = new Array(numGiocatori);
+
+		Object.keys(dati).forEach(indice => {
+    		pronostici[parseInt(indice)] = dati[indice];
+		});
 		aggiornaRiepilogoPronostici();
         for(let i=0;i<numGiocatori;i++){
 
