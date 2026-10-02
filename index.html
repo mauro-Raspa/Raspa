@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1593,7 +1593,8 @@ if(stanza){
 		else{
 			mioIndiceMultiplayer = 0;
 		}
-
+		document.getElementById("listaGiocatori").innerHTML +=
+			"<br>MioIndice = " + mioIndiceMultiplayer;
 		numGiocatori = ordine.length;
 
 		document.getElementById("tavoloShape").style.clipPath =
@@ -1928,7 +1929,8 @@ if(stanza){
         }
 
         leaderManoMP = valore;
-
+		document.getElementById("playersBox").innerText =
+			"LeaderMP = " + leaderManoMP;
         disegnaGiocatori();
 
     });
