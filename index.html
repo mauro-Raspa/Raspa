@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -686,6 +686,35 @@ const db = firebase.database();
 		  document.getElementById("storicoContainer").style.marginTop =
 		  	(150 + (righe - 1) * 60) + "px";
         }
+		
+		function mostraManoMP(){
+
+    		let d = document.getElementById("mano");
+    		d.innerHTML = "";
+
+    		let miaMano = mani[mioIndiceMultiplayer];
+
+    		miaMano.forEach((c,i) => {
+
+        		let b = document.createElement("button");
+
+        		b.innerText = c.v + c.s;
+
+        		b.style.color =
+            		(c.s==="♥" || c.s==="♦")
+            		? "red"
+            		: "black";
+
+        		b.onclick = () => giocaUtenteMP(i);
+
+        		b.disabled =
+            		(mioIndiceMultiplayer !== turnoGiocatoreMP);
+
+        		d.appendChild(b);
+
+    		});
+
+		}
 
         // ---------------------
 
@@ -1952,7 +1981,7 @@ if(stanza){
 			"LeaderMP = " + leaderManoMP +
 			" TurnoMP = " + turnoGiocatoreMP;
 
-        mostraMano();
+        mostraManoMP();
 
     });
 
