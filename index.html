@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -708,7 +708,7 @@ const db = firebase.database();
         		b.onclick = () => giocaUtenteMP(i);
 
         		b.disabled =
-            		(mioIndiceMultiplayer !== turnoGiocatoreMP);
+            		(mioIndiceMultiplayer !== leaderManoMP);
 
         		d.appendChild(b);
 
