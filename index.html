@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1119,8 +1119,8 @@ function invitaAmici(){
 		}
 		*/
 		function iniziaPresaMP(){
-    		turnoGiocatoreMP = leaderManoMP;
-    		mostraMano();
+    		db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
+        		.set(leaderManoMP);
 		}
 		
 
@@ -1936,7 +1936,24 @@ if(stanza){
     });
 
 }
+if(stanza){
 
+    db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
+    .on("value", (snapshot) => {
+
+        let valore = snapshot.val();
+
+        if(valore === null){
+            return;
+        }
+
+        turnoGiocatoreMP = valore;
+
+        mostraMano();
+
+    });
+
+}
 		
 		
 		
