@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -673,7 +673,8 @@ const db = firebase.database();
 			 
 			if(modalitaMultiplayer){
     			b.disabled =
-        			(mioIndiceMultiplayer !== turnoGiocatoreMP);
+					false;
+        			//(mioIndiceMultiplayer !== leaderManoMP);
 			}
 			else{
     			if(!partitaAvviata){
@@ -686,35 +687,36 @@ const db = firebase.database();
 		  document.getElementById("storicoContainer").style.marginTop =
 		  	(150 + (righe - 1) * 60) + "px";
         }
-		
-		function mostraManoMP(){
+						  
 
-    		let d = document.getElementById("mano");
-    		d.innerHTML = "";
+											  
+					   
 
-    		let miaMano = mani[mioIndiceMultiplayer];
+											   
 
-    		miaMano.forEach((c,i) => {
+								
 
-        		let b = document.createElement("button");
+												   
 
-        		b.innerText = c.v + c.s;
+								  
 
-        		b.style.color =
-            		(c.s==="♥" || c.s==="♦")
-            		? "red"
-            		: "black";
+						 
+										  
+					 
+						
 
-        		b.onclick = () => giocaUtenteMP(i);
+											 
 
-        		b.disabled =
-            		(mioIndiceMultiplayer !== turnoGiocatoreMP);
+					  
+														  
+								
 
-        		d.appendChild(b);
+						   
 
-    		});
+		 
 
-		}
+   
+
 
         // ---------------------
 
@@ -1148,8 +1150,9 @@ function invitaAmici(){
 		}
 		*/
 		function iniziaPresaMP(){
-    		db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
-        		.set(leaderManoMP);
+							 
+    		turnoGiocatoreMP = leaderManoMP;
+    		mostraMano();
 		}
 		
 
@@ -1965,32 +1968,27 @@ if(stanza){
     });
 
 }
-if(stanza){
 
-    db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
-    .on("value", (snapshot) => {
+													
+								
 
-        let valore = snapshot.val();
+									
 
-        if(valore === null){
-            return;
-        }
+							
+				   
+		 
 
-        turnoGiocatoreMP = valore;
-		document.getElementById("playersBox").innerText =
-			"LeaderMP = " + leaderManoMP +
-			" TurnoMP = " + turnoGiocatoreMP;
-		alert(
-			"Nome = " + localStorage.getItem("nomeGiocatore") +
-			"\nMioIndice = " + mioIndiceMultiplayer +
-			"\nTurnoMP = " + turnoGiocatoreMP
-		);
+								  
+												   
+								 
+									
 
-        mostraManoMP();
+					   
 
-    });
 
-}
+
+ 
+  
 		
 		
 		
@@ -1999,3 +1997,4 @@ if(stanza){
 </div>
 </body>
 </html>
+
