@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -708,7 +708,7 @@ const db = firebase.database();
         		b.onclick = () => giocaUtenteMP(i);
 
         		b.disabled =
-            		(LeaderMP !== MioIndice);
+            		(mioIndiceMultiplayer !== turnoGiocatoreMP);
 
         		d.appendChild(b);
 
@@ -1980,6 +1980,11 @@ if(stanza){
 		document.getElementById("playersBox").innerText =
 			"LeaderMP = " + leaderManoMP +
 			" TurnoMP = " + turnoGiocatoreMP;
+		alert(
+			"Nome = " + localStorage.getItem("nomeGiocatore") +
+			"\nMioIndice = " + mioIndiceMultiplayer +
+			"\nTurnoMP = " + turnoGiocatoreMP
+		);
 
         mostraManoMP();
 
