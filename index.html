@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -393,18 +393,18 @@ const db = firebase.database();
 
         for(let i = 0; i < numGiocatori; i++){
 
-        let angolo = (2 * Math.PI * i / numGiocatori) + Math.PI / 2;
+        let posizione = i;
 
-						  
-			  
-											 
-				   
-   
+		if(modalitaMultiplayer){
+			posizione =
+				(i - mioIndiceMultiplayer + numGiocatori)
+				% numGiocatori;
+		}
 
-			  
-										   
-				 
-				
+		let angolo =
+			(2 * Math.PI * posizione / numGiocatori)
+			+ Math.PI / 2;
+													   
 
         let campo = document.getElementById("campoGioco");
 
@@ -1195,16 +1195,14 @@ function invitaAmici(){
          document.getElementById("continuaBtn").style.display="none";
 
         if(window.prossimaAzione === "iniziaMano"){
-           iniziaPresa();
-           return;
-        }
 
 				 
 						  
 	   
 		   
-						
-	   
+           iniziaPresa();
+           return;
+        }
 
 			 
    
