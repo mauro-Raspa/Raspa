@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 9
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1649,11 +1649,8 @@ if(stanza){
 			return;
 		}
 
-		let maxCarte = valori.length * semi.length;
-		let totale = Math.floor((maxCarte - 1) / numGiocatori);
-
 		document.getElementById("manoNum").innerText =
-			n + " / " + totale;
+    		n + " / " + totaleManiMultiplayer;
 	});
 
 }
@@ -1678,17 +1675,23 @@ if(stanza){
 if(stanza){
 
 	db.ref("stanze/" + stanza + "/totaleMani")
-	.on("value", (snapshot) => {
+.on("value", (snapshot) => {
 
-		let n = snapshot.val();
+    let n = snapshot.val();
 
-		if(n === null){
-			return;
-		}
+    if(n === null){
+        return;
+    }
 
-		totaleManiMultiplayer = n;
+    totaleManiMultiplayer = n;
 
-	});
+    let testoMano =
+        document.getElementById("manoNum").innerText.split(" / ")[0];
+
+    document.getElementById("manoNum").innerText =
+        testoMano + " / " + totaleManiMultiplayer;
+
+});
 
 }
 
