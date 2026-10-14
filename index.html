@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -651,12 +651,12 @@ const db = firebase.database();
 
          const ordineSemi=["♠","♥","♦","♣"];
 
-							   
-			 
-         let sorted = mani[0]
-					  
-									   
-						
+		let miaMano =
+			modalitaMultiplayer
+			? mani[mioIndiceMultiplayer]
+			: mani[0];
+
+		let sorted = miaMano
           .map((c,i)=>({...c,index:i}))
           .sort((a,b)=>{
             let s=ordineSemi.indexOf(a.s)-ordineSemi.indexOf(b.s);
@@ -668,27 +668,27 @@ const db = firebase.database();
           let b=document.createElement("button");
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
+	 
+						   
 												 
 	
 		
-											   
-	
           b.onclick=()=>giocaUtente(c.index);
+	
+	
 						   
 				   
 			 
 												   
 	
 		
-						   
-							 
 			if(!partitaAvviata){
 				b.disabled = true;
-						   
+		
 			}	
           d.appendChild(b);
          });
-		  let righe = Math.ceil(mani[0].length / 5);
+		  let righe = Math.ceil(miaMano.length / 5);
 		  document.getElementById("storicoContainer").style.marginTop =
 		  	(150 + (righe - 1) * 60) + "px";
         }
@@ -729,11 +729,11 @@ const db = firebase.database();
 		
 		
         function avviaPronostici(){
+   
+			  
 								 
 		   
 	
-  
-																	   
 		
 		document.getElementById("btnAvviaPronostici").style.display = "none";
 
@@ -845,6 +845,8 @@ const db = firebase.database();
         }
 
         // ---------------------
+										
+
 																		   
 
 											 
@@ -896,9 +898,7 @@ const db = firebase.database();
 	   
 
 			 
-
-
-							
+   
 
         function giocaBot(){
 
@@ -982,7 +982,7 @@ const db = firebase.database();
 
         function giocaUtente(i){
 		 if(!partitaAvviata) return;
-
+	
          if(fasePronostico || indiceTurno!==0) return;
 
          let carta=mani[0][i];
@@ -1004,10 +1004,10 @@ const db = firebase.database();
 
          prossimoTurno();
         }
+  
+							
 
 	  
-
-								 
 
         function prossimoTurno(){
 
@@ -1117,6 +1117,8 @@ function invitaAmici(){
          if(indiceTurno!==0)
           setTimeout(giocaBot,300);
         }
+	
+						  
 							 
 								   
 				   
@@ -1127,8 +1129,6 @@ function invitaAmici(){
 				   
    
   
-
-
 
 
         function finePresa(){
@@ -1189,23 +1189,25 @@ function invitaAmici(){
         }
 
         function continuaGioco(){
-
-																	 
+  
+	   
 
          document.getElementById("continuaBtn").style.display="none";
 
         if(window.prossimaAzione === "iniziaMano"){
-						  
-	   
-		   
-						
-	  
            iniziaPresa();
            return;
         }
 
-												 
+				 
+						  
+	   
+		   
+						
+	   
 
+			 
+   
          if(window.prossimaAzione==="nuovaMano"){
 
           let maxCarte = valori.length * semi.length;
@@ -1365,8 +1367,8 @@ function invitaAmici(){
 			});
 		}
 
-							   
-								 
+  
+  
 		function condividiStanza(){		
 			let stanza = getStanzaDaURL();
 
@@ -1574,9 +1576,379 @@ if(stanza){
 
 }
 
+		
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/ordineGiocatori")
+	.on("value", (snapshot) => {
+
+		let ordine = snapshot.val();
+
+		if(!ordine){
+			return;
+		}
+
+		ordineGiocatori = ordine;
+
+		let mioNome = localStorage.getItem("nomeGiocatore");
+
+		let mioGiocatore = ordineGiocatori.find(
+			g => g.nome === mioNome
+		);
+
+		if(mioGiocatore){
+			mioIndiceMultiplayer = mioGiocatore.posizione;
+		}
+		else{
+			mioIndiceMultiplayer = 0;
+		}
+		document.getElementById("listaGiocatori").innerHTML +=
+			"<br>MioIndice = " + mioIndiceMultiplayer;
+		numGiocatori = ordine.length;
+
+		document.getElementById("tavoloShape").style.clipPath =
+			generaPoligono(numGiocatori);
+
+		disegnaGiocatori();
+
+	});
+
+}		   
+
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/briscola")
+	.on("value", (snapshot) => {
+
+		let b = snapshot.val();
+
+		if(!b){
+			return;
+		}
+
+		let bc = document.getElementById("briscolaCentro");
+
+		bc.innerText = b.v + b.s;
+
+		bc.style.color =
+			(b.s==="♥" || b.s==="♦")
+			? "red"
+			: "black";
+
+	});
+
+}
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/numeroMano")
+	.on("value", (snapshot) => {
+
+		let n = snapshot.val();
+
+		if(n === null){
+			return;
+		}
+
+		let maxCarte = valori.length * semi.length;
+		let totale = Math.floor((maxCarte - 1) / numGiocatori);
+
+		document.getElementById("manoNum").innerText =
+			n + " / " + totale;
+	});
+
+}
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/cartePerMano")
+	.on("value", (snapshot) => {
+
+		let n = snapshot.val();
+
+		if(n === null){
+			return;
+		}
+
+		document.getElementById("carteNum").innerText = n;
+
+	});
+
+}
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/totaleMani")
+	.on("value", (snapshot) => {
+
+		let n = snapshot.val();
+
+		if(n === null){
+			return;
+		}
+
+		totaleManiMultiplayer = n;
+
+	});
+
+}
+
+if(stanza){
+
+	db.ref("stanze/" + stanza + "/mani")
+	.on("value", (snapshot) => {
+
+		let m = snapshot.val();
+
+		if(!m){
+			return;
+		}
+
+		mani = m;
+
+		mostraMano();
+
+	});
+
+}
+
+
+		   
+
+												   
+								
+
+								   
+
+						   
+				   
+		 
+
+				   
+												  
+
+				 
+													 
+		   
+												  
+
+										   
+
+								 
+
+										   
+										 
+
+   
+	   
+
+								 
+
+   
+
+	   
+
+ 
+
+		   
+
+			
+									
+									  
+
+				 
+					 
+														   
+			  
+
+					   
+													
+				   
+		 
+
+					
+										   
+				   
+		 
+
+							   
+				  
+												
+							  
+			  
+				   
+		 
+
+			   
+					   
+					
+							
+								
+				   
+
+	   
+
+ 
+  
+		   
+
+											  
+								
+
+								  
+
+				  
+				   
+		 
+
+											 
+
+									   
+												  
+	 
+								
+										
+
+											
+
+						   
+											
+									 
+					  
+
+						  
+
+									 
+								 
+									   
+									
+				 
+			 
+		 
+
+	   
+
+ 
+
+
+					 
+
+											  
+								
+
+								  
+
+				  
+				   
+		 
+
+					
+									 
+
+								
 
 			 
+					 
+				  
+							
+				
 
+											
+								   
+
+											
+										  
+
+			 
+   
+
+							
+
+												   
+
+				  
+								   
+					   
+
+									 
+
+							
+				
+	   
+   
+
+							  
+
+				   
+						   
+						
+								  
+							
+		 
+
+	   
+
+ 
+
+		   
+
+											 
+								
+
+								  
+
+				  
+				   
+		 
+
+					   
+
+					  
+									
+								   
+			  
+
+		 
+			 
+
+					  
+										
+											
+			  
+
+		 
+
+	   
+
+ 
+
+
+
+
+		   
+
+												
+								
+
+									
+
+							
+				   
+		 
+
+							  
+												   
+								
+						   
+
+	   
+
+ 
+
+  
+  
+  
     </script>
 
 </div>
