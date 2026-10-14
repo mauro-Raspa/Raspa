@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -424,15 +424,14 @@ const db = firebase.database();
         let div = document.createElement("div");
         div.className = "nomeGiocatore";
 
-        if(i === leaderPresa){
-											
-		
-												 
-	
-            div.style.background = "red";
-            div.style.color = "white";
-        }
-
+        if(
+    		(!modalitaMultiplayer && i === leaderPresa)
+    		||
+    		(modalitaMultiplayer && i === leaderManoMP)
+		){
+    		div.style.background = "red";
+    		div.style.color = "white";
+		}
         let nomeVisualizzato;
 											
 																
