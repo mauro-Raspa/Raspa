@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 7
 	</div>
 
 	<div id="listaGiocatori"
@@ -337,12 +337,8 @@ const db = firebase.database();
 
         let mazzo=[], mani=[];
 
-        let leader=0;
+        let leaderPresa=0;
         let leaderMano=0;
-		// Multiplayer
-		let leaderPresaMP = -1;
-		let leaderManoMP = -1;
-		let turnoGiocatoreMP = -1;
         let numGiocatori=3;
         let numeroMano=1, cartePerMano=1;
         let totaleMani=0;
@@ -361,12 +357,6 @@ const db = firebase.database();
         let livelloBot = 5;
 
 		let modalitaMultiplayer = false;
-		let ordineGiocatori = [];
-		let totaleManiMultiplayer = 0;
-		let mioIndiceMultiplayer = 0;
-		
-							 
-					   
 
         // ---------------------
 
@@ -393,18 +383,8 @@ const db = firebase.database();
 
         for(let i = 0; i < numGiocatori; i++){
 
-        let posizione = i;
+        let angolo = (2 * Math.PI * i / numGiocatori) + Math.PI / 2;
 
-		if(modalitaMultiplayer){
-			posizione =
-				(i - mioIndiceMultiplayer + numGiocatori)
-				% numGiocatori;
-		}
-
-		let angolo =
-			(2 * Math.PI * posizione / numGiocatori)
-			+ Math.PI / 2;
-													   
 
         let campo = document.getElementById("campoGioco");
 
@@ -423,30 +403,18 @@ const db = firebase.database();
         let div = document.createElement("div");
         div.className = "nomeGiocatore";
 
-        if(
-    		(!modalitaMultiplayer && i === leader)
-    		||
-    		(modalitaMultiplayer && i === leaderManoMP)
-		){
-    		div.style.background = "red";
-    		div.style.color = "white";
-		}
+        if(i === leaderPresa){
+            div.style.background = "red";
+            div.style.color = "white";
+        }
 
-        let nomeVisualizzato;
+        div.innerHTML = `
+            ${(i === 0) ? "Tu" : "Bot " + i}
+            <div id="score_g${i}" style="font-size:12px;"></div>
+         `;
 
-		if(modalitaMultiplayer && ordineGiocatori.length > 0){
-			nomeVisualizzato = ordineGiocatori[i].nome;
-		}
-		else{
-			nomeVisualizzato = (i === 0) ? "Tu" : "Bot " + i;
-		}
 
-		div.innerHTML = `
-			${nomeVisualizzato}
-			<div id="score_g${i}" style="font-size:12px;"></div>
-		`;
 
-	
             div.style.left = x + "px";
             div.style.top = y + "px";
 
@@ -480,74 +448,9 @@ const db = firebase.database();
 
 
         function avviaPartita(){
-			
 			if(modalitaMultiplayer){
-				
-				document.getElementById("btnStart").style.display = "none";
-				document.getElementById("btnAvviaPronostici")
-    				.style.display = "inline-block";
-
-    			let nomi =
-    				document.getElementById("listaGiocatori")
-    				.innerHTML
-    				.split("<br>")
-    				.map(x => x.replace("• ",""))
-    				.filter(x => x.trim() !== "");
-
-				let ordine = nomi.map((nome, indice) => ({
-    				nome: nome,
-    				posizione: indice
-				}));
-
-				db.ref("stanze/" + stanza + "/ordineGiocatori")
-				    .set(ordine);
-				let tipo = document.getElementById("mazzoTipo").value;
-				db.ref("stanze/" + stanza + "/tipoMazzo")
-    				.set(tipo);
-
-				if(tipo=="40"){
-					valori = ["2","3","4","5","6","7","J","Q","K","A"];
-				}
-				else{
-					valori = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
-				}
-
-				let maxCarte = valori.length * semi.length;
-				let totaleManiTemp = Math.floor((maxCarte - 1) / numGiocatori);
-
-				let mazzoTemp = creaMazzo();
-
-				let maniTemp = [];
-
-				for(let i=0;i<numGiocatori;i++){
-					maniTemp.push([mazzoTemp.shift()]);
-				}
-
-				let briscolaTemp = mazzoTemp.shift();
-
-				db.ref("stanze/" + stanza + "/mani")
-					.set(maniTemp);
-
-				db.ref("stanze/" + stanza + "/briscola")
-					.set(briscolaTemp);
-
-				db.ref("stanze/" + stanza + "/numeroMano")
-					.set(1);
-
-				db.ref("stanze/" + stanza + "/cartePerMano")
-					.set(1);
-				
-				db.ref("stanze/" + stanza + "/totaleMani")
-					.set(totaleManiTemp);
-
-				let leaderCasuale =
-    				Math.floor(Math.random() * numGiocatori);
-
-				db.ref("stanze/" + stanza + "/leaderManoMP")
-    				.set(leaderCasuale);
-
+				alert("Modalità multiplayer in sviluppo");
 				return;
-
 			}	
 		
 		document.getElementById("btnStart").style.display = "none";
@@ -582,7 +485,7 @@ const db = firebase.database();
          totaleMani = Math.floor((maxCarte - 1) / numGiocatori);
 
          leaderMano = Math.floor(Math.random() * numGiocatori);
-         leader = leaderMano;
+         leaderPresa = leaderMano;
 
          nuovaMano();
         }
@@ -597,7 +500,7 @@ const db = firebase.database();
           leaderMano = (leaderMano + 1) % numGiocatori;
          }
 
-         leader = leaderMano;
+         leaderPresa = leaderMano;
 
          for(let i=0;i<numGiocatori;i++){
           mani.push(mazzo.splice(0,cartePerMano));
@@ -646,12 +549,7 @@ const db = firebase.database();
 
          const ordineSemi=["♠","♥","♦","♣"];
 
-        let miaMano =
-			modalitaMultiplayer
-			? mani[mioIndiceMultiplayer]
-			: mani[0];
-
-		let sorted = miaMano
+         let sorted = mani[0]
           .map((c,i)=>({...c,index:i}))
           .sort((a,b)=>{
             let s=ordineSemi.indexOf(a.s)-ordineSemi.indexOf(b.s);
@@ -663,60 +561,16 @@ const db = firebase.database();
           let b=document.createElement("button");
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
-    	
-			if(modalitaMultiplayer){
-    		  b.onclick = () => giocaUtenteMP(c.index);
-			}
-			else{
-    		  b.onclick = () => giocaUtente(c.index);
-			}
-			 
-			if(modalitaMultiplayer){
-    			b.disabled =
-					//false;
-        			(mioIndiceMultiplayer !== leaderManoMP);
-			}
-			else{
-    			if(!partitaAvviata){
-        			b.disabled = true;
-    			}
+          b.onclick=()=>giocaUtente(c.index);
+			if(!partitaAvviata){
+				b.disabled = true;
 			}	
           d.appendChild(b);
          });
-		  let righe = Math.ceil(miaMano.length / 5);
+		  let righe = Math.ceil(mani[0].length / 5);
 		  document.getElementById("storicoContainer").style.marginTop =
 		  	(150 + (righe - 1) * 60) + "px";
         }
-						  
-
-											  
-					   
-
-											   
-
-								
-
-												   
-
-								  
-
-						 
-										  
-					 
-						
-
-											 
-
-					  
-														  
-								
-
-						   
-
-		 
-
-   
-
 
         // ---------------------
 
@@ -754,17 +608,12 @@ const db = firebase.database();
 		
 		
         function avviaPronostici(){
-			
-			if(stanza){
-				avviaPronosticiMultiplayer();
-				return;
-			}
 		
 		document.getElementById("btnAvviaPronostici").style.display = "none";
 
          let ordine = [];
          for(let i=0;i<numGiocatori;i++){
-          ordine.push((leader+i)%numGiocatori);
+          ordine.push((leaderPresa+i)%numGiocatori);
          }
 
          pronostici=new Array(numGiocatori);
@@ -870,60 +719,7 @@ const db = firebase.database();
         }
 
         // ---------------------
-		function avviaPronosticiMultiplayer(){
 
-    		document.getElementById("btnAvviaPronostici").style.display = "none";
-
-			db.ref("stanze/" + stanza + "/pronostici")
-    			.remove()
-    			.then(() => {
-        			db.ref("stanze/" + stanza + "/turnoPronostico")
-            			.set(leaderManoMP);
-    			});
-
-    		let ordine = [];
-
-    		for(let i=0;i<numGiocatori;i++){
-        		ordine.push((leaderManoMP+i)%numGiocatori);
-    		}
-
-    		pronostici = new Array(numGiocatori);
-
-    		document.getElementById("pronostici").innerHTML = "";
-
-    		let index = 0;
-
-    		function step(){
-
-        		if(index >= ordine.length){
-
-            		fasePronostico = false;
-
-            		window.prossimaAzione = "iniziaMano";
-
-            		document.getElementById("continuaBtn").innerText =
-                		"▶ Inizia Presa";
-
-            		document.getElementById("continuaBtn").style.display =
-                		"block";
-
-            		return;
-        		}
-
-        		let g = ordine[index];
-
-				if(g === 0){
-
-    				return;
-				}
-
-        		index++;
-
-        		setTimeout(step,200);
-    		}
-
-    		step();
-		}
 
         function giocaBot(){
 
@@ -1007,7 +803,6 @@ const db = firebase.database();
 
         function giocaUtente(i){
 		 if(!partitaAvviata) return;
-				
          if(fasePronostico || indiceTurno!==0) return;
 
          let carta=mani[0][i];
@@ -1029,10 +824,6 @@ const db = firebase.database();
 
          prossimoTurno();
         }
-		
-		function giocaUtenteMP(i){
-
-    	}
 
         function prossimoTurno(){
 
@@ -1137,24 +928,11 @@ function invitaAmici(){
 		 mostraMano();
          tavolo=[];
 		 mostraTavolo();
-         indiceTurno=leader;
+         indiceTurno=leaderPresa;
 
          if(indiceTurno!==0)
           setTimeout(giocaBot,300);
         }
-		/*
-		function iniziaManoMP(){
-    		fasePronostico = false;
-    		leaderPresaMP = leaderManoMP;
-			iniziaPresaMP();
-		}
-		*/
-		function iniziaPresaMP(){
-							 
-    		turnoGiocatoreMP = leaderManoMP;
-    		mostraMano();
-		}
-		
 
 
         function finePresa(){
@@ -1169,10 +947,10 @@ function invitaAmici(){
           ) win=x;
          });
 
-         leader=win.g;
+         leaderPresa=win.g;
          disegnaGiocatori();
 		 mostraTavolo(win.g);
-         preseGiocatori[leader]++;
+         preseGiocatori[leaderPresa]++;
 			
 			for(let i=0;i<numGiocatori;i++){
 				if(pronostici[i] !== undefined){
@@ -1215,22 +993,14 @@ function invitaAmici(){
         }
 
         function continuaGioco(){
-		
-							
 
          document.getElementById("continuaBtn").style.display="none";
 
         if(window.prossimaAzione === "iniziaMano"){
+           iniziaPresa();
+           return;
+        }
 
-    		if(stanza){
-        		iniziaPresaMP();
-    		}
-    		else{
-        		iniziaPresa();
-    		}
-
-    		return;
-		}
          if(window.prossimaAzione==="nuovaMano"){
 
           let maxCarte = valori.length * semi.length;
@@ -1390,8 +1160,6 @@ function invitaAmici(){
 			});
 		}
 
-		
-		
 		function condividiStanza(){		
 			let stanza = getStanzaDaURL();
 
@@ -1600,398 +1368,10 @@ if(stanza){
 }
 
 		
-if(stanza){
 
-	db.ref("stanze/" + stanza + "/ordineGiocatori")
-	.on("value", (snapshot) => {
 
-		let ordine = snapshot.val();
 
-		if(!ordine){
-			return;
-		}
 
-		ordineGiocatori = ordine;
-
-		let mioNome = localStorage.getItem("nomeGiocatore");
-
-		let mioGiocatore = ordineGiocatori.find(
-			g => g.nome === mioNome
-		);
-
-		if(mioGiocatore){
-			mioIndiceMultiplayer = mioGiocatore.posizione;
-		}
-		else{
-			mioIndiceMultiplayer = 0;
-		}
-		document.getElementById("listaGiocatori").innerHTML +=
-			"<br>MioIndice = " + mioIndiceMultiplayer;
-		numGiocatori = ordine.length;
-
-		document.getElementById("tavoloShape").style.clipPath =
-			generaPoligono(numGiocatori);
-
-		disegnaGiocatori();
-
-	});
-
-}		   
-
-
-if(stanza){
-
-	db.ref("stanze/" + stanza + "/briscola")
-	.on("value", (snapshot) => {
-
-		let b = snapshot.val();
-
-		if(!b){
-			return;
-		}
-
-		let bc = document.getElementById("briscolaCentro");
-
-		bc.innerText = b.v + b.s;
-
-		bc.style.color =
-			(b.s==="♥" || b.s==="♦")
-			? "red"
-			: "black";
-
-	});
-
-}
-
-if(stanza){
-
-	db.ref("stanze/" + stanza + "/numeroMano")
-	.on("value", (snapshot) => {
-
-		let n = snapshot.val();
-
-		if(n === null){
-			return;
-		}
-
-		let maxCarte = valori.length * semi.length;
-		let totale = Math.floor((maxCarte - 1) / numGiocatori);
-
-		document.getElementById("manoNum").innerText =
-			n + " / " + totale;
-	});
-
-}
-
-if(stanza){
-
-	db.ref("stanze/" + stanza + "/cartePerMano")
-	.on("value", (snapshot) => {
-
-		let n = snapshot.val();
-
-		if(n === null){
-			return;
-		}
-
-		document.getElementById("carteNum").innerText = n;
-
-	});
-
-}
-
-if(stanza){
-
-	db.ref("stanze/" + stanza + "/totaleMani")
-	.on("value", (snapshot) => {
-
-		let n = snapshot.val();
-
-		if(n === null){
-			return;
-		}
-
-		totaleManiMultiplayer = n;
-
-	});
-
-}
-
-if(stanza){
-
-	db.ref("stanze/" + stanza + "/mani")
-	.on("value", (snapshot) => {
-
-		let m = snapshot.val();
-
-		if(!m){
-			return;
-		}
-
-		mani = m;
-
-		mostraMano();
-
-	});
-
-}
-
-
-if(stanza){
-
-    db.ref("stanze/" + stanza + "/turnoPronostico")
-    .on("value", (snapshot) => {
-
-        let turno = snapshot.val();
-
-        if(turno === null){
-            return;
-        }
-
-        let input =
-            document.getElementById("pronostico");
-
-        let btn =
-            document.getElementById("btnPronostico");
-		let box =
-        	document.getElementById("boxPronostico");
-
-        if(turno === mioIndiceMultiplayer){
-
-    		box.style.display = "flex";
-
-    		input.style.display = "inline-block";
-    		btn.style.display = "inline-block";
-
-		}
-		else{
-
-    		box.style.display = "none";
-
-		}
-
-    });
-
-}
-
-if(stanza){
-
-    document
-    .getElementById("btnPronostico")
-    .addEventListener("click", () => {
-
-        let mio =
-            parseInt(
-                document.getElementById("pronostico").value
-            );
-
-        if(isNaN(mio)){
-            alert("Inserisci un pronostico valido");
-            return;
-        }
-
-        if(mio < 0){
-            alert("Pronostico non valido");
-            return;
-        }
-
-        if(mio > cartePerMano){
-            alert(
-                "Non puoi pronosticare più di "
-                + cartePerMano
-            );
-            return;
-        }
-
-        db.ref(
-            "stanze/" +
-            stanza +
-            "/pronostici/" +
-            mioIndiceMultiplayer
-        ).set(mio);
-
-    });
-
-}
-		
-if(stanza){
-
-    db.ref("stanze/" + stanza + "/pronostici")
-    .on("value", (snapshot) => {
-
-        let dati = snapshot.val();
-
-        if(!dati){
-            return;
-        }
-
-        pronostici = new Array(numGiocatori);
-
-		Object.keys(dati).forEach(indice => {
-    		pronostici[parseInt(indice)] = dati[indice];
-		});
-		aggiornaRiepilogoPronostici();
-        for(let i=0;i<numGiocatori;i++){
-
-            if(pronostici[i] !== undefined){
-
-                let score =
-                    document.getElementById(
-                        "score_g" + i
-                    );
-
-                if(score){
-
-                    score.innerText =
-                        "🎯 " +
-                        pronostici[i] +
-                        " | 🏆 0";
-                }
-            }
-        }
-
-    });
-
-}
-
-
-if(stanza && isHost){
-
-    db.ref("stanze/" + stanza + "/pronostici")
-    .on("value", (snapshot) => {
-
-        let dati = snapshot.val();
-
-        if(!dati){
-            return;
-        }
-
-        let quanti =
-            Object.keys(dati).length;
-
-    	if(quanti >= numGiocatori){
-
-    		db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/turnoPronostico"
-    		).set(-1);
-
-    		document.getElementById("continuaBtn")
-        		.style.display = "block";
-
-    		document.getElementById("continuaBtn")
-        		.innerText = "▶ Inizia Presa";
-
-    		return;
-		}
-
-        let prossimo = null;
-
-		for(let offset=0; offset<numGiocatori; offset++){
-
-    		let indice =
-        		(leaderManoMP + offset) %
-        		numGiocatori;
-
-    		if(dati[indice] === undefined){
-
-        		prossimo = indice;
-        		break;
-    		}
-		}
-
-        if(prossimo !== null){
-
-            db.ref(
-                "stanze/" +
-                stanza +
-                "/turnoPronostico"
-            ).set(prossimo);
-        }
-
-    });
-
-}
-
-if(stanza){
-
-    db.ref("stanze/" + stanza + "/tipoMazzo")
-    .on("value", (snapshot) => {
-
-        let tipo = snapshot.val();
-
-        if(!tipo){
-            return;
-        }
-
-        if(tipo=="40"){
-
-            valori = [
-                "2","3","4","5","6",
-                "7","J","Q","K","A"
-            ];
-
-        }
-        else{
-
-            valori = [
-                "2","3","4","5","6","7",
-                "8","9","10","J","Q","K","A"
-            ];
-
-        }
-
-    });
-
-}
-
-
-
-
-if(stanza){
-
-    db.ref("stanze/" + stanza + "/leaderManoMP")
-    .on("value", (snapshot) => {
-
-        let valore = snapshot.val();
-
-        if(valore === null){
-            return;
-        }
-
-        leaderManoMP = valore;
-		document.getElementById("playersBox").innerText =
-			"LeaderMP = " + leaderManoMP;
-        disegnaGiocatori();
-
-    });
-
-}
-
-													
-								
-
-									
-
-							
-				   
-		 
-
-								  
-												   
-								 
-									
-
-					   
-
-
-
- 
-  
-		
-		
-		
     </script>
 
 </div>
