@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1684,6 +1684,14 @@ if(stanza){
     }
 
     totaleManiMultiplayer = n;
+
+	let numeroCorrente =
+    	document.getElementById("manoNum").innerText.split("/")[0].trim();
+
+	if(numeroCorrente){
+    	document.getElementById("manoNum").innerText =
+        	numeroCorrente + " / " + totaleManiMultiplayer;
+	}
     
 });
 
