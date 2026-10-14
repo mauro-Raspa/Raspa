@@ -1730,6 +1730,9 @@ if(stanza){
     .on("value", (snapshot) => {
 
         let turno = snapshot.val();
+		document.getElementById("playersBox").innerText =
+    		"Turno=" + turno +
+    		" MioIndice=" + mioIndiceMultiplayer;
 
         if(turno === null){
             return;
