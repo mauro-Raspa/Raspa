@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -341,7 +341,7 @@ const db = firebase.database();
         let leaderMano=0;
 				
 						 
-						
+		let leaderManoMP = -1;
 							
         let numGiocatori=3;
         let numeroMano=1, cartePerMano=1;
@@ -365,6 +365,7 @@ const db = firebase.database();
 		let totaleManiMultiplayer = 0;						
 							   
   
+		
 		
 		
 
@@ -682,6 +683,9 @@ const db = firebase.database();
 												   
 	
 		
+												   
+	
+		
 			if(!partitaAvviata){
 				b.disabled = true;
 		
@@ -729,11 +733,11 @@ const db = firebase.database();
 		
 		
         function avviaPronostici(){
-   
-			  
-								 
-		   
-	
+			
+			if(stanza){
+				avviaPronosticiMultiplayer();
+				return;
+			}
 		
 		document.getElementById("btnAvviaPronostici").style.display = "none";
 
@@ -845,60 +849,60 @@ const db = firebase.database();
         }
 
         // ---------------------
-										
+		function avviaPronosticiMultiplayer(){
 
-																		   
+    		document.getElementById("btnAvviaPronostici").style.display = "none";
 
-											 
-				
-					
-														  
-								  
-		  
+			db.ref("stanze/" + stanza + "/pronostici")
+    			.remove()
+    			.then(() => {
+        			db.ref("stanze/" + stanza + "/turnoPronostico")
+            			.set(leaderManoMP);
+    			});
 
-					  
+    		let ordine = [];
 
-									  
-													 
-	   
+    		for(let i=0;i<numGiocatori;i++){
+        		ordine.push((leaderManoMP+i)%numGiocatori);
+    		}
 
-										   
+    		pronostici = new Array(numGiocatori);
 
-														   
+    		document.getElementById("pronostici").innerHTML = "";
 
-					
+    		let index = 0;
 
-					  
+    		function step(){
 
-									 
+        		if(index >= ordine.length){
 
-									 
+            		fasePronostico = false;
 
-												   
+            		window.prossimaAzione = "iniziaMano";
 
-																
-									 
+            		document.getElementById("continuaBtn").innerText =
+                		"▶ Inizia Presa";
 
-																	
-						  
+            		document.getElementById("continuaBtn").style.display =
+                		"block";
 
-					 
-		   
+            		return;
+        		}
 
-								
+        		let g = ordine[index];
 
-				
+				if(g === 0){
 
-			   
-	 
+    				return;
+				}
 
-				  
+        		index++;
 
-							   
-	   
+        		setTimeout(step,200);
+    		}
 
-			 
-   
+    		step();
+		}
 
         function giocaBot(){
 
@@ -1649,6 +1653,9 @@ if(stanza){
 			return;
 		}
 
+											 
+														 
+
 		document.getElementById("manoNum").innerText =
     		n + " / " + totaleManiMultiplayer;
 	});
@@ -1717,186 +1724,186 @@ if(stanza){
 }
 
 
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/turnoPronostico")
+    .on("value", (snapshot) => {
+
+        let turno = snapshot.val();
+
+        if(turno === null){
+            return;
+        }
+
+        let input =
+            document.getElementById("pronostico");
+
+        let btn =
+            document.getElementById("btnPronostico");
+		let box =
+        	document.getElementById("boxPronostico");
+
+        if(turno === mioIndiceMultiplayer){
+
+    		box.style.display = "flex";
+
+    		input.style.display = "inline-block";
+    		btn.style.display = "inline-block";
+
+		}
+		else{
+
+    		box.style.display = "none";
+
+		}
+
+    });
+
+}
+
+if(stanza){
+
+    document
+    .getElementById("btnPronostico")
+    .addEventListener("click", () => {
+
+        let mio =
+            parseInt(
+                document.getElementById("pronostico").value
+            );
+
+        if(isNaN(mio)){
+            alert("Inserisci un pronostico valido");
+            return;
+        }
+
+        if(mio < 0){
+            alert("Pronostico non valido");
+            return;
+        }
+
+        if(mio > cartePerMano){
+            alert(
+                "Non puoi pronosticare più di "
+                + cartePerMano
+            );
+            return;
+        }
+
+        db.ref(
+            "stanze/" +
+            stanza +
+            "/pronostici/" +
+            mioIndiceMultiplayer
+        ).set(mio);
+
+    });
+
+}
+		
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/pronostici")
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        pronostici = new Array(numGiocatori);
+
+		Object.keys(dati).forEach(indice => {
+    		pronostici[parseInt(indice)] = dati[indice];
+		});
+		aggiornaRiepilogoPronostici();
+        for(let i=0;i<numGiocatori;i++){
+
+            if(pronostici[i] !== undefined){
+
+                let score =
+                    document.getElementById(
+                        "score_g" + i
+                    );
+
+                if(score){
+
+                    score.innerText =
+                        "🎯 " +
+                        pronostici[i] +
+                        " | 🏆 0";
+                }
+            }
+        }
+
+    });
+
+}
+
+
+if(stanza && isHost){
+
+    db.ref("stanze/" + stanza + "/pronostici")
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        let quanti =
+            Object.keys(dati).length;
+
+    	if(quanti >= numGiocatori){
+
+    		db.ref(
+        		"stanze/" +
+        		stanza +
+        		"/turnoPronostico"
+    		).set(-1);
+
+    		document.getElementById("continuaBtn")
+        		.style.display = "block";
+
+    		document.getElementById("continuaBtn")
+        		.innerText = "▶ Inizia Presa";
+
+    		return;
+		}
+
+        let prossimo = null;
+
+		for(let offset=0; offset<numGiocatori; offset++){
+
+    		let indice =
+        		(leaderManoMP + offset) %
+        		numGiocatori;
+
+    		if(dati[indice] === undefined){
+
+        		prossimo = indice;
+        		break;
+    		}
+		}
+
+        if(prossimo !== null){
+
+            db.ref(
+                "stanze/" +
+                stanza +
+                "/turnoPronostico"
+            ).set(prossimo);
+        }
+
+    });
+
+}
+
 		   
-
-												   
-								
-
-								   
-
-						   
-				   
-		 
-
-				   
-												  
-
-				 
-													 
-		   
-												  
-
-										   
-
-								 
-
-										   
-										 
-
-   
-	   
-
-								 
-
-   
-
-	   
-
- 
-
-		   
-
-			
-									
-									  
-
-				 
-					 
-														   
-			  
-
-					   
-													
-				   
-		 
-
-					
-										   
-				   
-		 
-
-							   
-				  
-												
-							  
-			  
-				   
-		 
-
-			   
-					   
-					
-							
-								
-				   
-
-	   
-
- 
-  
-		   
-
-											  
-								
-
-								  
-
-				  
-				   
-		 
 
 											 
-
-									   
-												  
-	 
-								
-										
-
-											
-
-						   
-											
-									 
-					  
-
-						  
-
-									 
-								 
-									   
-									
-				 
-			 
-		 
-
-	   
-
- 
-
-
-					 
-
-											  
-								
-
-								  
-
-				  
-				   
-		 
-
-					
-									 
-
-								
-
-			 
-					 
-				  
-							
-				
-
-											
-								   
-
-											
-										  
-
-			 
-   
-
-							
-
-												   
-
-				  
-								   
-					   
-
-									 
-
-							
-				
-	   
-   
-
-							  
-
-				   
-						   
-						
-								  
-							
-		 
-
-	   
-
- 
-
-		   
-
-											 
 								
 
 								  
@@ -1929,29 +1936,29 @@ if(stanza){
 
 
 
-		   
+if(stanza){
 
-												
-								
+    db.ref("stanze/" + stanza + "/leaderManoMP")
+    .on("value", (snapshot) => {
 
-									
+        let valore = snapshot.val();
 
-							
-				   
-		 
+        if(valore === null){
+            return;
+        }
 
-							  
-												   
-								
-						   
+        leaderManoMP = valore;
+		document.getElementById("playersBox").innerText =
+			"LeaderMP = " + leaderManoMP;
+        disegnaGiocatori();
 
-	   
+    });
 
- 
+}
 
-  
-  
-  
+		
+		
+		
     </script>
 
 </div>
