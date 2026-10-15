@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 8
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -348,7 +348,7 @@ const db = firebase.database();
         let totaleMani=0;
 
         let briscola;
-
+		let tavoloMP = [];
         let tavolo=[];
         let fasePronostico=true;
         let indiceTurno=0;
@@ -982,6 +982,21 @@ const db = firebase.database();
         // ---------------------
 
         function giocaUtente(i){
+
+			if(modalitaMultiplayer){
+    			let carta = mani[mioIndiceMultiplayer][i];
+    			db.ref(
+        			"stanze/" +
+        			stanza +
+        			"/tavoloMP/" +
+        			mioIndiceMultiplayer
+    			).set({
+        			g: mioIndiceMultiplayer,
+        			c: carta
+    			});
+    			return;
+			}
+			
 		 if(!partitaAvviata) return;
 	
          if(fasePronostico || indiceTurno!==0) return;
@@ -1939,7 +1954,24 @@ if(stanza){
 
 }
 		   
+if(stanza){
 
+    db.ref("stanze/" + stanza + "/tavoloMP")
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        tavolo = Object.values(dati);
+
+        mostraTavolo();
+
+    });
+
+}
 											 
 								
 
