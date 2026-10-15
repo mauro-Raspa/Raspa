@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -342,7 +342,7 @@ const db = firebase.database();
 				
 						 
 		let leaderManoMP = -1;
-							
+		let turnoGiocatoreMP = -1;					
         let numGiocatori=3;
         let numeroMano=1, cartePerMano=1;
         let totaleMani=0;
@@ -675,19 +675,17 @@ const db = firebase.database();
 		
           b.onclick=()=>giocaUtente(c.index);
 	
-	
-						   
 				   
 			 
-												   
-	
-		
-												   
-	
-		
-			if(!partitaAvviata){
-				b.disabled = true;
-		
+		if(modalitaMultiplayer){
+    			b.disabled =
+        			(turnoGiocatoreMP !== mioIndiceMultiplayer);
+			}
+			else{
+    			if(!partitaAvviata){
+        			b.disabled = true;
+    			}
+
 			}	
           d.appendChild(b);
          });
@@ -1111,6 +1109,14 @@ function invitaAmici(){
 
 
         function iniziaPresa(){
+
+			if(modalitaMultiplayer){
+    			db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
+        			.set(leaderManoMP);
+    			return;
+			}
+
+			
 		 partitaAvviata = true;
 		 mostraMano();
          tavolo=[];
@@ -1903,6 +1909,25 @@ if(stanza && isHost){
 
 }
 
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
+    .on("value", (snapshot) => {
+
+        let turno = snapshot.val();
+
+        if(turno === null){
+            return;
+        }
+
+        turnoGiocatoreMP = turno;
+
+        document.getElementById("playersBox").innerText =
+            "Turno = " + turnoGiocatoreMP;
+
+    });
+
+}
 		   
 
 											 
