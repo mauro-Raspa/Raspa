@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -985,6 +985,7 @@ const db = firebase.database();
 
 			if(modalitaMultiplayer){
     			let carta = mani[mioIndiceMultiplayer][i];
+				mostraMano();
 				mani[mioIndiceMultiplayer].splice(i,1);
 				db.ref(
 					"stanze/" +
