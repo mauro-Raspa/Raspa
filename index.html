@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1985,7 +1985,28 @@ if(stanza){
 
         tavolo = Object.values(dati);
 
-        mostraTavolo();
+		if(tavolo.length === numGiocatori){
+			let rank =
+				Object.fromEntries(
+					valori.map((v,i)=>[v,i])
+				);
+			let win = tavolo[0];
+			tavolo.forEach(x => {
+				if(
+					(x.c.s === briscola.s && win.c.s !== briscola.s)
+					||
+					(x.c.s === win.c.s && rank[x.c.v] > rank[win.c.v])
+				){
+					win = x;
+				}
+			});
+			leaderPresaMP = win.g;
+			disegnaGiocatori();
+			mostraTavolo(win.g);
+		}
+		else{
+			mostraTavolo();
+		}
 
         if(
             isHost &&
