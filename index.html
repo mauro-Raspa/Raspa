@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -428,8 +428,6 @@ const db = firebase.database();
     		(!modalitaMultiplayer && i === leaderPresa)
     		||
     		(modalitaMultiplayer && i === leaderManoMP)
-			||
-    		(modalitaMultiplayer && i === leaderPRESAMP)
 		){
     		div.style.background = "red";
     		div.style.color = "white";
@@ -1987,28 +1985,7 @@ if(stanza){
 
         tavolo = Object.values(dati);
 
-		if(tavolo.length === numGiocatori){
-			let rank =
-				Object.fromEntries(
-					valori.map((v,i)=>[v,i])
-				);
-			let win = tavolo[0];
-			tavolo.forEach(x => {
-				if(
-					(x.c.s === briscola.s && win.c.s !== briscola.s)
-					||
-					(x.c.s === win.c.s && rank[x.c.v] > rank[win.c.v])
-				){
-					win = x;
-				}
-			});
-			leaderPresaMP = win.g;
-			disegnaGiocatori();
-			mostraTavolo(win.g);
-		}
-		else{
-			mostraTavolo();
-		}
+        mostraTavolo();
 
         if(
             isHost &&
