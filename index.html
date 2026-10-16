@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1983,6 +1983,23 @@ if(stanza){
         tavolo = Object.values(dati);
 
         mostraTavolo();
+
+        if(
+            isHost &&
+            tavolo.length < numGiocatori
+        ){
+
+            let prossimo =
+                (turnoGiocatoreMP + 1)
+                % numGiocatori;
+
+            db.ref(
+                "stanze/" +
+                stanza +
+                "/turnoGiocatoreMP"
+            ).set(prossimo);
+
+        }
 
     });
 
