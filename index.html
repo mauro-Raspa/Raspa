@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1161,7 +1161,26 @@ function invitaAmici(){
           setTimeout(giocaBot,300);
         }
 	
-						  
+		function vincitorePresaMP(){
+    		let rank = Object.fromEntries(
+        		valori.map((v,i) => [v,i])
+    		);
+    		let win = tavolo[0];
+    		tavolo.forEach(x => {
+        		if(
+            		(x.c.s === briscola.s && win.c.s !== briscola.s)
+            		||
+            		(x.c.s === win.c.s && rank[x.c.v] > rank[win.c.v])
+        		){
+            		win = x;
+        		}
+    		});
+    		db.ref(
+				"stanze/" +
+				stanza +
+				"/leaderPresaMP"
+			).set(win.g);
+		}				  
 							 
 								   
 				   
@@ -2004,6 +2023,14 @@ if(stanza){
 
         }
 
+		if(
+    		isHost &&
+    		tavolo.length === numGiocatori
+		){
+    		vincitorePresaMP();
+		}
+		
+
     });
 
 }
@@ -2060,7 +2087,24 @@ if(stanza){
 
 }
 
-		
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/leaderPresaMP")
+    .on("value", (snapshot) => {
+
+        let valore = snapshot.val();
+
+        if(valore === null){
+            return;
+        }
+
+        leaderPresaMP = valore;
+
+        mostraTavolo(leaderPresaMP);
+
+    });
+
+}		
 		
 		
     </script>
