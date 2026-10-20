@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1168,14 +1168,24 @@ function invitaAmici(){
     		let win = tavolo.find(
     			x => x.g === leaderManoMP
 			);
+			let semeUscita = win.c.s;
     		tavolo.forEach(x => {
-        		if(
-            		(x.c.s === briscola.s && win.c.s !== briscola.s)
-            		||
-            		(x.c.s === win.c.s && rank[x.c.v] > rank[win.c.v])
-        		){
-            		win = x;
-        		}
+        	if(
+    			(x.c.s === briscola.s && win.c.s !== briscola.s)
+    			||
+    			(
+        			x.c.s === win.c.s &&
+        			rank[x.c.v] > rank[win.c.v]
+    			)
+    			||
+    			(
+        			win.c.s !== briscola.s &&
+        			x.c.s === semeUscita &&
+        			win.c.s !== semeUscita
+    			)
+			){
+    			win = x;
+			}
     		});
     		db.ref(
 				"stanze/" +
