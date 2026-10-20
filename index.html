@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1682,6 +1682,7 @@ if(stanza){
 	.on("value", (snapshot) => {
 
 		let b = snapshot.val();
+		briscola = b;
 
 		if(!b){
 			return;
@@ -2003,11 +2004,7 @@ if(stanza){
         }
 
         tavolo = Object.values(dati);
-		
-		document.getElementById("playersBox").innerText =
-    		"Tavolo=" + tavolo.length +
-    		" Giocatori=" + numGiocatori;
-
+				
         mostraTavolo();
 
         if(
