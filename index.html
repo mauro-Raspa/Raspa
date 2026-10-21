@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -427,7 +427,7 @@ const db = firebase.database();
         if(
     		(!modalitaMultiplayer && i === leaderPresa)
     		||
-    		(modalitaMultiplayer && i === leaderManoMP)
+    		(modalitaMultiplayer && i === leaderPresaMP)
 		){
     		div.style.background = "red";
     		div.style.color = "white";
@@ -984,17 +984,38 @@ const db = firebase.database();
         function giocaUtente(i){
 
 			if(modalitaMultiplayer){
+
     			let carta = mani[mioIndiceMultiplayer][i];
-				
-				mani[mioIndiceMultiplayer].splice(i,1);
-				mostraMano();
-				
-				db.ref(
-					"stanze/" +
-					stanza +
-					"/mani"
-				).set(mani);
-				
+
+    			if(tavolo.length > 0){
+
+        			let seme = tavolo[0].c.s;
+
+        			let haiSeme =
+            			mani[mioIndiceMultiplayer]
+            			.some(c => c.s === seme);
+
+        			if(haiSeme && carta.s !== seme){
+
+            			alert(
+                			"Devi rispondere al seme: " +
+                			seme
+            			);
+
+            			return;
+        			}
+    			}
+
+    			mani[mioIndiceMultiplayer].splice(i,1);
+
+    			mostraMano();
+
+    			db.ref(
+        			"stanze/" +
+        			stanza +
+        			"/mani"
+    			).set(mani);
+
     			db.ref(
         			"stanze/" +
         			stanza +
@@ -1004,6 +1025,7 @@ const db = firebase.database();
         			g: mioIndiceMultiplayer,
         			c: carta
     			});
+
     			return;
 			}
 			
