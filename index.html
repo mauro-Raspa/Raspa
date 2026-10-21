@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1217,23 +1217,41 @@ function invitaAmici(){
     			win = x;
 			}
     		});
-    		db.ref(
-				"stanze/" +
-				stanza +
-				"/leaderPresaMP"
+			leaderPresaMP = win.g;
+
+			let giocatori =
+    			document.querySelectorAll(".nomeGiocatore");
+
+			giocatori.forEach(g => {
+
+    			g.style.background = "white";
+    			g.style.color = "black";
+
+			});
+
+			let posizioneVisiva =
+    			(leaderPresaMP - mioIndiceMultiplayer + numGiocatori)
+    			% numGiocatori;
+
+			if(giocatori[posizioneVisiva]){
+
+    		giocatori[posizioneVisiva].style.background =
+        		"red";
+
+    		giocatori[posizioneVisiva].style.color =
+        		"white";
+			}
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/leaderPresaMP"
 			).set(win.g);
 		}				  
 							 
 								   
 				   
    
-	
-						   
-									  
-				   
-   
-  
-
 
         function finePresa(){
 
@@ -2144,8 +2162,7 @@ if(stanza){
         leaderPresaMP = valore;
 
         mostraTavolo(leaderPresaMP);
-		disegnaGiocatori();
-
+		
     });
 
 }		
