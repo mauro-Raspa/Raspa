@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -425,7 +425,18 @@ const db = firebase.database();
         div.className = "nomeGiocatore";
 		div.id = "giocatore_" + i;
 
-        if(!modalitaMultiplayer && i === leaderPresa){
+        if(
+    		(!modalitaMultiplayer && i === leaderPresa)
+    		||
+    		(
+        		modalitaMultiplayer &&
+        		i === (
+            		leaderPresaMP >= 0
+            		? leaderPresaMP
+            		: leaderManoMP
+        		)
+    		)
+		){
     		div.style.background = "red";
     		div.style.color = "white";
 		}
@@ -1221,33 +1232,7 @@ function invitaAmici(){
     			"/preseGiocatori"
 			).set(preseGiocatori);
 
-			leaderPresaMP = win.g;
-
-			for(let i=0;i<numGiocatori;i++){
-
-    			let div =
-        			document.getElementById(
-            			"giocatore_" + i
-        			);
-
-    			if(div){
-
-        			div.style.background = "white";
-        			div.style.color = "black";
-    			}
-			}
-
-			let vincitore =
-    			document.getElementById(
-        			"giocatore_" + leaderPresaMP
-    			);
-
-			if(vincitore){
-
-    			vincitore.style.background = "red";
-    			vincitore.style.color = "white";
-			}
-
+			
 			
 			db.ref(
     			"stanze/" +
