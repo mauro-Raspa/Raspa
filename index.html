@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1218,6 +1218,18 @@ function invitaAmici(){
 			}
     		});
 			
+
+			preseGiocatori[win.g]++;
+
+			for(let i=0;i<numGiocatori;i++){
+
+    			if(pronostici[i] !== undefined){
+
+        			document.getElementById("score_g"+i).innerText =
+            			"🎯 " + pronostici[i] +
+            			" | 🏆 " + preseGiocatori[i];
+    			}
+			}
 
 			db.ref(
     			"stanze/" +
