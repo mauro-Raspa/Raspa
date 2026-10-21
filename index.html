@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1223,17 +1223,14 @@ function invitaAmici(){
 			
 
 			preseGiocatori[win.g]++;
+			
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/preseGiocatori"
+			).set(preseGiocatori);
 
-			for(let i=0;i<numGiocatori;i++){
-
-    			if(pronostici[i] !== undefined){
-
-        			document.getElementById("score_g"+i).innerText =
-            			"🎯 " + pronostici[i] +
-            			" | 🏆 " + preseGiocatori[i];
-    			}
-			}
-
+			
 			db.ref(
     			"stanze/" +
     			stanza +
@@ -2089,7 +2086,42 @@ if(stanza){
 }
 											 
 								
+if(stanza){
 
+    db.ref("stanze/" + stanza + "/preseGiocatori")
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        preseGiocatori = dati;
+
+        for(let i=0;i<numGiocatori;i++){
+
+            if(pronostici[i] !== undefined){
+
+                let score =
+                    document.getElementById(
+                        "score_g" + i
+                    );
+
+                if(score){
+
+                    score.innerText =
+                        "🎯 " +
+                        pronostici[i] +
+                        " | 🏆 " +
+                        (preseGiocatori[i] || 0);
+                }
+            }
+        }
+
+    });
+
+}
 								  
 
 				  
