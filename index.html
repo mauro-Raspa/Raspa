@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -1265,6 +1265,19 @@ function invitaAmici(){
 		function fineManoMP(){
 
     		aggiornaClassifica();
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/storicoMani"
+			).set(storicoMani);
+
+			db.ref(
+    			"stanze/" +
+    			stanza +
+    			"/puntiGiocatori"
+			).set(puntiGiocatori);
+			
     		if(isHost){
         		document.getElementById("continuaBtn").innerText =
             		"➡️ Continua Mano";
@@ -2144,8 +2157,43 @@ if(stanza){
 
 }
 								  
+if(stanza){
 
+    db.ref("stanze/" + stanza + "/storicoMani")
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        storicoMani = dati;
+
+        aggiornaClassifica();
+
+    });
+
+}
 				  
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/puntiGiocatori")
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        puntiGiocatori = dati;
+
+        aggiornaClassifica();
+
+    });
+
+}
 				   
 		 
 
