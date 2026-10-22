@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -508,6 +508,9 @@ const db = firebase.database();
     				.filter(x => x.trim() !== "");
 					
 				numGiocatori = nomi.length;
+
+				puntiGiocatori = new Array(numGiocatori).fill(0);
+				storicoMani = [];
 
 				let ordine = nomi.map((nome, indice) => ({
     				nome: nome,
@@ -1263,6 +1266,21 @@ function invitaAmici(){
 
 
 		function fineManoMP(){
+
+			for(let i=0;i<numGiocatori;i++){
+
+    			let punti =
+        			(preseGiocatori[i] === pronostici[i])
+        			? 10 + (preseGiocatori[i] * 5)
+        			: preseGiocatori[i];
+
+    			puntiGiocatori[i] += punti;
+			}
+
+			storicoMani.push({
+    			prese:[...preseGiocatori],
+    			pron:[...pronostici]
+			});
 
     		aggiornaClassifica();
 
