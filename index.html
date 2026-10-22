@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2178,19 +2178,40 @@ if(stanza){
 if(stanza){
 
     db.ref("stanze/" + stanza + "/leaderPresaMP")
-    .on("value", (snapshot) => {
+		.on("value", (snapshot) => {
 
-        let valore = snapshot.val();
+    		let valore = snapshot.val();
 
-        if(valore === null){
-            return;
-        }
+    		if(valore === null){
+        		return;
+    		}
 
-        leaderPresaMP = valore;
+    		leaderPresaMP = valore;
 
-        mostraTavolo(leaderPresaMP);
-		
-    });
+    		mostraTavolo(leaderPresaMP);
+
+    		document
+        		.querySelectorAll(".nomeGiocatore")
+        		.forEach(div => {
+
+            		div.style.background = "white";
+            		div.style.color = "black";
+
+        		});
+
+    		let leaderDiv =
+        		document.getElementById(
+            		"giocatore_" + leaderPresaMP
+        		);
+
+    		if(leaderDiv){
+
+        		leaderDiv.style.background = "red";
+        		leaderDiv.style.color = "white";
+
+    		}
+
+		});
 
 }		
 		
