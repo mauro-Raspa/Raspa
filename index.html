@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1239,9 +1239,37 @@ function invitaAmici(){
     			stanza +
     			"/leaderPresaMP"
 			).set(win.g);
+			if(mani[0].length > 0){
+    			finePresaMP();
+			}
+			else{
+    			fineManoMP();
+			}
 		}				  
 							 
-								   
+		function finePresaMP(){
+
+    		if(isHost){
+        		document.getElementById("continuaBtn").innerText =
+            		"➡️ Continua Presa";
+        		document.getElementById("continuaBtn").style.display =
+            		"block";
+    		}
+		}
+
+
+		function fineManoMP(){
+
+    		aggiornaClassificaMP();
+    		if(isHost){
+        		document.getElementById("continuaBtn").innerText =
+            		"➡️ Continua Mano";
+
+        		document.getElementById("continuaBtn").style.display =
+            		"block";
+    		}
+
+		}
 				   
    
 
@@ -1249,14 +1277,12 @@ function invitaAmici(){
 
          let rank = Object.fromEntries(valori.map((v,i)=>[v,i]));
          let win=tavolo[0];
-
          tavolo.forEach(x=>{
           if(
            (x.c.s===briscola.s && win.c.s!==briscola.s) ||
            (x.c.s===win.c.s && rank[x.c.v]>rank[win.c.v])
           ) win=x;
          });
-
          leaderPresa=win.g;
          disegnaGiocatori();
 		 mostraTavolo(win.g);
@@ -1269,9 +1295,7 @@ function invitaAmici(){
 						" |🏆 " + preseGiocatori[i];
 				}
 			}	
-					
-
-				
+			
          //document.getElementById("leader").innerText=(leader===0?"Tu":"Bot "+leader);
 
          if(mani[0].length===0){
@@ -1304,16 +1328,9 @@ function invitaAmici(){
 
         function continuaGioco(){
   
-	   
-
          document.getElementById("continuaBtn").style.display="none";
-
+			
         if(window.prossimaAzione === "iniziaMano"){
-
-				 
-						  
-	   
-		   
            iniziaPresa();
            return;
         }
@@ -1321,12 +1338,9 @@ function invitaAmici(){
 			 
    
          if(window.prossimaAzione==="nuovaMano"){
-
           let maxCarte = valori.length * semi.length;
-
-
+			 
         if((cartePerMano+1)*numGiocatori >= maxCarte){
-
           let max = Math.max(...puntiGiocatori);
           let vincitori = [];
 
