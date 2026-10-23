@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -359,7 +359,7 @@ const db = firebase.database();
         let storicoMani=[];
 
         let livelloBot = 5;
-
+		let ordineTabella = [];
 		let modalitaMultiplayer = false;
 		let ordineGiocatori = [];
 		let totaleManiMultiplayer = 0;						
@@ -1421,9 +1421,23 @@ function invitaAmici(){
 
          let html="<tr><th>Mano</th>";
 
-         for(let i=0;i<numGiocatori;i++){
-          html+="<th>"+(i===0?"Tu":"Bot "+i)+"</th>";
-         }
+		for(let col=0; col<numGiocatori; col++){
+
+    		let i = modalitaMultiplayer
+        		? ordineTabella[col]
+        		: col;
+
+    		let nome;
+
+    		if(modalitaMultiplayer){
+        		nome = ordineGiocatori[i].nome;
+    		}
+    		else{
+        		nome = (i===0 ? "Tu" : "Bot " + i);
+    		}
+
+    		html += "<th>" + nome + "</th>";
+		}
 
          html+="</tr>";
 
@@ -1431,13 +1445,18 @@ function invitaAmici(){
 
           html+="<tr><td>"+(i+1)+"</td>";
 
-          for(let g=0;g<numGiocatori;g++){
-           let ok=m.prese[g]===m.pron[g];
+        for(let col=0; col<numGiocatori; col++){
 
-           html+="<td class='"+(ok?"ok":"ko")+"'>"
-           + m.pron[g]+"/"+m.prese[g]
-           +"</td>";
-          }
+    		let g = modalitaMultiplayer
+        		? ordineTabella[col]
+        		: col;
+
+    		let ok = m.prese[g] === m.pron[g];
+
+    		html += "<td class='"+(ok?"ok":"ko")+"'>"
+        		+ m.pron[g] + "/" + m.prese[g]
+        		+ "</td>";
+		}
 
           html+="</tr>";
          });
@@ -1462,15 +1481,23 @@ function invitaAmici(){
 
          html+="<tr><td><b>TOT</b></td>";
 
-         for(let i=0;i<numGiocatori;i++){
+        for(let col=0; col<numGiocatori; col++){
 
-          let badge = "";
-          if(posizioni[i] === 1) badge = " 🥇";
-          else if(posizioni[i] === 2) badge = " 🥈";
-          else if(posizioni[i] === 3) badge = " 🥉";
+    		let i = modalitaMultiplayer
+        		? ordineTabella[col]
+        		: col;
 
-          html+="<td><b>"+puntiGiocatori[i]+badge+"</b></td>";
-         }
+    		let badge = "";
+
+    		if(posizioni[i] === 1) badge = " 🥇";
+    		else if(posizioni[i] === 2) badge = " 🥈";
+    		else if(posizioni[i] === 3) badge = " 🥉";
+
+    		html += "<td><b>" +
+        		puntiGiocatori[i] +
+        		badge +
+        		"</b></td>";
+		}
 
          html+="</tr>";
 
@@ -2254,6 +2281,19 @@ if(stanza){
         }
 
         leaderManoMP = valore;
+
+		if(
+    		ordineTabella.length === 0 &&
+    		ordineGiocatori.length > 0
+		){
+    		for(let offset=0; offset<numGiocatori; offset++){
+
+        		ordineTabella.push(
+            		(leaderManoMP + offset) % numGiocatori
+        		);
+    		}
+		}
+		
 		document.getElementById("playersBox").innerText =
 			"LeaderMP = " + leaderManoMP;
         disegnaGiocatori();
