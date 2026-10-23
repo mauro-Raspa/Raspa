@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1309,7 +1309,10 @@ function invitaAmici(){
 
 		}
 				   
-   
+   		function iniziaManoMP(){
+			alert("Adesso inizierà la nuova mano");
+
+		}
 
         function finePresa(){
 
@@ -1369,13 +1372,71 @@ function invitaAmici(){
          document.getElementById("continuaBtn").style.display="none";
 			
         if(window.prossimaAzione === "iniziaMano"){
-           iniziaPresa();
-           return;
+    		iniziaPresa();
+           	return;
         }
 
 			 
    
          if(window.prossimaAzione==="nuovaMano"){
+			 
+			if(modalitaMultiplayer){
+
+    			let maxCarte =
+        			valori.length * semi.length;
+
+    			if(
+        			(cartePerMano + 1) * numGiocatori
+        			>= maxCarte
+    			){
+
+        			let max =
+            			Math.max(...puntiGiocatori);
+
+        			let vincitori = [];
+
+        			for(let i=0;i<numGiocatori;i++){
+
+            			if(
+                			puntiGiocatori[i] === max
+            			){
+                			vincitori.push(i);
+            			}
+
+        			}
+
+        			let testo = "";
+
+        			if(vincitori.length === 1){
+
+            			testo =
+                			ordineGiocatori[
+                    			vincitori[0]
+                			].nome;
+
+        			}
+        			else{
+
+            			testo =
+                			vincitori
+                			.map(v =>
+                    			ordineGiocatori[v].nome
+                			)
+                			.join(", ");
+
+        			}
+
+        			alert(
+            			"🏆 Vincitore partita:\n" +
+            			testo
+        			);
+
+        			return;
+    			}
+				iniziaManoMP();
+				return;
+			}
+				 
           let maxCarte = valori.length * semi.length;
 			 
         if((cartePerMano+1)*numGiocatori >= maxCarte){
