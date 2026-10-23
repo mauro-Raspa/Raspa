@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1257,67 +1257,16 @@ function invitaAmici(){
 			}
 		}				  
 							 
-		function finePresaMP(){
+function finePresaMP(){
 
-    		if(isHost){
+    if(isHost){
+        document.getElementById("continuaBtn").innerText =
+            "➡️ Continua Presa";
 
-    			document.getElementById("continuaBtn").innerText =
-        		"➡️ Continua Mano";
-
-    			document.getElementById("continuaBtn").onclick = () => {
-
-        			let maxCarte =
-            			valori.length * semi.length;
-
-        			if(
-            			(cartePerMano + 1) * numGiocatori
-            			>= maxCarte
-        			){
-
-            			let max =
-                			Math.max(...puntiGiocatori);
-
-            			let vincitori = [];
-
-            			for(let i=0; i<numGiocatori; i++){
-
-                			if(puntiGiocatori[i] === max){
-                    			vincitori.push(
-                        			ordineGiocatori[i].nome
-                    			);
-                			}
-
-            			}
-
-            			if(vincitori.length === 1){
-
-    						alert(
-        						"Partita finita.\nVince:\n" +
-        						vincitori[0]
-    						);
-
-						}
-						else{
-
-    						alert(
-        						"Partita finita.\nVincono:\n" +
-        						vincitori.join(", ")
-    						);
-
-						}
-
-            			return;
-        			}
-
-        			iniziaManoMP();
-
-    			};
-
-    			document.getElementById("continuaBtn").style.display =
-        			"block";
-			}
-			
-		}
+        document.getElementById("continuaBtn").style.display =
+            "block";
+    }
+}
 
 
 		function fineManoMP(){
@@ -1352,12 +1301,62 @@ function invitaAmici(){
 			).set(puntiGiocatori);
 			
     		if(isHost){
-        		document.getElementById("continuaBtn").innerText =
-            		"➡️ Continua Mano";
 
-        		document.getElementById("continuaBtn").style.display =
-            		"block";
-    		}
+    			document.getElementById("continuaBtn").innerText =
+        			"➡️ Continua Mano";
+
+    			document.getElementById("continuaBtn").onclick = () => {
+
+        			let maxCarte =
+            			valori.length * semi.length;
+
+        			if(
+            			(cartePerMano + 1) * numGiocatori
+            			>= maxCarte
+        			){
+
+            			let max =
+                			Math.max(...puntiGiocatori);
+
+            			let vincitori = [];
+
+            			for(let i=0; i<numGiocatori; i++){
+
+                			if(puntiGiocatori[i] === max){
+                    			vincitori.push(
+                        			ordineGiocatori[i].nome
+                    			);
+                			}
+
+            			}
+
+            			if(vincitori.length === 1){
+
+                			alert(
+                    			"Partita finita.\nVince:\n" +
+                    			vincitori[0]
+                			);
+
+            			}
+            			else{
+
+                			alert(
+                    			"Partita finita.\nVincono:\n" +
+                    			vincitori.join(", ")
+                			);
+
+            			}
+
+            			return;
+        			}
+
+        			iniziaManoMP();
+
+    			};
+
+    			document.getElementById("continuaBtn").style.display =
+        			"block";
+			}
 
 		}
 		function iniziaManoMP(){
