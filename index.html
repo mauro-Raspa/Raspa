@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 6
+    MODALITA GIOCATORE SINGOLO 7
 	</div>
 
 	<div id="listaGiocatori"
@@ -1412,6 +1412,11 @@ function finePresaMP(){
 
         			db.ref("stanze/" + stanza + "/briscola")
             			.set(nuovaBriscola);
+					let nuovoLeader =
+    					(leaderManoMP + 1) % numGiocatori;
+
+					db.ref("stanze/" + stanza + "/leaderManoMP")
+    					.set(nuovoLeader);
 
     			});
 
