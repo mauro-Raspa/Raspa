@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -1262,7 +1262,8 @@ function finePresaMP(){
     if(isHost){
         document.getElementById("continuaBtn").innerText =
             "➡️ Continua Presa";
-
+		document.getElementById("continuaBtn").onclick =
+			iniziaPresaMP;
         document.getElementById("continuaBtn").style.display =
             "block";
     }
@@ -1433,8 +1434,11 @@ function finePresaMP(){
 				
 
 		}
-				   
-   		
+
+		function iniziaPresaMP(){
+
+			alert("Qui partirà la futura iniziaPresaMP()");
+   		}
 
         function finePresa(){
 
