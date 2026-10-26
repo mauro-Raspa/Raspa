@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -2070,8 +2070,22 @@ if(stanza){
         let dati = snapshot.val();
 
         if(!dati){
-            return;
-        }
+
+    		document.getElementById("pronostici").innerHTML = "";
+    		document.getElementById("riepilogoPronostici").innerHTML = "";
+
+    		for(let i=0; i<numGiocatori; i++){
+
+        		let score = document.getElementById("score_g" + i);
+
+        		if(score){
+            		score.innerText = "";
+        		}
+
+    		}
+
+    		return;
+		}
 
         pronostici = new Array(numGiocatori);
 
