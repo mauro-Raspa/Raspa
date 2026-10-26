@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1363,7 +1363,9 @@ function finePresaMP(){
 		}
 		function iniziaManoMP(){
 			
-			pronostici = [];
+			db.ref("stanze/" + stanza + "/pronostici")
+				.remove();
+			
 			document.getElementById("pronostici").innerHTML = "";
 			document.getElementById("riepilogoPronostici").innerHTML = "";
 
