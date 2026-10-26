@@ -1382,18 +1382,38 @@ function finePresaMP(){
     		}
 
     		db.ref("stanze/" + stanza + "/numeroMano")
-        		.once("value")
-        		.then((snapshot) => {
+    			.once("value")
+    			.then((snapshot) => {
 
-            		let nuovaMano = snapshot.val() + 1;
+        			let nuovaMano = snapshot.val() + 1;
 
-            		db.ref("stanze/" + stanza + "/numeroMano")
-                		.set(nuovaMano);
+        			db.ref("stanze/" + stanza + "/numeroMano")
+            			.set(nuovaMano);
 
-            		db.ref("stanze/" + stanza + "/cartePerMano")
-                		.set(nuovaMano);
+        			db.ref("stanze/" + stanza + "/cartePerMano")
+            			.set(nuovaMano);
 
-        		});
+        			let mazzoNuovo = creaMazzo();
+
+        			let nuoveMani = [];
+
+        			for(let i=0; i<numGiocatori; i++){
+
+            			nuoveMani.push(
+                			mazzoNuovo.splice(0, nuovaMano)
+            			);
+
+        			}
+
+        			let nuovaBriscola = mazzoNuovo.shift();
+
+        			db.ref("stanze/" + stanza + "/mani")
+            			.set(nuoveMani);
+
+        			db.ref("stanze/" + stanza + "/briscola")
+            			.set(nuovaBriscola);
+
+    			});
 
 		}
 				   
