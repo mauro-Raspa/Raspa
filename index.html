@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 8
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2260,8 +2260,13 @@ if(stanza){
         let dati = snapshot.val();
 
         if(!dati){
-            return;
-        }
+
+    		tavolo = [];
+
+    		mostraTavolo();
+
+    		return;
+		}
 
         tavolo = Object.values(dati);
 				
