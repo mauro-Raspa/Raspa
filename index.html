@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 6
 	</div>
 
 	<div id="listaGiocatori"
@@ -1361,19 +1361,39 @@ function finePresaMP(){
 			}
 
 		}
+
+		
 		function iniziaManoMP(){
-			
-			db.ref("stanze/" + stanza + "/pronostici")
-				.remove();
-			
-			document.getElementById("pronostici").innerHTML = "";
-			document.getElementById("riepilogoPronostici").innerHTML = "";
-			for(let i=0; i<numGiocatori; i++){
-				let score = document.getElementById("score_g" + i);
-				if(score){
-					score.innerText = "";
-				}
-			}
+
+    		db.ref("stanze/" + stanza + "/pronostici")
+        		.remove();
+
+    		document.getElementById("pronostici").innerHTML = "";
+    		document.getElementById("riepilogoPronostici").innerHTML = "";
+
+    		for(let i=0; i<numGiocatori; i++){
+
+        		let score = document.getElementById("score_g" + i);
+
+        		if(score){
+            		score.innerText = "";
+        		}
+
+    		}
+
+    		db.ref("stanze/" + stanza + "/numeroMano")
+        		.once("value")
+        		.then((snapshot) => {
+
+            		let nuovaMano = snapshot.val() + 1;
+
+            		db.ref("stanze/" + stanza + "/numeroMano")
+                		.set(nuovaMano);
+
+            		db.ref("stanze/" + stanza + "/cartePerMano")
+                		.set(nuovaMano);
+
+        		});
 
 		}
 				   
