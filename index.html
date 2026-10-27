@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1243,7 +1243,13 @@ function invitaAmici(){
     			"/leaderPresaMP"
 			).set(win.g);
 			
-			if(mani[win.g].length > 0){
+			let preseGiocate =
+    			preseGiocatori.reduce(
+        			(totale, prese) => totale + prese,
+        			0
+    			);
+
+			if(preseGiocate < cartePerMano){
     			finePresaMP();
 			}
 			else{
