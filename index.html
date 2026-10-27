@@ -1262,7 +1262,8 @@ function finePresaMP(){
     if(isHost){
         document.getElementById("continuaBtn").innerText =
             "➡️ Continua Presa";
-
+		document.getElementById("continuaBtn").onclick =
+			iniziaPresaMP;
         document.getElementById("continuaBtn").style.display =
             "block";
     }
