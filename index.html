@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 4
 	</div>
 
 	<div id="listaGiocatori"
@@ -1444,9 +1444,7 @@ function finePresaMP(){
         		"stanze/" +
         		stanza +
         		"/turnoGiocatoreMP"
-    		).set(
-        		(leaderManoMP + 1) % numGiocatori
-    		);
+    		).set(leaderManoMP);
 
 		}
         function finePresa(){
