@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 7
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -2194,26 +2194,31 @@ if(stanza && isHost){
             Object.keys(dati).length;
 
     	if(quanti >= numGiocatori){
-			
+
     		db.ref(
         		"stanze/" +
         		stanza +
         		"/turnoPronostico"
     		).set(-1);
-			/*
-			db.ref(
-        		"stanze/" +
-        		stanza +
-        		"/turnoGiocatoreMP"
-    		).set(leaderManoMP);
-			*/
-			
+
     		document.getElementById("continuaBtn")
         		.style.display = "block";
 
-    		document.getElementById("continuaBtn")
-        		.innerText = "▶ Inizia Presa";
-			window.prossimaAzione = "iniziaMano";
+    		if(cartePerMano === 1){
+
+        		document.getElementById("continuaBtn")
+            		.innerText = "▶ Inizia Presa";
+
+        		window.prossimaAzione = "iniziaMano";
+
+    		}else{
+
+        		document.getElementById("continuaBtn")
+            		.innerText = "➡️ Continua Presa";
+
+        		document.getElementById("continuaBtn").onclick =
+            		iniziaPresaMP;
+    		}
 
     		return;
 		}
