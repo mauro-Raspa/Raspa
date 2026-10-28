@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -1374,6 +1374,9 @@ function finePresaMP(){
     			.set(-1);
 			db.ref("stanze/" + stanza + "/turnoGiocatoreMP")
     			.set(-1);
+			db.ref("stanze/" + stanza + "/preseGiocatori")
+				.set(new Array(numGiocatori).fill(0));
+			preseGiocatori = new Array(numGiocatori).fill(0);
 
     		document.getElementById("pronostici").innerHTML = "";
     		document.getElementById("riepilogoPronostici").innerHTML = "";
