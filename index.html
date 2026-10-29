@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -495,6 +495,8 @@ const db = firebase.database();
         function avviaPartita(){
    
 			if(modalitaMultiplayer){
+				db.ref("stanze/" + stanza + "/finePartita")
+					.remove();
 				
 				document.getElementById("btnStart").style.display = "none";
 				document.getElementById("btnAvviaPronostici")
@@ -1331,22 +1333,26 @@ function finePresaMP(){
 
             			}
 
-            			if(vincitori.length === 1){
+            			let messaggio;
 
-                			alert(
-                    			"Partita finita.\nVince:\n" +
-                    			vincitori[0]
-                			);
+						if(vincitori.length === 1){
 
-            			}
-            			else{
+							messaggio =
+								"Partita finita.\nVince:\n" +
+								vincitori[0];
 
-                			alert(
-                    			"Partita finita.\nVincono:\n" +
-                    			vincitori.join(", ")
-                			);
+						}
+						else{
 
-            			}
+							messaggio =
+								"Partita finita.\nVincono:\n" +
+								vincitori.join(", ");
+
+						}
+						
+
+						db.ref("stanze/" + stanza + "/finePartita")
+							.set(messaggio);
 
             			return;
         			}
@@ -1380,6 +1386,7 @@ function finePresaMP(){
 
     		document.getElementById("pronostici").innerHTML = "";
     		document.getElementById("riepilogoPronostici").innerHTML = "";
+			document.getElementById("pronostico").value = "";
 
     		for(let i=0; i<numGiocatori; i++){
 
@@ -2425,29 +2432,22 @@ if(stanza){
 }
 				   
 		 
+if(stanza){
 
-					   
+    db.ref("stanze/" + stanza + "/finePartita")
+    .on("value", (snapshot) => {
 
-					  
-									
-								   
-			  
+        let messaggio = snapshot.val();
 
-		 
-			 
+        if(!messaggio){
+            return;
+        }
 
-					  
-										
-											
-			  
+        alert(messaggio);
 
-		 
+    });
 
-	   
-
- 
-
-
+}
 
 
 if(stanza){
