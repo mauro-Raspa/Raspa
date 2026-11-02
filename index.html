@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1004,22 +1004,30 @@ const db = firebase.database();
 
     			if(tavolo.length > 0){
 
-        			let seme = tavolo[0].c.s;
+    				let primoGiocatore =
+        				(leaderPresaMP >= 0)
+        				? leaderPresaMP
+        				: leaderManoMP;
 
-        			let haiSeme =
-            			mani[mioIndiceMultiplayer]
-            			.some(c => c.s === seme);
+    				let cartaApertura =
+        				tavolo.find(x => x.g === primoGiocatore);
 
-        			if(haiSeme && carta.s !== seme){
+    				let seme = cartaApertura.c.s;
 
-            			alert(
-                			"Devi rispondere al seme: " +
-                			seme
-            			);
+    				let haiSeme =
+        				mani[mioIndiceMultiplayer]
+        				.some(c => c.s === seme);
 
-            			return;
-        			}
-    			}
+    				if(haiSeme && carta.s !== seme){
+
+        				alert(
+            				"Devi rispondere al seme: " +
+            				seme
+        				);
+
+        				return;
+    				}
+				}
 
     			mani[mioIndiceMultiplayer].splice(i,1);
 
