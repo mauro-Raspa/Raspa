@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1871,29 +1871,51 @@ if(isHost){
 }
 else{
 
-	db.ref("stanzeChiuse/" + stanza)
-	.once("value")
-	.then((snapshot) => {
+    db.ref("stanzeChiuse/" + stanza)
+    .once("value")
+    .then((snapshot) => {
 
-		if(snapshot.val() === true){
+        if(snapshot.val() === true){
 
-			document.body.innerHTML = `
-				<div style="
-					margin-top:100px;
-					text-align:center;
-					font-family:Arial;
-				">
-					<h2>🚪 L'host ha chiuso la stanza</h2>
-					<p>Questo link non è più valido.</p>
-				</div>
-			`;
+            document.body.innerHTML = `
+                <div style="
+                    margin-top:100px;
+                    text-align:center;
+                    font-family:Arial;
+                ">
+                    <h2>🚪 L'host ha chiuso la stanza</h2>
+                    <p>Questo link non è più valido.</p>
+                </div>
+            `;
 
-			return;
-		}
+            return;
+        }
 
-		registraGiocatore();
+        db.ref("stanze/" + stanza + "/partitaIniziata")
+        .once("value")
+        .then((snap) => {
 
-	});
+            if(snap.val() === true){
+
+                document.body.innerHTML = `
+                    <div style="
+                        margin-top:100px;
+                        text-align:center;
+                        font-family:Arial;
+                    ">
+                        <h2>⛔ Partita già iniziata</h2>
+                        <p>Non è più possibile entrare in questa partita.</p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            registraGiocatore();
+
+        });
+
+    });
 
 }
 
