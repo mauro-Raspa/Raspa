@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -1258,6 +1258,7 @@ function invitaAmici(){
     			stanza +
     			"/leaderPresaMP"
 			).set(win.g);
+			mostraTavolo(win.g);
 			
 			let preseGiocate =
     			preseGiocatori.reduce(
