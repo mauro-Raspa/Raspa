@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -1033,7 +1033,7 @@ const db = firebase.database();
 				}
 
     			mani[mioIndiceMultiplayer].splice(i,1);
-
+				turnoGiocatoreMP = -1;
     			mostraMano();
 
     			db.ref(
