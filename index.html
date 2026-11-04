@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 3
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -363,7 +363,8 @@ const db = firebase.database();
 		let modalitaMultiplayer = false;
 		let ordineGiocatori = [];
 		let totaleManiMultiplayer = 0;						
-		let mioIndiceMultiplayer = 0;							   
+		let mioIndiceMultiplayer = 0;
+		let emojiGiocatori = {};
   
 		
 		
@@ -455,8 +456,10 @@ const db = firebase.database();
 		}
 
 		div.innerHTML = `
-			${nomeVisualizzato}
-			<div id="score_g${i}" style="font-size:12px;"></div>
+    		<span id="nome_g${i}">
+        		${nomeVisualizzato}
+    		</span>
+    		<div id="score_g${i}" style="font-size:12px;"></div>
 		`;
 
 	
@@ -1098,7 +1101,20 @@ const db = firebase.database();
         }
 
 
-        
+function inviaEmoji(emoji){
+
+    if(!modalitaMultiplayer){
+        return;
+    }
+
+    db.ref(
+        "stanze/" +
+        stanza +
+        "/emoji/" +
+        mioIndiceMultiplayer
+    ).set(emoji);
+
+}        
 
 
 
@@ -2597,6 +2613,54 @@ if(stanza){
 		});
 
 }		
+
+if(stanza){
+
+    db.ref("stanze/" + stanza + "/emoji")
+    .on("value", (snapshot) => {
+
+        let dati = snapshot.val();
+
+        if(!dati){
+            return;
+        }
+
+        Object.keys(dati).forEach(indice => {
+
+            let nomeDiv =
+                document.getElementById(
+                    "nome_g" + indice
+                );
+
+            if(nomeDiv){
+
+                let nomeBase =
+                    ordineGiocatori[indice].nome;
+
+                nomeDiv.innerHTML =
+                    nomeBase + " " + dati[indice];
+
+                setTimeout(() => {
+
+                    let n =
+                        document.getElementById(
+                            "nome_g" + indice
+                        );
+
+                    if(n){
+                        n.innerHTML = nomeBase;
+                    }
+
+                },3000);
+
+            }
+
+        });
+
+    });
+
+}
+
 		
 		
     </script>
