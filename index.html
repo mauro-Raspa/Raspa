@@ -196,7 +196,7 @@
 <div id="container">
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 3
 	</div>
 
 	<div id="listaGiocatori"
@@ -1857,17 +1857,35 @@ function registraGiocatore(){
 		return;
 	}
 
-	localStorage.setItem("nomeGiocatore", nome);
+	db.ref("stanze/" + stanza + "/players")
+	.once("value")
+	.then((snapshot) => {
 
-	playerRef.set({
-		nome: nome,
-		mioNome: nome
+    	let players = snapshot.val() || {};
+
+    	let nomeOriginale = nome;
+    	let contatore = 1;
+
+    	let nomiEsistenti =
+        	Object.values(players)
+        	.map(p => p.nome);
+
+    	while(nomiEsistenti.includes(nome)){
+        	nome = nomeOriginale + contatore;
+        	contatore++;
+    	}
+
+    	localStorage.setItem("nomeGiocatore", nome);
+
+    	playerRef.set({
+        	nome: nome,
+        	mioNome: nome
+    	});
+
 	})
 	.then(() => {
-
 	})
 	.catch((err) => {
-
 	});
 }
 
