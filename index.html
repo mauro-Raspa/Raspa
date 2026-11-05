@@ -194,19 +194,9 @@
 
 <!--<h1>RASPA 🃏</h1>-->
 <div id="container">
-	
-	<div id="boxEmoji" style="margin-top:10px;display:none;">
-		<button onclick="inviaEmoji('😭')">😭</button>
-		<button onclick="inviaEmoji('😘')">😘</button>
-		<button onclick="inviaEmoji('😂')">😂</button>
-		<button onclick="inviaEmoji('😡')">😡</button>
-		<button onclick="inviaEmoji('🤔')">🤔</button>
-		<button onclick="inviaEmoji('😔')">😔</button>
-	</div>
-	
-	
+		
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 5
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -308,7 +298,14 @@
     </div>
 
 
-
+	<div id="boxEmoji" style="margin-top:10px;display:none;">
+		<button onclick="inviaEmoji('😭')">😭</button>
+		<button onclick="inviaEmoji('😘')">😘</button>
+		<button onclick="inviaEmoji('😂')">😂</button>
+		<button onclick="inviaEmoji('😡')">😡</button>
+		<button onclick="inviaEmoji('🤔')">🤔</button>
+		<button onclick="inviaEmoji('😔')">😔</button>
+	</div>
 
     <!--<button id="continuaBtn" onclick="continuaGioco()" style="display:none;">
     ➡️ Continua
@@ -719,8 +716,11 @@ const db = firebase.database();
     			if(!partitaAvviata){
         			b.disabled = true;
     			}
-
+			}
+			if(!b.disabled){
+				b.style.border = "4px solid black";
 			}	
+			 
           d.appendChild(b);
          });
 		  let righe = Math.ceil(miaMano.length / 5);
