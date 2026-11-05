@@ -206,7 +206,7 @@
 	
 	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 5
 	</div>
 
 	<div id="listaGiocatori"
@@ -2188,10 +2188,11 @@ if(stanza){
     .on("value", (snapshot) => {
 
         let turno = snapshot.val();
+		/*
 		document.getElementById("playersBox").innerText =
     		"Turno=" + turno +
     		" MioIndice=" + mioIndiceMultiplayer;
-
+		*/
         if(turno === null){
             return;
         }
@@ -2686,4 +2687,3 @@ if(stanza){
 </div>
 </body>
 </html>
-
