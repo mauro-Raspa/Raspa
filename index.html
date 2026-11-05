@@ -195,8 +195,18 @@
 <!--<h1>RASPA 🃏</h1>-->
 <div id="container">
 	
+	<div id="boxEmoji" style="margin-top:10px;display:none;">
+		<button onclick="inviaEmoji('😭')">😭</button>
+		<button onclick="inviaEmoji('😘')">😘</button>
+		<button onclick="inviaEmoji('😂')">😂</button>
+		<button onclick="inviaEmoji('😡')">😡</button>
+		<button onclick="inviaEmoji('🤔')">🤔</button>
+		<button onclick="inviaEmoji('😔')">😔</button>
+	</div>
+	
+	
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -278,17 +288,6 @@
 
     <!--<h3>Pronostici:</h3>-->
     <div id="pronostici"></div>
-	
-	
-	<div id="boxEmoji" style="margin-top:10px;">
-		<button onclick="inviaEmoji('😭')">😭</button>
-		<button onclick="inviaEmoji('😘')">😘</button>
-		<button onclick="inviaEmoji('😂')">😂</button>
-		<button onclick="inviaEmoji('😡')">😡</button>
-		<button onclick="inviaEmoji('🤔')">🤔</button>
-		<button onclick="inviaEmoji('😔')">😔</button>
-	</div>
-
 	
 	<div id="riepilogoPronostici"></div>
 
@@ -1829,6 +1828,7 @@ if(!isHost){
 if(stanza){
 	modalitaMultiplayer = true;
 	
+	document.getElementById("boxEmoji").style.display = "block";
 	document.getElementById("boxPronostico").style.display = "none";
 	
 	if(isHost){
