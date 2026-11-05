@@ -71,7 +71,8 @@
 	   }
 
 	   #mano button{
-		width: 45px;
+			width: 60px;
+    		height: 80px;
 	   }
 
 	   #storicoContainer{
@@ -196,7 +197,7 @@
 <div id="container">
 		
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 2
+    MODALITA GIOCATORE SINGOLO 1
 	</div>
 
 	<div id="listaGiocatori"
@@ -698,6 +699,11 @@ const db = firebase.database();
 
          sorted.forEach(c=>{
           let b=document.createElement("button");
+			b.style.width = "60px";
+			b.style.height = "80px";
+			b.style.fontSize = "20px";
+			b.style.fontWeight = "bold";
+			b.style.borderRadius = "8px";
           b.innerText=c.v+c.s;
           b.style.color = (c.s==="♥"||c.s==="♦") ? "red":"black";
 	 
