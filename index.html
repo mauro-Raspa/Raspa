@@ -196,7 +196,7 @@
 <div id="container">
 		
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 1
+    MODALITA GIOCATORE SINGOLO 2
 	</div>
 
 	<div id="listaGiocatori"
@@ -293,19 +293,10 @@
         <!-- ✅ BRISCOLA AL CENTRO -->
         <div id="briscolaCentro"></div>
         <div id="mano"></div>
-
-
     </div>
 
 
-	<div id="boxEmoji" style="margin-top:10px;display:none;">
-		<button onclick="inviaEmoji('😭')">😭</button>
-		<button onclick="inviaEmoji('😘')">😘</button>
-		<button onclick="inviaEmoji('😂')">😂</button>
-		<button onclick="inviaEmoji('😡')">😡</button>
-		<button onclick="inviaEmoji('🤔')">🤔</button>
-		<button onclick="inviaEmoji('😔')">😔</button>
-	</div>
+	
 
     <!--<button id="continuaBtn" onclick="continuaGioco()" style="display:none;">
     ➡️ Continua
@@ -313,7 +304,17 @@
 
 
     <div id="storicoContainer">
-        <h3>Storico:</h3>
+
+		<div id="boxEmoji" style="margin-top:10px;display:none;">
+			<button onclick="inviaEmoji('😭')">😭</button>
+			<button onclick="inviaEmoji('😘')">😘</button>
+			<button onclick="inviaEmoji('😂')">😂</button>
+			<button onclick="inviaEmoji('😡')">😡</button>
+			<button onclick="inviaEmoji('🤔')">🤔</button>
+			<button onclick="inviaEmoji('😔')">😔</button>
+		</div>
+
+		<h3>Storico:</h3>
         <table border="1" id="classificaTabella"></table>
     </div>
 
