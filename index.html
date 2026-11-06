@@ -169,6 +169,7 @@
 
 <div id="header">
     <h1>RASPA 🃏</h1>
+	<button onclick="apriInfo()">ℹ️ Info</button>
     <button id="btnStart" onclick="avviaPartita()">
 		Avvia Partita
 	</button>
@@ -207,7 +208,7 @@
 <div id="container">
 		
 	<div id="playersBox" style="margin:10px 0; font-weight:bold;">
-    MODALITA GIOCATORE SINGOLO 4
+    MODALITA GIOCATORE SINGOLO 8
 	</div>
 
 	<div id="listaGiocatori"
@@ -329,7 +330,21 @@
         <table border="1" id="classificaTabella"></table>
     </div>
 
-	
+<div id="finestraInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; overflow-y:auto; padding:20px; z-index:9999; text-align:left;">
+
+<h2>🃏 RASPA - REGOLAMENTO UFFICIALE</h2>
+
+<div id="testoRegole">
+
+QUI INCOLLERAI IL REGOLAMENTO
+
+</div>
+
+<br>
+
+<button onclick="chiudiInfo()">❌ Chiudi</button>
+
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -2706,7 +2721,13 @@ if(stanza){
 
 }
 
-		
+function apriInfo(){
+    document.getElementById("finestraInfo").style.display = "block";
+}
+
+function chiudiInfo(){
+    document.getElementById("finestraInfo").style.display = "none";
+}		
 		
     </script>
 
